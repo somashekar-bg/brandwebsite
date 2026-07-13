@@ -1,0 +1,192 @@
+{
+  "PROFILE": {
+    "name": "Somashekar",
+    "lastName": "BG",
+    "badge": "PRO-LEADER",
+    "title": "Senior Platform Engineering & Enterprise Infrastructure Leader",
+    "portraitUrl": "/src/assets/images/somashekar_portrait_1783933330764.jpg",
+    "email": "santurmucik@gmail.com",
+    "phone": "+91 99869 92683",
+    "linkedin": "https://www.linkedin.com/in/somashekar-bg/",
+    "summary": "Senior Platform Engineering and Enterprise Infrastructure Leader with 14+ years of experience delivering technology transformation across Fortune 500 healthcare and retail enterprises. Proven track record of leading globally distributed engineering organizations, modernizing enterprise infrastructure, driving cloud adoption, implementing AI-enabled operational capabilities, and building high-performing engineering teams that deliver measurable business outcomes."
+  },
+  "LEADER_STATS": [
+    {
+      "label": "Lifecycle Management",
+      "value": "14+ Years",
+      "description": "Specialized in Enterprise Platform Engineering"
+    },
+    {
+      "label": "Scale Factor",
+      "value": "80k+ Servers",
+      "description": "Managing globally distributed infrastructure nodes"
+    },
+    {
+      "label": "Asset Valuation",
+      "value": "$24M Portfolio",
+      "description": "Optimizing large-scale CAPEX/OPEX operations"
+    }
+  ],
+  "TECHNICAL_MATRIX": [
+    {
+      "category": "Platform Engineering",
+      "items": [
+        "Internal Developer Platforms (IDP)",
+        "Platform Modernization",
+        "Developer Experience (DevEx)",
+        "Infrastructure as a Product",
+        "Backstage",
+        "Kubernetes Adoption"
+      ]
+    },
+    {
+      "category": "Cloud & Infrastructure",
+      "items": [
+        "Google Cloud Platform (GCP)",
+        "Hybrid Cloud Architecture",
+        "Linux Platform Tuning",
+        "Infrastructure Automation",
+        "Disaster Recovery & High Availability"
+      ]
+    },
+    {
+      "category": "Engineering Excellence",
+      "items": [
+        "Site Reliability Engineering (SRE)",
+        "DevSecOps Pipelines",
+        "Observability & Telemetry",
+        "Cascading Incident Management",
+        "Capacity Planning & Performance"
+      ]
+    },
+    {
+      "category": "AI & Emerging Tech",
+      "items": [
+        "AI Platform Strategy",
+        "Model Context Protocol (MCP)",
+        "Generative AI System Tuning",
+        "LLM Integration Architectures",
+        "Autonomous SRE Operations"
+      ]
+    }
+  ],
+  "ARCHITECTURE_LABS": [
+    {
+      "id": "vulcan-grid",
+      "title": "Project: Vulcan Grid",
+      "status": "Completed",
+      "refId": "LAB-2910",
+      "author": "SOMASHEKAR BG",
+      "description": "A distributed ledger implementation optimized for sub-50ms finality in high-throughput industrial IoT environments. Leverages custom consensus algorithms to ensure structural integrity under network partitions.",
+      "metrics": ["Latency: 42ms Average", "Nodes: 5,000+ Verified"],
+      "imageUrl": "https://lh3.googleusercontent.com/aida-public/AB6AXuBbQx7d7U4aq6NAgKr4yxgr0N5okKimzW5JXI2Ts4BFJtaMMRHe5KwfSzJdY3EmJ-YKU57De93wZSG5-UQcZCYvUMNoQBeTwwxWhCEX7kqSXrS80sPmI-5-Xr2T_fgC9o0PkB7HD0FaAYo6-NJR2Xvc-oShHlKvhDkG3BKqNK_Q1268OULxUdpzqo7tjYs8So0sVNXlvyDax4MVDM7xSMSGrlU5Dki7WAjKN5ecBm_NevUmk0aBvXEqveDE8EJRkwLQ79aJMvITnb4",
+      "tags": ["#DISTRIBUTED_SYSTEMS", "#RUST_CORE", "#KAFKA_ROUTING"],
+      "whitepaperUrl": "#vulcan-grid-whitepaper"
+    },
+    {
+      "id": "zero-trust-mesh",
+      "title": "Zero-Trust Mesh",
+      "status": "Active",
+      "refId": "LAB-4402",
+      "author": "SOMASHEKAR BG",
+      "description": "Implementation of mTLS-driven service mesh for enterprise Kubernetes clusters. Automated rotating certificates, identity-based access control, and absolute network isolation boundaries.",
+      "metrics": ["Rotations: 100% Automated", "Certificates: Hashicorp Vault"],
+      "imageUrl": "https://lh3.googleusercontent.com/aida-public/AB6AXuA4jnVKFBtR2ZkigndNzIVfS5__CJkMsSqsZ3LvbtuoDktIqgg3_TBC1api3uIbV8wI5qJWvFL4Yi0Mqql5wOqovPrMRlVALz2LHq6pqhdK-do1njzcNtU8WQciJTkuvnNiWfH6rAdeCmtbz-gc-pjT9Icd1BX3Z5VrWiZapTvWpWdKEE1EDdNAEs5lVQ5bUZMj6krVyhVTue1ECzY9e66YEbVjtczp3Kcaj_2Hg-LKcoiKmKnylAIhacrJ7fQy10qRTTBb2TmbwgI",
+      "tags": ["#KUBERNETES", "#ISTIO", "#MTLS", "#SECURE_TUNNEL"],
+      "whitepaperUrl": "#zero-trust-mesh-case-study"
+    },
+    {
+      "id": "kernel-tuning",
+      "title": "Kernel Tuning Suite",
+      "status": "Completed",
+      "refId": "LAB-8812",
+      "author": "SOMASHEKAR BG",
+      "description": "Optimizing Linux kernel parameters (scheduler policy, memory lock, huge pages, IRQ affinity) for high-frequency low-latency workloads. Results in a 15% reduction in tail latency.",
+      "metrics": ["Latency Reduction: 15% Max", "Scheduler: SCHED_FIFO"],
+      "imageUrl": "https://lh3.googleusercontent.com/aida-public/AB6AXuAH9jmnu9eNZ7z3sZksH8lwRpGX2dTBB99HDeQNmxBjNs4sCgsCBVnB5a8WjwlwuoqRZb9N2s16RTP-6i5U7Tf26pDmERu0WynfuYzmwGx5aktmZKzyYPGMFmuXMiiuec4ZlzcmDuSqSF-pNufTi5xJDynaeubSbe46zuljbC1Su0CzDaNZ8cL6X7jFrcQEsBawh_f6sys4ixXmo5yQpu9Wc95yAaQTfhp8047JJBQiKe7-USr0MNNlYAb8blD0EUH9wiNgboWUJV8",
+      "tags": ["#LINUX_KERNEL", "#SYSCALL_OPTIMIZE", "#IRQ_AFFINITY"],
+      "whitepaperUrl": "#kernel-metrics"
+    },
+    {
+      "id": "neural-infra",
+      "title": "Neural Infrastructure",
+      "status": "Experimental",
+      "refId": "LAB-9071",
+      "author": "SOMASHEKAR BG",
+      "description": "Self-healing server clusters managed by autonomous reinforcement learning agents. High-fidelity real-time resource reallocation and predictive scaling based on automated neural traffic models.",
+      "metrics": ["Self-Heal accuracy: 94%", "Reallocation: <500ms"],
+      "imageUrl": "https://lh3.googleusercontent.com/aida-public/AB6AXuCgc4p_zeTDTmyhdrdoCcj5UgwFdwkeBAn949P2yyK52G5DYcqxEaO-IhzyBgoNS0sALSbeEuxqBPIZipY2xSY76F7SLlSy1N8vH0V8Odtrh6XbPE06EJNm2-8ux0uKPttjd8-SnYi_1jGTVBjbOHDXuBfTKhqZP8djP8dclpZvAyWFZ_nGjEAUFAWBaoNDx4uHBUGVpUxD9yKI338k_oOw2A3zaskB4PbHQwmiJRs9Vlt5PNkgtStue2lSdaAWIKdQpUAkUpdHMzQ",
+      "tags": ["#REINFORCEMENT_LEARNING", "#AUTONOMOUS_SRE", "#SMART_PROVISIONING"],
+      "whitepaperUrl": "#neural-whitepaper",
+      "demoUrl": "#neural-sandbox"
+    }
+  ],
+  "PRODUCTS_LIST": [
+    {
+      "title": "Hyper MCP",
+      "status": "Deployment Ready",
+      "imageUrl": "https://lh3.googleusercontent.com/aida-public/AB6AXuAWYBfeMnIDUpCdFrYAeiAnR_K4G0pVOPPCAQnySd3qgfP8SCRFzFjEOwkC81VZuinhURV3Ob1pnqUvK3AaHHrzWb2yL76cwzUoSxOyV5pEMMDp84579RD0SFDAudS_mtyYO2WVhJegcj3t_sdOH0dq6TYL9wOI_h9jxekVUG8RYAw0pYpFIThXF3vCznu87jImGBpxcnnaiSDew0LTg4FDQD9Ysno5UJGRFskAubtGlwJMdIB_x_neh6EW4_C0AK5ev0V9DIX4alk",
+      "description": "Mission Critical Platform engineered for ultra-low latency infrastructure orchestration. Features real-time node synchronization, auto-scaling telemetry, and zero-downtime cluster transfers for large global enterprise infrastructure.",
+      "bullets": ["99.999% Uptime SLA Guarantee", "Quantum-Safe mTLS Mesh Integration", "Automated Load Redistribution"],
+      "tags": ["GO-PLATFORM", "ETCD-SYNC", "KUBERNETES"],
+      "actionLabel": "View Technical Specs"
+    },
+    {
+      "title": "Hyper Resume Parser",
+      "status": "Alpha V2.4",
+      "imageUrl": "https://lh3.googleusercontent.com/aida-public/AB6AXuAH9jmnu9eNZ7z3sZksH8lwRpGX2dTBB99HDeQNmxBjNs4sCgsCBVnB5a8WjwlwuoqRZb9N2s16RTP-6i5U7Tf26pDmERu0WynfuYzmwGx5aktmZKzyYPGMFmuXMiiuec4ZlzcmDuSqSF-pNufTi5xJDynaeubSbe46zuljbC1Su0CzDaNZ8cL6X7jFrcQEsBawh_f6sys4ixXmo5yQpu9Wc95yAaQTfhp8047JJBQiKe7-USr0MNNlYAb8blD0EUH9wiNgboWUJV8",
+      "description": "An automated enterprise talent parsing engine that leverages deep neural networks and custom vector search schemas to instantly map applicant professional histories directly to active infrastructure demand parameters.",
+      "bullets": ["Highly optimized Transformer model", "Custom 1536-dim Vector Embeddings", "Real-time compliance rating dashboard"],
+      "tags": ["NLP", "VECTOR-EMBED", "PYTORCH"],
+      "actionLabel": "Initialize Engine"
+    },
+    {
+      "title": "Sitman AI (Situational SRE)",
+      "status": "AI-Experimental",
+      "imageUrl": "https://lh3.googleusercontent.com/aida-public/AB6AXuBH5g2HEjVAewkIokh94xXqFxH6ykQGGwMMG_RG4daQQP-APRZID-SNPRwucpyydiweVbIxmkjUtdYSXUuBsR7xIzsHDa18YdJVKQiOnCnGJa3kPvYI1idLL6w4MtGvonsuSkTXL1Tt8rnqcbvSYTmSGutIEHaNAmv7y5nZ5oLabHjILjItn-ZkeUxNwirwSN5JEIyU4smEYfDiJfRPaS0BOWqdqKZ6NTKtOK5IXe6PKwF0StWi4uBtNse4aqh1HZWw5cX3wDWUL04",
+      "description": "Situational SRE Manager AI utilizing multi-modal anomaly detectors. Predicts server hardware degradation and cooling unit failure 72 hours in advance via acoustic spectral and thermo-dynamic telemetry analyses.",
+      "bullets": ["Predicts failures 72 hours before occurrence", "Acoustic ML wave-shape matching engine", "Runs edge-side on sensor nodes"],
+      "tags": ["AUDIO-ML", "THERMAL-DETECTOR", "EDGE-OPS"],
+      "actionLabel": "Access Dashboard"
+    }
+  ],
+  "ARCHITECTURE_INSIGHTS": [
+    {
+      "type": "Whitepaper",
+      "title": "Scaling Edge Nodes in Post-Cloud Architectures",
+      "cta": "Read Report"
+    },
+    {
+      "type": "Case Study",
+      "title": "Reducing Latency by 40% for Global FinTech",
+      "cta": "Review Case"
+    },
+    {
+      "type": "Solution",
+      "title": "Autonomous Mesh Networks for Rugged Sites",
+      "cta": "Explore Mesh"
+    }
+  ],
+  "SEARCHABLE_TOPICS": [
+    { "title": "Executive Summary", "category": "Experience", "sectionId": "summary", "description": "Senior Platform Engineering and Enterprise Infrastructure Leader summary" },
+    { "title": "Leader Statistics", "category": "Experience", "sectionId": "summary", "description": "14+ Years lifecycle management, 80k+ servers, $24M portfolio" },
+    { "title": "Internal Developer Platforms (IDP)", "category": "Platform Engineering", "sectionId": "summary", "description": "Platform Modernization and Developer Experience (DevEx)" },
+    { "title": "Google Cloud Platform (GCP)", "category": "Cloud & Infrastructure", "sectionId": "summary", "description": "Hybrid Cloud Architecture and Infrastructure Automation" },
+    { "title": "Site Reliability Engineering (SRE)", "category": "Engineering Excellence", "sectionId": "summary", "description": "Observability, Telemetry, and Cascading Incident Management" },
+    { "title": "AI Platform Strategy", "category": "AI & Emerging Tech", "sectionId": "summary", "description": "Model Context Protocol (MCP), LLM Integration Architectures" },
+    { "title": "Hyper MCP", "category": "Products & Solutions", "sectionId": "solutions", "description": "Mission Critical Platform for ultra-low latency infrastructure orchestration" },
+    { "title": "Hyper Resume Parser", "category": "Products & Solutions", "sectionId": "solutions", "description": "Alpha V2.4 AI applicant professional history parsing engine" },
+    { "title": "Sitman AI (Situational SRE)", "category": "Products & Solutions", "sectionId": "solutions", "description": "Situational SRE Manager using multi-modal acoustic spectral anomalies" },
+    { "title": "Case Study: Scaling Edge Nodes", "category": "Research & Insights", "sectionId": "solutions", "description": "Scaling Edge Nodes in Post-Cloud Architectures report" },
+    { "title": "Case Study: Reducing Latency by 40%", "category": "Research & Insights", "sectionId": "solutions", "description": "Reducing Latency by 40% for Global FinTech" },
+    { "title": "Project: Vulcan Grid", "category": "Architecture Labs", "sectionId": "labs", "description": "Distributed ledger implementation optimized for sub-50ms finality" },
+    { "title": "Zero-Trust Mesh", "category": "Architecture Labs", "sectionId": "labs", "description": "mTLS-driven service mesh for enterprise Kubernetes clusters" },
+    { "title": "Kernel Tuning Suite", "category": "Architecture Labs", "sectionId": "labs", "description": "Linux kernel tuning parameter optimization (scheduler, huge pages)" },
+    { "title": "Neural Infrastructure", "category": "Architecture Labs", "sectionId": "labs", "description": "Self-healing server clusters managed by autonomous RL agents" },
+    { "title": "SRE Reinforcement Learning Visualization", "category": "Labs Interactive", "sectionId": "labs", "description": "Live simulator to test network partition or CPU spikes" },
+    { "title": "API Authentication Protocol", "category": "API & Core Protocols", "sectionId": "docs", "description": "/api/v1/auth endpoint with custom handshake parameters" },
+    { "title": "Cluster Health Endpoint", "category": "API & Core Protocols", "sectionId": "docs", "description": "/api/v1/cluster/health system status query API" },
+    { "title": "Telemetry Stream Event Subscription", "category": "Core Architecture Protocols", "sectionId": "docs", "description": "Event Subscriptions and system webhook telemetry triggers" },
+    { "title": "Security Audits Protocol Bridge", "category": "Core Architecture Protocols", "sectionId": "docs", "description": "Protocol Bridge security log telemetry stream" }
+  ]
+}

@@ -1,0 +1,325 @@
+{
+  "PROFILE": {
+    "name": "Somashekar",
+    "lastName": "BG",
+    "badge": "PRO-LEADER",
+    "title": "Senior Platform Engineering Leader | Enterprise Infrastructure | Cloud | AI Platforms | Kubernetes | DevOps | SRE",
+    "portraitUrl": "/src/assets/images/somashekar_portrait_1783933330764.jpg",
+    "email": "santurmucik@gmail.com",
+    "phone": "+91 99869 92683",
+    "linkedin": "https://www.linkedin.com/in/somashekar-bg/",
+    "summary": "Enterprise Platform Engineering Leader with 14+ years of experience building scalable infrastructure platforms, AI-enabled automation engines, cloud-native engineering capabilities, and high-performing organizations. Specialist in transitioning legacy operations into modern Internal Developer Platforms (IDP) that empower engineering teams to deliver software faster, more reliably, and with AI-assisted operations. Proven champion of infrastructure-as-a-product, managing multi-million dollar optimization portfolios ($9.5M+ in savings), and pioneering AI-Ops architectures while aligning technical execution directly with corporate business outcomes."
+  },
+  "LEADERSHIP_PHILOSOPHY": "I believe Platform Engineering exists to enable engineers—not create more operational work. My leadership philosophy focuses on building scalable platforms, automating repetitive processes, empowering engineering teams through self-service capabilities, and using AI responsibly to improve operational excellence.",
+  "EXECUTIVE_HIGHLIGHTS": [
+    "14+ Years of Engineering Leadership: Steering enterprise-scale infrastructure, cloud-native transformations, and platform engineering initiatives.",
+    "Multi-Discipline Scope: Led Linux, Cloud, Database, and Supply Chain Engineering across mission-critical enterprise systems.",
+    "Rapid Executive Promotion: Accelerated from Engineering Manager to Senior Manager, IT within 14 months at HST Global.",
+    "Massive Business Value: Delivered $9.5M+ annual savings through cloud modernization, automation, and engineering transformation.",
+    "Live AI Architectures: Architected and deployed Enterprise AI MCP Platform capabilities, Hyper Resume AI, and the Sitman AI Incident Commander.",
+    "Fleet & Cloud Modernization: Led Google Cloud Platform modernization, governance, FinOps, and large-scale automation saving thousands of engineering hours."
+  ],
+  "LEADER_STATS": [
+    {
+      "label": "Engineering Leadership",
+      "value": "14+ Years",
+      "description": "Enterprise-scale infrastructure & cloud-native transformations"
+    },
+    {
+      "label": "Annual Business Value",
+      "value": "$9.5M+",
+      "description": "Savings through cloud modernization & FinOps"
+    },
+    {
+      "label": "Team Scale Directed",
+      "value": "10-Member",
+      "description": "Multi-discipline Platform Engineering organization"
+    }
+  ],
+  "TECHNICAL_MATRIX": [
+    {
+      "category": "Platform Engineering",
+      "items": [
+        "Internal Developer Platforms (IDP)",
+        "Platform Strategy",
+        "Developer Experience (DevEx)",
+        "Self-Service Infrastructure",
+        "Platform Product Management"
+      ]
+    },
+    {
+      "category": "Cloud Platforms",
+      "items": [
+        "Google Cloud Platform (GCP/GKE)",
+        "Cloud Run, Cloud SQL, Cloud Build",
+        "Artifact Registry, Networking, IAM",
+        "Amazon Web Services (AWS)",
+        "Microsoft Azure",
+        "Oracle Cloud Infrastructure (OCI)"
+      ]
+    },
+    {
+      "category": "AI Platforms & SRE",
+      "items": [
+        "Model Context Protocol (MCP)",
+        "Agentic AI, Vertex AI",
+        "AI Governance, LLM Integration",
+        "Prompt Engineering, AI-Ops",
+        "Observability, Incident Management"
+      ]
+    },
+    {
+      "category": "Engineering & IaC",
+      "items": [
+        "Kubernetes, Docker",
+        "Linux (RHEL/OEL)",
+        "Terraform, Ansible, CHEF",
+        "GitHub, Jenkins, Concourse CI/CD",
+        "TOSCA Specification"
+      ]
+    },
+    {
+      "category": "Executive Leadership",
+      "items": [
+        "Executive Stakeholder Management",
+        "Budget Ownership & FinOps",
+        "People Leadership & Mentoring",
+        "Organizational Transformation",
+        "Strategic Thinking & Foresight"
+      ]
+    }
+  ],
+  "PROFESSIONAL_EXPERIENCE": [
+    {
+      "company": "HST Global (Hy-Vee India)",
+      "role": "Senior Manager, IT – CoreIT / Infrastructure Engineering",
+      "location": "Bengaluru, India",
+      "period": "Nov 2023 — Jun 2026",
+      "context": "Directed a 10-member, four-discipline Platform Engineering organization responsible for enterprise infrastructure platforms spanning Linux, Database, Cloud Engineering, and Supply Chain technologies supporting mission-critical retail operations.",
+      "bullets": [
+        "Executive Advancement: Promoted from Engineering Manager to Senior Manager, IT within 14 months of joining the organization due to high-impact operational delivery.",
+        "Platform & AI Transformation: Rebuilt legacy infrastructure capabilities into a modern platform model, enabling development squads to deliver software with increased agility and embedded AI-assisted operations guardrails.",
+        "AI Control Plane Design: Pioneered cutting-edge AI-assisted operations utilizing Claude AI triage, Model Context Protocol (MCP) servers, and incident automation bots, making approximately 33% of P2 tickets AI-assisted to slash MTTR.",
+        "Process Automation (CAMM): Served as Project Owner and Lead Architect for the CAMM Automation pipeline, utilizing Python, Shell scripting, and Jenkins to save over 3,000+ business hours annually through algorithmic process pipelines.",
+        "SecOps Governance: Partnered across teams to govern real-time vulnerability management, rapid patch compliance, and regulatory security audits utilizing CrowdStrike, Rapid7, and Snyk."
+      ]
+    },
+    {
+      "company": "Oracle Cerner",
+      "role": "Senior Manager, Technical Solutions",
+      "location": "Bengaluru, India",
+      "period": "2021 — 2023",
+      "context": "Directed technical solution strategies and took complete ownership of IT Service Management (ITSM) for over 24 complex healthcare-technology solutions spanning 5 global enterprise sites.",
+      "bullets": [
+        "FinOps & Asset Reclamation: Delivered more than $9.5M in annual savings through aggressive automation, asset optimization, and aggressive software/hardware license reclaim campaigns.",
+        "Infrastructure Transformation: Acted as Infrastructure Lead for a large-scale Storage Array Migration initiative, achieving $2M in annual recurring savings through hardware consolidation and migrating application datastores with near zero downstream clinical disruption.",
+        "Production Reliability: Managed high-performing engineering and infrastructure operations squads, guaranteeing 99.99% high availability and strict adherence to strict business compliance and SLA standards."
+      ]
+    },
+    {
+      "company": "Cerner",
+      "role": "Manager, IT System Management",
+      "location": "Bengaluru, India",
+      "period": "2021 — 2021",
+      "bullets": [
+        "Oversaw daily IT operations, system management workloads, and global infrastructure support frameworks in alignment with ITIL best practices.",
+        "Championed enterprise change and release management policies, establishing strict quality gates to eliminate post-change production incidents while optimizing proactive monitoring and logging configurations via Zabbix."
+      ]
+    },
+    {
+      "company": "Cerner",
+      "role": "Lead System Engineer / Team Lead",
+      "location": "Bengaluru, India",
+      "period": "2019 — 2021",
+      "bullets": [
+        "Platform Automation (CWxPI): Acted as Project Owner for the CWxPI enterprise automation framework, utilizing PowerShell and advanced error handling to save 4,000+ production support hours annually.",
+        "IaC & Patch Automation: Managed multi-platform technical engineering squads across virtualization (Citrix XenApp, PVS), Windows AD, and Linux environments; directed unified patching automations via Ansible to shave 1,000+ engineering hours annually."
+      ]
+    },
+    {
+      "company": "Cerner",
+      "role": "Senior System Engineer / System Engineer / Intern",
+      "location": "Bengaluru, India",
+      "period": "2014 — 2019",
+      "bullets": [
+        "Developed an automated OEL Pre & Post Check state-capture utility using Shell Scripting and SSH automation, saving 600+ manual system validation hours annually during maintenance cycles.",
+        "Reclaimed and optimized 8 Full-Time Equivalent (FTE) capacities annually through strategic on-call rotation refactoring and efficient incident triage routing."
+      ]
+    },
+    {
+      "company": "Aeinway Technologies",
+      "role": "Web Developer",
+      "location": "Bengaluru, India",
+      "period": "2010 — 2014",
+      "bullets": [
+        "Designed, updated, and deployed dynamic, database-driven web applications utilizing the LAMP stack (PHP, Apache, MySQL) verified via Selenium automated testing suites."
+      ]
+    }
+  ],
+  "EDUCATION": [
+    {
+      "degree": "Executive Master of Business Administration (EMBA)",
+      "institution": "Dayananda Sagar University, Bengaluru",
+      "period": "2020 – 2021",
+      "gpa": "8.85"
+    },
+    {
+      "degree": "Master of Computer Science (M.Sc.)",
+      "institution": "Dayananda Sagar Institutions, Bengaluru",
+      "period": "2011 – 2014",
+      "gpa": "8.0"
+    },
+    {
+      "degree": "Bachelor of Computer Science (B.Sc.)",
+      "institution": "Williams International College, Bengaluru",
+      "period": "2007 – 2010",
+      "gpa": "7.6"
+    }
+  ],
+  "CERTIFICATIONS": [
+    {
+      "name": "Introducing SAP Business AI Platform",
+      "issuer": "SAP Learning",
+      "year": "2026"
+    },
+    {
+      "name": "Introducing SAP Business Data Cloud",
+      "issuer": "SAP Learning",
+      "year": "2026"
+    },
+    {
+      "name": "Oracle Cloud Infrastructure Foundations: Associate",
+      "issuer": "Oracle",
+      "year": "2022"
+    },
+    {
+      "name": "ITIL 4 Foundation Certificate in ITSM",
+      "issuer": "PeopleCert on behalf of AXELOS",
+      "year": "2022"
+    },
+    {
+      "name": "Six Sigma White Belt",
+      "issuer": "Council for Six Sigma Certification",
+      "year": "2021"
+    }
+  ],
+  "ARCHITECTURE_LABS": [
+    {
+      "id": "vulcan-grid",
+      "title": "Project: Vulcan Grid",
+      "status": "Completed",
+      "refId": "LAB-2910",
+      "author": "SOMASHEKAR BG",
+      "description": "A distributed ledger implementation optimized for sub-50ms finality in high-throughput industrial IoT environments. Leverages custom consensus algorithms to ensure structural integrity under network partitions.",
+      "metrics": ["Latency: 42ms Average", "Nodes: 5,000+ Verified"],
+      "imageUrl": "https://lh3.googleusercontent.com/aida-public/AB6AXuBbQx7d7U4aq6NAgKr4yxgr0N5okKimzW5JXI2Ts4BFJtaMMRHe5KwfSzJdY3EmJ-YKU57De93wZSG5-UQcZCYvUMNoQBeTwwxWhCEX7kqSXrS80sPmI-5-Xr2T_fgC9o0PkB7HD0FaAYo6-NJR2Xvc-oShHlKvhDkG3BKqNK_Q1268OULxUdpzqo7tjYs8So0sVNXlvyDax4MVDM7xSMSGrlU5Dki7WAjKN5ecBm_NevUmk0aBvXEqveDE8EJRkwLQ79aJMvITnb4",
+      "tags": ["#DISTRIBUTED_SYSTEMS", "#RUST_CORE", "#KAFKA_ROUTING"],
+      "whitepaperUrl": "#vulcan-grid-whitepaper"
+    },
+    {
+      "id": "zero-trust-mesh",
+      "title": "Zero-Trust Mesh",
+      "status": "Active",
+      "refId": "LAB-4402",
+      "author": "SOMASHEKAR BG",
+      "description": "Implementation of mTLS-driven service mesh for enterprise Kubernetes clusters. Automated rotating certificates, identity-based access control, and absolute network isolation boundaries.",
+      "metrics": ["Rotations: 100% Automated", "Certificates: Hashicorp Vault"],
+      "imageUrl": "https://lh3.googleusercontent.com/aida-public/AB6AXuA4jnVKFBtR2ZkigndNzIVfS5__CJkMsSqsZ3LvbtuoDktIqgg3_TBC1api3uIbV8wI5qJWvFL4Yi0Mqql5wOqovPrMRlVALz2LHq6pqhdK-do1njzcNtU8WQciJTkuvnNiWfH6rAdeCmtbz-gc-pjT9Icd1BX3Z5VrWiZapTvWpWdKEE1EDdNAEs5lVQ5bUZMj6krVyhVTue1ECzY9e66YEbVjtczp3Kcaj_2Hg-LKcoiKmKnylAIhacrJ7fQy10qRTTBb2TmbwgI",
+      "tags": ["#KUBERNETES", "#ISTIO", "#MTLS", "#SECURE_TUNNEL"],
+      "whitepaperUrl": "#zero-trust-mesh-case-study"
+    },
+    {
+      "id": "kernel-tuning",
+      "title": "Kernel Tuning Suite",
+      "status": "Completed",
+      "refId": "LAB-8812",
+      "author": "SOMASHEKAR BG",
+      "description": "Optimizing Linux kernel parameters (scheduler policy, memory lock, huge pages, IRQ affinity) for high-frequency low-latency workloads. Results in a 15% reduction in tail latency.",
+      "metrics": ["Latency Reduction: 15% Max", "Scheduler: SCHED_FIFO"],
+      "imageUrl": "https://lh3.googleusercontent.com/aida-public/AB6AXuAH9jmnu9eNZ7z3sZksH8lwRpGX2dTBB99HDeQNmxBjNs4sCgsCBVnB5a8WjwlwuoqRZb9N2s16RTP-6i5U7Tf26pDmERu0WynfuYzmwGx5aktmZKzyYPGMFmuXMiiuec4ZlzcmDuSqSF-pNufTi5xJDynaeubSbe46zuljbC1Su0CzDaNZ8cL6X7jFrcQEsBawh_f6sys4ixXmo5yQpu9Wc95yAaQTfhp8047JJBQiKe7-USr0MNNlYAb8blD0EUH9wiNgboWUJV8",
+      "tags": ["#LINUX_KERNEL", "#SYSCALL_OPTIMIZE", "#IRQ_AFFINITY"],
+      "whitepaperUrl": "#kernel-metrics"
+    },
+    {
+      "id": "neural-infra",
+      "title": "Neural Infrastructure",
+      "status": "Experimental",
+      "refId": "LAB-9071",
+      "author": "SOMASHEKAR BG",
+      "description": "Self-healing server clusters managed by autonomous reinforcement learning agents. High-fidelity real-time resource reallocation and predictive scaling based on automated neural traffic models.",
+      "metrics": ["Self-Heal accuracy: 94%", "Reallocation: <500ms"],
+      "imageUrl": "https://lh3.googleusercontent.com/aida-public/AB6AXuCgc4p_zeTDTmyhdrdoCcj5UgwFdwkeBAn949P2yyK52G5DYcqxEaO-IhzyBgoNS0sALSbeEuxqBPIZipY2xSY76F7SLlSy1N8vH0V8Odtrh6XbPE06EJNm2-8ux0uKPttjd8-SnYi_1jGTVBjbOHDXuBfTKhqZP8djP8dclpZvAyWFZ_nGjEAUFAWBaoNDx4uHBUGVpUxD9yKI338k_oOw2A3zaskB4PbHQwmiJRs9Vlt5PNkgtStue2lSdaAWIKdQpUAkUpdHMzQ",
+      "tags": ["#REINFORCEMENT_LEARNING", "#AUTONOMOUS_SRE", "#SMART_PROVISIONING"],
+      "whitepaperUrl": "#neural-whitepaper",
+      "demoUrl": "#neural-sandbox"
+    }
+  ],
+  "PRODUCTS_LIST": [
+    {
+      "title": "Hyper MCP",
+      "status": "Deployment Ready",
+      "imageUrl": "https://lh3.googleusercontent.com/aida-public/AB6AXuAWYBfeMnIDUpCdFrYAeiAnR_K4G0pVOPPCAQnySd3qgfP8SCRFzFjEOwkC81VZuinhURV3Ob1pnqUvK3AaHHrzWb2yL76cwzUoSxOyV5pEMMDp84579RD0SFDAudS_mtyYO2WVhJegcj3t_sdOH0dq6TYL9wOI_h9jxekVUG8RYAw0pYpFIThXF3vCznu87jImGBpxcnnaiSDew0LTg4FDQD9Ysno5UJGRFskAubtGlwJMdIB_x_neh6EW4_C0AK5ev0V9DIX4alk",
+      "description": "Mission Critical Platform engineered for ultra-low latency infrastructure orchestration. Features real-time node synchronization, auto-scaling telemetry, and zero-downtime cluster transfers for large global enterprise infrastructure.",
+      "bullets": ["99.999% Uptime SLA Guarantee", "Quantum-Safe mTLS Mesh Integration", "Automated Load Redistribution"],
+      "tags": ["GO-PLATFORM", "ETCD-SYNC", "KUBERNETES"],
+      "actionLabel": "View Technical Specs"
+    },
+    {
+      "title": "Hyper Resume Parser",
+      "status": "Alpha V2.4",
+      "imageUrl": "https://lh3.googleusercontent.com/aida-public/AB6AXuAH9jmnu9eNZ7z3sZksH8lwRpGX2dTBB99HDeQNmxBjNs4sCgsCBVnB5a8WjwlwuoqRZb9N2s16RTP-6i5U7Tf26pDmERu0WynfuYzmwGx5aktmZKzyYPGMFmuXMiiuec4ZlzcmDuSqSF-pNufTi5xJDynaeubSbe46zuljbC1Su0CzDaNZ8cL6X7jFrcQEsBawh_f6sys4ixXmo5yQpu9Wc95yAaQTfhp8047JJBQiKe7-USr0MNNlYAb8blD0EUH9wiNgboWUJV8",
+      "description": "An automated enterprise talent parsing engine that leverages deep neural networks and custom vector search schemas to instantly map applicant professional histories directly to active infrastructure demand parameters.",
+      "bullets": ["Highly optimized Transformer model", "Custom 1536-dim Vector Embeddings", "Real-time compliance rating dashboard"],
+      "tags": ["NLP", "VECTOR-EMBED", "PYTORCH"],
+      "actionLabel": "Initialize Engine"
+    },
+    {
+      "title": "Sitman AI (Situational SRE)",
+      "status": "AI-Experimental",
+      "imageUrl": "https://lh3.googleusercontent.com/aida-public/AB6AXuBH5g2HEjVAewkIokh94xXqFxH6ykQGGwMMG_RG4daQQP-APRZID-SNPRwucpyydiweVbIxmkjUtdYSXUuBsR7xIzsHDa18YdJVKQiOnCnGJa3kPvYI1idLL6w4MtGvonsuSkTXL1Tt8rnqcbvSYTmSGutIEHaNAmv7y5nZ5oLabHjILjItn-ZkeUxNwirwSN5JEIyU4smEYfDiJfRPaS0BOWqdqKZ6NTKtOK5IXe6PKwF0StWi4uBtNse4aqh1HZWw5cX3wDWUL04",
+      "description": "Situational SRE Manager AI utilizing multi-modal anomaly detectors. Predicts server hardware degradation and cooling unit failure 72 hours in advance via acoustic spectral and thermo-dynamic telemetry analyses.",
+      "bullets": ["Predicts failures 72 hours before occurrence", "Acoustic ML wave-shape matching engine", "Runs edge-side on sensor nodes"],
+      "tags": ["AUDIO-ML", "THERMAL-DETECTOR", "EDGE-OPS"],
+      "actionLabel": "Access Dashboard"
+    }
+  ],
+  "ARCHITECTURE_INSIGHTS": [
+    {
+      "type": "Whitepaper",
+      "title": "Scaling Edge Nodes in Post-Cloud Architectures",
+      "cta": "Read Report"
+    },
+    {
+      "type": "Case Study",
+      "title": "Reducing Latency by 40% for Global FinTech",
+      "cta": "Review Case"
+    },
+    {
+      "type": "Solution",
+      "title": "Autonomous Mesh Networks for Rugged Sites",
+      "cta": "Explore Mesh"
+    }
+  ],
+  "SEARCHABLE_TOPICS": [
+    { "title": "Executive Summary", "category": "Experience", "sectionId": "summary", "description": "Senior Platform Engineering and Enterprise Infrastructure Leader summary" },
+    { "title": "Leader Statistics", "category": "Experience", "sectionId": "summary", "description": "14+ Years lifecycle management, 80k+ servers, $24M portfolio" },
+    { "title": "Internal Developer Platforms (IDP)", "category": "Platform Engineering", "sectionId": "summary", "description": "Platform Modernization and Developer Experience (DevEx)" },
+    { "title": "Google Cloud Platform (GCP)", "category": "Cloud & Infrastructure", "sectionId": "summary", "description": "Hybrid Cloud Architecture and Infrastructure Automation" },
+    { "title": "Site Reliability Engineering (SRE)", "category": "Engineering Excellence", "sectionId": "summary", "description": "Observability, Telemetry, and Cascading Incident Management" },
+    { "title": "AI Platform Strategy", "category": "AI & Emerging Tech", "sectionId": "summary", "description": "Model Context Protocol (MCP), LLM Integration Architectures" },
+    { "title": "Hyper MCP", "category": "Products & Solutions", "sectionId": "solutions", "description": "Mission Critical Platform for ultra-low latency infrastructure orchestration" },
+    { "title": "Hyper Resume Parser", "category": "Products & Solutions", "sectionId": "solutions", "description": "Alpha V2.4 AI applicant professional history parsing engine" },
+    { "title": "Sitman AI (Situational SRE)", "category": "Products & Solutions", "sectionId": "solutions", "description": "Situational SRE Manager using multi-modal acoustic spectral anomalies" },
+    { "title": "Case Study: Scaling Edge Nodes", "category": "Research & Insights", "sectionId": "solutions", "description": "Scaling Edge Nodes in Post-Cloud Architectures report" },
+    { "title": "Case Study: Reducing Latency by 40%", "category": "Research & Insights", "sectionId": "solutions", "description": "Reducing Latency by 40% for Global FinTech" },
+    { "title": "Project: Vulcan Grid", "category": "Architecture Labs", "sectionId": "labs", "description": "Distributed ledger implementation optimized for sub-50ms finality" },
+    { "title": "Zero-Trust Mesh", "category": "Architecture Labs", "sectionId": "labs", "description": "mTLS-driven service mesh for enterprise Kubernetes clusters" },
+    { "title": "Kernel Tuning Suite", "category": "Architecture Labs", "sectionId": "labs", "description": "Linux kernel tuning parameter optimization (scheduler, huge pages)" },
+    { "title": "Neural Infrastructure", "category": "Architecture Labs", "sectionId": "labs", "description": "Self-healing server clusters managed by autonomous RL agents" },
+    { "title": "SRE Reinforcement Learning Visualization", "category": "Labs Interactive", "sectionId": "labs", "description": "Live simulator to test network partition or CPU spikes" },
+    { "title": "API Authentication Protocol", "category": "API & Core Protocols", "sectionId": "docs", "description": "/api/v1/auth endpoint with custom handshake parameters" },
+    { "title": "Cluster Health Endpoint", "category": "API & Core Protocols", "sectionId": "docs", "description": "/api/v1/cluster/health system status query API" },
+    { "title": "Telemetry Stream Event Subscription", "category": "Core Architecture Protocols", "sectionId": "docs", "description": "Event Subscriptions and system webhook telemetry triggers" },
+    { "title": "Security Audits Protocol Bridge", "category": "Core Architecture Protocols", "sectionId": "docs", "description": "Protocol Bridge security log telemetry stream" }
+  ]
+}

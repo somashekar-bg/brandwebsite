@@ -1,0 +1,1762 @@
+import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import {
+  Terminal,
+  Layers,
+  Cpu,
+  FileText,
+  Activity,
+  CheckCircle,
+  ArrowRight,
+  ShieldAlert,
+  Send,
+  X,
+  Play,
+  RotateCcw,
+  User,
+  Heart,
+  Compass,
+  FileDown,
+  ExternalLink,
+  ChevronRight,
+  AlertTriangle,
+  Monitor,
+  Volume2,
+  SlidersHorizontal,
+  Search,
+  Mail,
+  Phone,
+  Linkedin
+} from "lucide-react";
+import {
+  SOMASHEKAR_PROFILE,
+  LEADERSHIP_PHILOSOPHY,
+  EXECUTIVE_HIGHLIGHTS,
+  LEADER_STATS,
+  TECHNICAL_MATRIX,
+  PROFESSIONAL_EXPERIENCE,
+  EDUCATION,
+  CERTIFICATIONS,
+  ARCHITECTURE_LABS,
+  PRODUCTS_LIST,
+  ARCHITECTURE_INSIGHTS,
+  SEARCHABLE_TOPICS
+} from "./data";
+
+export default function App() {
+  // Navigation states
+  const [activeTab, setActiveTab] = useState<"summary" | "solutions" | "labs" | "docs">("summary");
+  const [hoveredTab, setHoveredTab] = useState<string | null>(null);
+  const [isTerminalOpen, setIsTerminalOpen] = useState(false);
+  const [systemUplink, setSystemUplink] = useState<"active" | "standby">("active");
+  const [latency, setLatency] = useState(14);
+
+  // Search states
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [highlightedSection, setHighlightedSection] = useState<string | null>(null);
+
+  // Terminal Chat states
+  const [chatInput, setChatInput] = useState("");
+  const [chatMessages, setChatMessages] = useState<Array<{ role: "user" | "assistant"; content: string }>>([
+    {
+      role: "assistant",
+      content: "UPLINK SECURED. I am Somashekar's AI SRE Co-Pilot. Ask me anything about Somashekar's portfolio, infrastructure expertise, or trigger a /simulate-incident command."
+    }
+  ]);
+  const [isChatLoading, setIsChatLoading] = useState(false);
+  const chatScrollRef = useRef<HTMLDivElement>(null);
+
+  // SRE Simulator states
+  const [activeIncident, setActiveIncident] = useState<any>(null);
+  const [isSimulating, setIsSimulating] = useState(false);
+  const [userCustomAction, setUserCustomAction] = useState("");
+  const [simulationResult, setSimulationResult] = useState<any>(null);
+  const [simulationLog, setSimulationLog] = useState<string[]>([]);
+
+  // Interactive Product animations
+  const [isResumeEngineInitialized, setIsResumeEngineInitialized] = useState(false);
+  const [resumeParsedData, setResumeParsedData] = useState<any>(null);
+  const [isSitmanMonitoring, setIsSitmanMonitoring] = useState(false);
+  const [sitmanMetrics, setSitmanMetrics] = useState({ acousticDb: 42, thermalKelvin: 298, failureProbability: 0.02 });
+
+  // Custom connection modal
+  const [isConnectionModalOpen, setIsConnectionModalOpen] = useState(false);
+  const [connectionForm, setConnectionForm] = useState({ name: "", email: "", query: "" });
+  const [connectionSubmitted, setConnectionSubmitted] = useState(false);
+
+  // Scroll progress and smooth scrolling spy
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  const scrollToSection = (sectionId: "summary" | "solutions" | "labs" | "docs", topicTitle?: string) => {
+    setActiveTab(sectionId);
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    if (topicTitle) {
+      setHighlightedSection(topicTitle);
+      setTimeout(() => {
+        setHighlightedSection(null);
+      }, 3000);
+    }
+  };
+
+  // Scroll depth tracking and header scrollspy
+  useEffect(() => {
+    const handleScroll = () => {
+      const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalScroll > 0) {
+        setScrollProgress((window.scrollY / totalScroll) * 100);
+      }
+
+      const sections = ["summary", "solutions", "labs", "docs"];
+      const scrollPosition = window.scrollY + 160; // Offset for header & extra padding
+
+      for (const sectionId of sections) {
+        const el = document.getElementById(sectionId);
+        if (el) {
+          const top = el.offsetTop;
+          const height = el.offsetHeight;
+          if (scrollPosition >= top && scrollPosition < top + height) {
+            setActiveTab(sectionId as any);
+          }
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Periodic latency simulation for visual fidelity
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setLatency(Math.floor(Math.random() * 8) + 11);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Auto-scroll chat
+  useEffect(() => {
+    if (chatScrollRef.current) {
+      chatScrollRef.current.scrollTop = chatScrollRef.current.scrollHeight;
+    }
+  }, [chatMessages, isSimulating, simulationLog]);
+
+  // Handle Terminal Chat submission
+  const handleSendMessage = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!chatInput.trim() || isChatLoading) return;
+
+    const userMsg = chatInput.trim();
+    setChatInput("");
+    setChatMessages(prev => [...prev, { role: "user", content: userMsg }]);
+    setIsChatLoading(true);
+
+    // Check for special command
+    if (userMsg.toLowerCase().startsWith("/simulate") || userMsg.toLowerCase().startsWith("/incident")) {
+      await triggerIncidentSimulation();
+      setIsChatLoading(false);
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/profile-chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          query: userMsg,
+          messages: chatMessages.slice(-6) // send last few context messages
+        }),
+      });
+      const data = await res.json();
+      setChatMessages(prev => [...prev, { role: "assistant", content: data.reply }]);
+    } catch (err) {
+      setChatMessages(prev => [
+        ...prev,
+        { role: "assistant", content: "[SYSTEM OFF-LINE] Connection timeout. Verify GEMINI_API_KEY environment config." }
+      ]);
+    } finally {
+      setIsChatLoading(false);
+    }
+  };
+
+  // Trigger SRE Incident Simulation
+  const triggerIncidentSimulation = async () => {
+    setIsSimulating(true);
+    setSimulationResult(null);
+    setSimulationLog(["[INITIALIZING] Establishing secure Sandbox environments...", "[ALERT] Injecting automated fault cascade scenario..."]);
+    
+    try {
+      const res = await fetch("/api/sre-simulator", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "start" }),
+      });
+      const data = await res.json();
+      setActiveIncident(data);
+      
+      setSimulationLog(prev => [
+        ...prev,
+        `[CRITICAL_ALARM] Incident generated: ${data.id}`,
+        `[SITUATION] ${data.title} is now active.`,
+        `[IMPACT] ${data.impact}`,
+        `[TELEMETRY] Latency spiked to ${data.telemetry?.latency || "500ms"}`,
+        `[LOGGER] Output snippet:\n${data.telemetry?.logSnippet || ""}`,
+        `[PROMPT] Enter resolution script or select from the recovery options below:`
+      ]);
+    } catch (err) {
+      setSimulationLog(prev => [...prev, "[ERROR] Simulated fault injector timed out. Check server connectivity."]);
+    } finally {
+      setIsSimulating(false);
+    }
+  };
+
+  // Resolve SRE Incident
+  const resolveIncident = async (remediationStrategy: string) => {
+    setIsSimulating(true);
+    setSimulationLog(prev => [
+      ...prev,
+      `[REMEDIATION] Deploying strategy: "${remediationStrategy}"`,
+      `[PIPELINE] Executing automated hotfixes...`,
+      `[VAL] Running telemetry validation sweeps...`
+    ]);
+
+    try {
+      const res = await fetch("/api/sre-simulator", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "resolve",
+          incidentId: activeIncident?.id,
+          userAction: remediationStrategy,
+          currentHistory: activeIncident
+        }),
+      });
+      const data = await res.json();
+      setSimulationResult(data);
+      
+      if (data.success) {
+        setSimulationLog(prev => [
+          ...prev,
+          `[SUCCESS] Fault cleared! SRE system returning to operational safety.`,
+          `[STATS] Latency: ${data.telemetryAfter?.latency || "14ms"} | Load: ${data.telemetryAfter?.cpuLoad || "12%"}`,
+          `[DEBRIEF] ${data.debrief}`
+        ]);
+      } else {
+        setSimulationLog(prev => [
+          ...prev,
+          `[WARNING] Strategy did not fully remediate the incident.`,
+          `[DEBRIEF] ${data.debrief || "Platform instability detected."}`
+        ]);
+      }
+    } catch (err) {
+      setSimulationLog(prev => [...prev, "[ERROR] Telemetry evaluation timed out."]);
+    } finally {
+      setIsSimulating(false);
+    }
+  };
+
+  // Trigger Hyper Resume Parser
+  const runResumeParser = () => {
+    setIsResumeEngineInitialized(true);
+    setTimeout(() => {
+      setResumeParsedData({
+        parsedAt: "2026-07-13T01:47:00Z",
+        parsedScores: { "Platform Ops": "98%", "Kubernetes": "99%", "Generative AI": "95%", "Enterprise Scale": "97%" },
+        matchToken: "TOKEN_SBG_99812A",
+        executiveInsights: [
+          "Healthcare/Retail Fortune 500 specialist.",
+          "Manages infrastructure asset valuations up to $24 Million.",
+          "Enterprise footprints exceeding 200,000 servers globally."
+        ]
+      });
+    }, 1800);
+  };
+
+  // Simulate Sitman Acoustic Sensors
+  useEffect(() => {
+    if (!isSitmanMonitoring) return;
+    const interval = setInterval(() => {
+      setSitmanMetrics({
+        acousticDb: 40 + Math.floor(Math.random() * 6),
+        thermalKelvin: 295 + Math.floor(Math.random() * 8),
+        failureProbability: Math.random() * 0.05
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [isSitmanMonitoring]);
+
+  const toggleSitmanMonitoring = () => {
+    setIsSitmanMonitoring(prev => !prev);
+  };
+
+  const handleConnectionSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setConnectionSubmitted(true);
+    setTimeout(() => {
+      setIsConnectionModalOpen(false);
+      setConnectionSubmitted(false);
+      setConnectionForm({ name: "", email: "", query: "" });
+    }, 3000);
+  };
+
+  const highlightedSectionId = SEARCHABLE_TOPICS.find(t => t.title === highlightedSection)?.sectionId;
+
+  return (
+    <div className="min-h-screen bg-brand-dark text-brand-cararra font-sans antialiased relative selection:bg-brand-red selection:text-white overflow-x-hidden">
+      {/* Visual background lines and noise overlay */}
+      <div className="absolute inset-0 grid-bg opacity-15 pointer-events-none z-0"></div>
+      <div className="absolute inset-0 noise-bg pointer-events-none z-0"></div>
+
+      {/* Top Application Bar */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-brand-dark/95 backdrop-blur-md border-b border-brand-border">
+        <div className="w-full max-w-7xl mx-auto px-6 md:px-16 py-4 md:py-5 flex flex-col gap-4">
+          {/* Top Row: Profile and Brand Title */}
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 w-full">
+            <div className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6 shrink-0">
+              <div className="w-14 h-14 md:w-16 md:h-16 bg-brand-chalk border-2 border-brand-red rounded-full overflow-hidden shrink-0 relative group shadow-lg">
+                <img
+                  src={SOMASHEKAR_PROFILE.portraitUrl}
+                  alt={`${SOMASHEKAR_PROFILE.name} ${SOMASHEKAR_PROFILE.lastName}`}
+                  referrerPolicy="no-referrer"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-all duration-500"
+                />
+                <div className="absolute inset-0 border border-brand-red/20 rounded-full pointer-events-none group-hover:border-brand-red transition-all"></div>
+              </div>
+              <div className="flex flex-col space-y-1.5">
+                <div className="flex items-center gap-2">
+                  <h1 className="font-normal text-xl md:text-2xl tracking-normal text-brand-cararra leading-none uppercase">
+                    {SOMASHEKAR_PROFILE.name} <span className="text-brand-red font-medium">{SOMASHEKAR_PROFILE.lastName}</span>
+                  </h1>
+                  <span className="text-[8px] font-mono bg-brand-red text-white border border-brand-red/30 px-2 py-0.5 rounded-sm font-normal uppercase tracking-wider">
+                    {SOMASHEKAR_PROFILE.badge}
+                  </span>
+                </div>
+                
+                <p className="text-[11px] md:text-xs uppercase tracking-wider text-brand-slate font-normal leading-none">
+                  {SOMASHEKAR_PROFILE.title}
+                </p>
+
+                {/* Highlights: Email, Phone & LinkedIn */}
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[11px] md:text-xs text-brand-slate font-normal pt-0.5">
+                  <a href={`mailto:${SOMASHEKAR_PROFILE.email}`} className="flex items-center gap-1.5 hover:text-brand-red text-brand-cararra transition-colors">
+                    <Mail className="w-3.5 h-3.5 text-brand-red/80 shrink-0" />
+                    <span className="font-normal">{SOMASHEKAR_PROFILE.email}</span>
+                  </a>
+                  <span className="hidden md:inline text-brand-border/60">|</span>
+                  <a href={`tel:${SOMASHEKAR_PROFILE.phone.replace(/\s+/g, '')}`} className="flex items-center gap-1.5 hover:text-brand-red text-brand-cararra transition-colors">
+                    <Phone className="w-3.5 h-3.5 text-brand-red/80 shrink-0" />
+                    <span className="font-normal">{SOMASHEKAR_PROFILE.phone}</span>
+                  </a>
+                  <span className="hidden md:inline text-brand-border/60">|</span>
+                  <a href={SOMASHEKAR_PROFILE.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-brand-red text-brand-cararra transition-colors">
+                    <Linkedin className="w-3.5 h-3.5 text-brand-red/80 shrink-0" />
+                    <span className="font-normal">LinkedIn</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Delimiter / Divider line separating headlines from tabs section */}
+          <div className="w-full border-t border-brand-border/60"></div>
+
+          {/* Bottom Row: Navigation Tabs and Search Hub */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 w-full">
+            <nav 
+              onMouseLeave={() => setHoveredTab(null)}
+              className="flex items-center flex-wrap gap-2 md:gap-3 text-[11px] uppercase tracking-wider font-normal"
+            >
+              <button
+                onMouseEnter={() => setHoveredTab("summary")}
+                onClick={() => scrollToSection("summary")}
+                className={`relative px-4 py-1.5 rounded-full border text-[11px] uppercase tracking-wider transition-all duration-300 z-10 select-none ${
+                  activeTab === "summary"
+                    ? "border-brand-red/30 text-brand-red font-medium"
+                    : "border-brand-border/40 bg-brand-chalk/20 text-brand-slate hover:text-brand-cararra"
+                }`}
+              >
+                <span className="relative z-10">Experience</span>
+                {(hoveredTab === "summary" || (hoveredTab === null && activeTab === "summary")) && (
+                  <motion.div
+                    layoutId="activeTabWaterBackground"
+                    className="absolute inset-0 bg-brand-red/10 rounded-full border border-brand-red/20 shadow-[inset_0_1px_3px_rgba(187,8,11,0.08),0_2px_8px_rgba(187,8,11,0.05)]"
+                    style={{ originY: "50%" }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 280,
+                      damping: 18,
+                      mass: 1.2
+                    }}
+                  />
+                )}
+              </button>
+
+              <button
+                onMouseEnter={() => setHoveredTab("solutions")}
+                onClick={() => scrollToSection("solutions")}
+                className={`relative px-4 py-1.5 rounded-full border text-[11px] uppercase tracking-wider transition-all duration-300 z-10 select-none ${
+                  activeTab === "solutions"
+                    ? "border-brand-red/30 text-brand-red font-medium"
+                    : "border-brand-border/40 bg-brand-chalk/20 text-brand-slate hover:text-brand-cararra"
+                }`}
+              >
+                <span className="relative z-10">Expertise</span>
+                {(hoveredTab === "solutions" || (hoveredTab === null && activeTab === "solutions")) && (
+                  <motion.div
+                    layoutId="activeTabWaterBackground"
+                    className="absolute inset-0 bg-brand-red/10 rounded-full border border-brand-red/20 shadow-[inset_0_1px_3px_rgba(187,8,11,0.08),0_2px_8px_rgba(187,8,11,0.05)]"
+                    style={{ originY: "50%" }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 280,
+                      damping: 18,
+                      mass: 1.2
+                    }}
+                  />
+                )}
+              </button>
+
+              <button
+                onMouseEnter={() => setHoveredTab("labs")}
+                onClick={() => scrollToSection("labs")}
+                className={`relative px-4 py-1.5 rounded-full border text-[11px] uppercase tracking-wider transition-all duration-300 z-10 select-none ${
+                  activeTab === "labs"
+                    ? "border-brand-red/30 text-brand-red font-medium"
+                    : "border-brand-border/40 bg-brand-chalk/20 text-brand-slate hover:text-brand-cararra"
+                }`}
+              >
+                <span className="relative z-10">Architecture</span>
+                {(hoveredTab === "labs" || (hoveredTab === null && activeTab === "labs")) && (
+                  <motion.div
+                    layoutId="activeTabWaterBackground"
+                    className="absolute inset-0 bg-brand-red/10 rounded-full border border-brand-red/20 shadow-[inset_0_1px_3px_rgba(187,8,11,0.08),0_2px_8px_rgba(187,8,11,0.05)]"
+                    style={{ originY: "50%" }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 280,
+                      damping: 18,
+                      mass: 1.2
+                    }}
+                  />
+                )}
+              </button>
+
+              <button
+                onMouseEnter={() => setHoveredTab("docs")}
+                onClick={() => scrollToSection("docs")}
+                className={`relative px-4 py-1.5 rounded-full border text-[11px] uppercase tracking-wider transition-all duration-300 z-10 select-none ${
+                  activeTab === "docs"
+                    ? "border-brand-red/30 text-brand-red font-medium"
+                    : "border-brand-border/40 bg-brand-chalk/20 text-brand-slate hover:text-brand-cararra"
+                }`}
+              >
+                <span className="relative z-10">Docs</span>
+                {(hoveredTab === "docs" || (hoveredTab === null && activeTab === "docs")) && (
+                  <motion.div
+                    layoutId="activeTabWaterBackground"
+                    className="absolute inset-0 bg-brand-red/10 rounded-full border border-brand-red/20 shadow-[inset_0_1px_3px_rgba(187,8,11,0.08),0_2px_8px_rgba(187,8,11,0.05)]"
+                    style={{ originY: "50%" }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 280,
+                      damping: 18,
+                      mass: 1.2
+                    }}
+                  />
+                )}
+              </button>
+
+              <button
+                onMouseEnter={() => setHoveredTab("contact")}
+                onClick={() => setIsConnectionModalOpen(true)}
+                className={`relative px-4 py-1.5 rounded-full border text-[11px] uppercase tracking-wider transition-all duration-300 z-10 select-none ${
+                  isConnectionModalOpen
+                    ? "border-brand-red/30 text-brand-red font-medium"
+                    : "border-brand-border/40 bg-brand-chalk/20 text-brand-slate hover:text-brand-cararra"
+                }`}
+              >
+                <span className="relative z-10">Contact</span>
+                {(hoveredTab === "contact" || isConnectionModalOpen) && (
+                  <motion.div
+                    layoutId="activeTabWaterBackground"
+                    className="absolute inset-0 bg-brand-red/10 rounded-full border border-brand-red/20 shadow-[inset_0_1px_3px_rgba(187,8,11,0.08),0_2px_8px_rgba(187,8,11,0.05)]"
+                    style={{ originY: "50%" }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 280,
+                      damping: 18,
+                      mass: 1.2
+                    }}
+                  />
+                )}
+              </button>
+            </nav>
+
+            {/* Header Search Hub replacing AI Terminal button */}
+            <div className="relative w-full sm:w-64 md:w-80 z-50">
+              <div className="relative">
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-red" />
+                <input
+                  type="text"
+                  placeholder="Search portfolio..."
+                  className="bg-brand-black/90 border border-brand-border text-xs text-brand-cararra placeholder-brand-slate pl-10 pr-16 py-2 rounded-full w-full focus:outline-none focus:border-brand-red transition-all focus:ring-2 focus:ring-brand-red/10 font-normal"
+                  value={searchQuery}
+                  onFocus={() => setIsSearchFocused(true)}
+                  onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                {searchQuery && (
+                  <button 
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[10px] text-brand-slate hover:text-brand-red font-mono font-normal uppercase tracking-wider transition-colors"
+                  >
+                    CLEAR
+                  </button>
+                )}
+              </div>
+
+              {/* Dropdown list of results relative to the search box */}
+              <AnimatePresence>
+                {isSearchFocused && searchQuery.trim() !== "" && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    className="absolute right-0 top-full mt-2 w-72 sm:w-80 md:w-96 bg-brand-black border border-brand-border rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.15)] max-h-80 overflow-y-auto z-50 divide-y divide-brand-border/40"
+                  >
+                    {SEARCHABLE_TOPICS.filter(
+                      topic =>
+                        topic.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        topic.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        topic.description.toLowerCase().includes(searchQuery.toLowerCase())
+                    ).length > 0 ? (
+                      SEARCHABLE_TOPICS.filter(
+                        topic =>
+                          topic.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          topic.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          topic.description.toLowerCase().includes(searchQuery.toLowerCase())
+                      ).map((topic, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => {
+                            scrollToSection(topic.sectionId, topic.title);
+                            setSearchQuery("");
+                          }}
+                          className="w-full text-left px-4 py-3 hover:bg-brand-red/5 group transition-all"
+                        >
+                          <div className="flex justify-between items-center mb-0.5">
+                            <span className="font-bold text-xs text-brand-cararra group-hover:text-brand-red transition-colors">
+                              {topic.title}
+                            </span>
+                            <span className="text-[8px] font-mono bg-brand-chalk border border-brand-border px-1.5 py-0.5 rounded text-brand-slate font-bold uppercase tracking-wider">
+                              {topic.category}
+                            </span>
+                          </div>
+                          <p className="text-[10px] text-brand-slate line-clamp-2 leading-relaxed">{topic.description}</p>
+                        </button>
+                      ))
+                    ) : (
+                      <div className="px-4 py-4 text-center text-xs text-brand-slate font-mono font-bold">
+                        NO TOPICS MATCHING "{searchQuery.toUpperCase()}"
+                      </div>
+                    )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </div>
+        </div>
+
+        {/* Scroll depth indicator bar */}
+        <div 
+          className="absolute bottom-0 left-0 h-[3px] bg-brand-red transition-all duration-75 z-50"
+          style={{ width: `${scrollProgress}%` }}
+        />
+      </header>
+
+      {/* Main Structural Layout */}
+      <div className="pt-[240px] sm:pt-[200px] md:pt-[180px] lg:pt-[155px] min-h-screen relative z-10 w-full flex flex-col items-center">
+        {/* Content Area with Single Page Long Scroll Sections */}
+        <main className="w-full max-w-7xl px-6 md:px-16 py-12 md:py-16 space-y-24 pb-24">
+          <motion.div
+            id="summary"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+            className={`space-y-12 scroll-mt-[240px] sm:scroll-mt-[200px] md:scroll-mt-[180px] lg:scroll-mt-[155px] transition-all duration-1000 p-4 md:p-6 rounded-2xl ${
+              highlightedSectionId === "summary"
+                ? "ring-2 ring-brand-red bg-brand-red/5 shadow-[0_0_50px_rgba(235,94,85,0.15)] scale-[1.01]"
+                : "ring-0 ring-transparent"
+            }`}
+          >
+                {/* Executive summary block */}
+                <div className="space-y-6">
+                  <div className="inline-block px-3 py-1 border border-brand-red/30 bg-brand-red/10 rounded-full">
+                    <span className="text-[10px] text-brand-red uppercase tracking-widest font-bold">Executive Summary</span>
+                  </div>
+                  <h2 className="text-4xl md:text-6xl font-light text-brand-cararra leading-[1.1] tracking-tight">
+                    Driving technology transformation for <span className="text-brand-slate italic">Fortune 500</span> enterprises.
+                  </h2>
+                  <p className="font-mono text-xs md:text-sm text-brand-slate border-l-2 border-brand-red pl-6 py-1 max-w-2xl">
+                    {SOMASHEKAR_PROFILE.title}. Re-architecting large-scale systems for the next era of computing.
+                  </p>
+                  <p className="text-brand-slate font-light leading-relaxed text-sm md:text-base max-w-3xl">
+                    {SOMASHEKAR_PROFILE.summary}
+                  </p>
+                </div>
+
+                {/* SRE Stats Row */}
+                <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-brand-border bg-brand-black border border-brand-border p-6 rounded-lg">
+                  {LEADER_STATS.map((stat, i) => (
+                    <div key={i} className="p-6 space-y-2 group hover:bg-brand-dark/40 transition-colors">
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-brand-slate">{stat.label}</p>
+                      <h3 className="font-light text-4xl text-brand-cararra tracking-tighter">{stat.value}</h3>
+                      <p className="text-xs text-brand-slate font-light">{stat.description}</p>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Technical matrix bento-like grid */}
+                <div className="space-y-6">
+                  <div className="border-b border-brand-border pb-4">
+                    <p className="text-[10px] font-bold tracking-widest text-brand-red uppercase">// CORE_COMPETENCIES.JSON</p>
+                    <h3 className="text-2xl font-light uppercase text-brand-cararra tracking-tight">System Architecture Matrix</h3>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {TECHNICAL_MATRIX.map((group, i) => (
+                      <div key={i} className="custom-card p-8 space-y-4 rounded-lg">
+                        <div className="flex items-center gap-3 border-b border-brand-border pb-3">
+                          <span className="w-1.5 h-1.5 rounded-full bg-brand-red"></span>
+                          <h4 className="font-light text-sm uppercase tracking-wider text-brand-cararra">{group.category}</h4>
+                        </div>
+                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-brand-slate">
+                          {group.items.map((item, idx) => (
+                            <li key={idx} className="flex items-center gap-2 font-light">
+                              <span className="w-1 h-1 rounded-full bg-brand-slate shrink-0"></span>
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Leadership Philosophy & Executive Highlights */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  {/* Leadership Philosophy */}
+                  <div className="bg-brand-black border border-brand-border p-8 rounded-lg space-y-4 flex flex-col justify-between relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-brand-red/5 rounded-full blur-2xl pointer-events-none"></div>
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-mono font-bold tracking-widest text-brand-red uppercase">// LEADERSHIP_PHILOSOPHY.MD</span>
+                      </div>
+                      <h3 className="text-2xl font-light uppercase text-brand-cararra tracking-tight">Leadership Philosophy</h3>
+                      <p className="text-brand-slate text-sm font-light leading-relaxed italic border-l-2 border-brand-red pl-4">
+                        "{LEADERSHIP_PHILOSOPHY}"
+                      </p>
+                    </div>
+                    <div className="pt-4 flex items-center gap-2 text-[10px] font-mono text-brand-slate/60">
+                      <span>ORGANIZATIONAL_PRINCIPLE</span>
+                      <span>•</span>
+                      <span>SELF_SERVICE_INFRA</span>
+                    </div>
+                  </div>
+
+                  {/* Executive Highlights */}
+                  <div className="bg-brand-black border border-brand-border p-8 rounded-lg space-y-4">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-mono font-bold tracking-widest text-brand-red uppercase">// EXECUTIVE_HIGHLIGHTS.LOG</span>
+                    </div>
+                    <h3 className="text-2xl font-light uppercase text-brand-cararra tracking-tight">Executive Highlights</h3>
+                    <ul className="space-y-3">
+                      {EXECUTIVE_HIGHLIGHTS.map((highlight, idx) => (
+                        <li key={idx} className="flex gap-3 text-xs text-brand-slate leading-relaxed font-light">
+                          <span className="text-brand-red font-mono font-bold mt-0.5 shrink-0">0{idx + 1}.</span>
+                          <span>{highlight}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Professional Experience Timeline */}
+                <div className="space-y-8">
+                  <div className="border-b border-brand-border pb-4">
+                    <p className="text-[10px] font-bold tracking-widest text-brand-red uppercase">// PROFESSIONAL_TIMELINE.JSON</p>
+                    <h3 className="text-2xl font-light uppercase text-brand-cararra tracking-tight">Professional Experience</h3>
+                  </div>
+
+                  <div className="relative border-l border-brand-border pl-6 md:pl-8 ml-3 space-y-12">
+                    {PROFESSIONAL_EXPERIENCE.map((exp, idx) => (
+                      <div key={idx} className="relative group">
+                        {/* Timeline Bullet */}
+                        <div className="absolute -left-[31px] md:-left-[39px] top-1.5 w-4 h-4 bg-brand-black border-2 border-brand-red rounded-full group-hover:scale-125 group-hover:bg-brand-red transition-all duration-300">
+                          <div className="w-1.5 h-1.5 bg-brand-cararra rounded-full m-auto absolute inset-0"></div>
+                        </div>
+
+                        {/* Experience Content */}
+                        <div className="space-y-3">
+                          <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
+                            <div>
+                              <h4 className="text-lg md:text-xl font-bold text-brand-cararra group-hover:text-brand-red transition-colors">{exp.role}</h4>
+                              <p className="text-sm font-mono text-brand-slate/80">{exp.company}</p>
+                            </div>
+                            <div className="text-left md:text-right">
+                              <span className="inline-block bg-brand-dark border border-brand-border text-brand-cararra text-[10px] font-mono px-2 py-1 rounded-sm">
+                                {exp.period}
+                              </span>
+                              <p className="text-[10px] font-mono text-brand-slate mt-1">{exp.location}</p>
+                            </div>
+                          </div>
+
+                          {exp.context && (
+                            <p className="text-xs md:text-sm text-brand-slate/95 font-light leading-relaxed max-w-4xl bg-brand-dark/30 border-l border-brand-border p-3 pl-4 rounded-sm">
+                              {exp.context}
+                            </p>
+                          )}
+
+                          <ul className="space-y-2 pl-4">
+                            {exp.bullets.map((bullet, bIdx) => (
+                              <li key={bIdx} className="list-disc list-outside text-xs text-brand-slate font-light leading-relaxed pl-1">
+                                {bullet}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Education & Certifications Grid */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  {/* Education */}
+                  <div className="bg-brand-black border border-brand-border p-8 rounded-lg space-y-6">
+                    <div className="border-b border-brand-border pb-3 flex justify-between items-center">
+                      <h3 className="text-xl font-light uppercase text-brand-cararra tracking-tight">Education Credentials</h3>
+                      <span className="text-[9px] font-mono text-brand-slate uppercase tracking-wider">// ACADEMIC.LOG</span>
+                    </div>
+                    <div className="space-y-6">
+                      {EDUCATION.map((edu, idx) => (
+                        <div key={idx} className="space-y-2 border-l border-brand-border/40 pl-4 py-1 hover:border-brand-red transition-colors">
+                          <div className="flex justify-between items-start gap-4">
+                            <h4 className="text-sm font-bold text-brand-cararra leading-snug">{edu.degree}</h4>
+                            <span className="text-[9px] font-mono bg-brand-red/15 text-brand-red border border-brand-red/30 px-1.5 py-0.5 rounded-sm shrink-0">
+                              {edu.period}
+                            </span>
+                          </div>
+                          <p className="text-xs text-brand-slate">{edu.institution}</p>
+                          {edu.gpa && (
+                            <p className="text-[10px] font-mono text-brand-slate/60">GPA: <strong className="text-brand-cararra">{edu.gpa}</strong></p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Certifications */}
+                  <div className="bg-brand-black border border-brand-border p-8 rounded-lg space-y-6">
+                    <div className="border-b border-brand-border pb-3 flex justify-between items-center">
+                      <h3 className="text-xl font-light uppercase text-brand-cararra tracking-tight">Certifications</h3>
+                      <span className="text-[9px] font-mono text-brand-slate uppercase tracking-wider">// COMPLIANCE.LOG</span>
+                    </div>
+                    <div className="space-y-4">
+                      {CERTIFICATIONS.map((cert, idx) => (
+                        <div key={idx} className="flex justify-between items-center gap-4 text-xs border-b border-brand-border/30 pb-3 last:border-b-0 last:pb-0">
+                          <div className="space-y-1">
+                            <h4 className="font-bold text-brand-cararra leading-tight">{cert.name}</h4>
+                            <p className="text-[10px] text-brand-slate/80">{cert.issuer}</p>
+                          </div>
+                          <span className="text-[10px] font-mono text-brand-slate bg-brand-dark border border-brand-border px-2 py-1 rounded-sm shrink-0">
+                            {cert.year}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* AI Emergence Section with futuristic data center image */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-brand-black border border-brand-border p-8 rounded-lg">
+                  <div className="lg:col-span-7 space-y-4">
+                    <div className="inline-block px-3 py-1 border border-brand-red/30 bg-brand-red/10 rounded-full">
+                      <span className="text-[10px] text-brand-red uppercase tracking-widest font-bold">AI Platform Strategy</span>
+                    </div>
+                    <h3 className="text-2xl font-light uppercase text-brand-cararra tracking-tight">Infrastructure for Large Language Models</h3>
+                    <p className="text-xs md:text-sm text-brand-slate leading-relaxed font-light">
+                      Somashekar specializes in provisioning and tuning cloud systems, container farms, and GPUs for heavy AI computing workloads. Supporting AI Operations, mTLS edge secure links, and GenAI integrations globally.
+                    </p>
+                    <div className="flex flex-wrap gap-2 text-[10px] font-mono text-brand-slate">
+                      <span className="bg-brand-dark px-2 py-1 border border-brand-border rounded-md">VLLM-TUNING</span>
+                      <span className="bg-brand-dark px-2 py-1 border border-brand-border rounded-md">GPU-SLICE</span>
+                      <span className="bg-brand-dark px-2 py-1 border border-brand-border rounded-md">GCP-VERTEX</span>
+                    </div>
+                  </div>
+                  <div className="lg:col-span-5 h-48 lg:h-64 bg-brand-dark border border-brand-border rounded-lg overflow-hidden relative">
+                    <img
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWYBfeMnIDUpCdFrYAeiAnR_K4G0pVOPPCAQnySd3qgfP8SCRFzFjEOwkC81VZuinhURV3Ob1pnqUvK3AaHHrzWb2yL76cwzUoSxOyV5pEMMDp84579RD0SFDAudS_mtyYO2WVhJegcj3t_sdOH0dq6TYL9wOI_h9jxekVUG8RYAw0pYpFIThXF3vCznu87jImGBpxcnnaiSDew0LTg4FDQD9Ysno5UJGRFskAubtGlwJMdIB_x_neh6EW4_C0AK5ev0V9DIX4alk"
+                      alt="Data center corridor"
+                      className="w-full h-full object-cover brightness-95 hover:brightness-100 transition-all duration-700"
+                    />
+                  </div>
+                </div>
+
+                {/* CTA callout */}
+                <div className="border border-brand-red/30 bg-brand-red/5 p-8 md:p-12 text-center space-y-6 rounded-lg relative overflow-hidden">
+                  <div className="absolute inset-0 grid-bg opacity-10 pointer-events-none"></div>
+                  <h3 className="text-2xl md:text-4xl font-light uppercase text-brand-cararra tracking-tight">Ready to Optimize Your Stack?</h3>
+                  <p className="text-xs md:text-sm text-brand-slate max-w-xl mx-auto font-light">
+                    Currently accepting strategic infrastructure consultations. Secure your enterprise reliability guidelines and platform strategy today.
+                  </p>
+                  <div className="flex justify-center gap-4 flex-wrap">
+                    <button
+                      onClick={() => setIsConnectionModalOpen(true)}
+                      className="bg-brand-red text-white px-8 py-4 rounded-full text-xs font-bold uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all flex items-center gap-2"
+                    >
+                      <span>Initiate Connection</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => {
+                        // Log to simulation or notify smoothly rather than standard browser alert
+                        setSimulationLog(prev => [
+                          ...prev,
+                          `[PROTOCOL] Technical dossier download request registered dynamically.`,
+                          `[STATUS] Tokenized packet SOMASHEKAR_BG_DOSSIER.PDF generated.`
+                        ]);
+                        setIsTerminalOpen(true);
+                      }}
+                      className="bg-transparent border border-brand-border text-brand-cararra px-8 py-4 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-brand-black transition-all flex items-center gap-2"
+                    >
+                      <FileDown className="w-4 h-4 text-brand-red" />
+                      <span>Download Dossier</span>
+                    </button>
+                  </div>
+                </div>
+          </motion.div>
+
+          {/* Section Divider */}
+          <div className="h-[1px] bg-brand-border/40 my-16" />
+
+          <motion.div
+            id="solutions"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+            className={`space-y-12 scroll-mt-[240px] sm:scroll-mt-[200px] md:scroll-mt-[180px] lg:scroll-mt-[155px] transition-all duration-1000 p-4 md:p-6 rounded-2xl ${
+              highlightedSectionId === "solutions"
+                ? "ring-2 ring-brand-red bg-brand-red/5 shadow-[0_0_50px_rgba(235,94,85,0.15)] scale-[1.01]"
+                : "ring-0 ring-transparent"
+            }`}
+          >
+                {/* Section title */}
+                <div className="border-l-4 border-brand-red pl-6 space-y-2">
+                  <p className="text-[10px] font-bold text-brand-red uppercase tracking-widest leading-none">Portfolio Directory</p>
+                  <h2 className="text-3xl font-extrabold uppercase text-brand-cararra">Products &amp; Solutions</h2>
+                </div>
+
+                {/* LARGE FEATURED: Hyper MCP */}
+                <div className="bg-brand-black border border-brand-border rounded-sm overflow-hidden group">
+                  <div className="grid grid-cols-1 lg:grid-cols-12">
+                    <div className="lg:col-span-5 h-64 lg:h-full min-h-[300px] relative">
+                      <img
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4jnVKFBtR2ZkigndNzIVfS5__CJkMsSqsZ3LvbtuoDktIqgg3_TBC1api3uIbV8wI5qJWvFL4Yi0Mqql5wOqovPrMRlVALz2LHq6pqhdK-do1njzcNtU8WQciJTkuvnNiWfH6rAdeCmtbz-gc-pjT9Icd1BX3Z5VrWiZapTvWpWdKEE1EDdNAEs5lVQ5bUZMj6krVyhVTue1ECzY9e66YEbVjtczp3Kcaj_2Hg-LKcoiKmKnylAIhacrJ7fQy10qRTTBb2TmbwgI"
+                        alt="Hyper MCP server room"
+                        className="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-750"
+                      />
+                      <div className="absolute top-4 left-4 bg-brand-red text-white text-[9px] font-mono uppercase px-3 py-1 font-bold tracking-widest rounded-sm">
+                        DEPLOYMENT READY
+                      </div>
+                    </div>
+                    <div className="lg:col-span-7 p-8 md:p-12 space-y-6 flex flex-col justify-center">
+                      <h3 className="text-2xl font-extrabold uppercase text-brand-cararra">Hyper MCP</h3>
+                      <p className="text-xs md:text-sm text-brand-slate leading-relaxed">
+                        Mission Critical Platform engineered for ultra-low latency infrastructure orchestration. Designed for Fortune 500 scale, supporting multi-region server clusters, automated self-healing states, and secure cryptographic mTLS link exchanges.
+                      </p>
+                      <ul className="space-y-2 text-xs font-mono text-brand-slate">
+                        <li className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-brand-red" />
+                          <span>99.999% UPTIME SERVICE LEVEL AGREEMENT</span>
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-brand-red" />
+                          <span>QUANTUM-SAFE ENCRYPTED PROTOCOL LINK</span>
+                        </li>
+                      </ul>
+                      <button
+                        onClick={() => alert("Hyper MCP technical specifications requested. Loading secure schema file...")}
+                        className="bg-brand-red text-white px-6 py-3 rounded-sm text-xs font-bold uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all w-fit"
+                      >
+                        View Technical Specs
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* STATS row */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="bg-brand-black border border-brand-border p-8 flex items-center justify-between rounded-sm">
+                    <div className="space-y-1">
+                      <p className="text-[10px] font-mono text-brand-slate uppercase tracking-widest">TOTAL MANAGED NODES</p>
+                      <h4 className="font-extrabold text-3xl text-brand-cararra">14,280+</h4>
+                    </div>
+                    <Activity className="w-10 h-10 text-brand-red opacity-80" />
+                  </div>
+                  <div className="bg-brand-black border border-brand-border p-8 flex items-center justify-between rounded-sm">
+                    <div className="space-y-1">
+                      <p className="text-[10px] font-mono text-brand-slate uppercase tracking-widest">SECURITY COMPLIANCE</p>
+                      <h4 className="font-extrabold text-3xl text-brand-cararra">SOC2 / HIPAA</h4>
+                    </div>
+                    <User className="w-10 h-10 text-brand-red opacity-80" />
+                  </div>
+                </div>
+
+                {/* Two Col layout for Hyper Resume Parser and Sitman AI */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {/* Hyper Resume Card */}
+                  <div className="bg-brand-black border border-brand-border rounded-sm overflow-hidden flex flex-col hover:border-brand-red transition-all">
+                    <div className="p-8 space-y-4 flex-1">
+                      <div className="flex justify-between items-start">
+                        <span className="bg-brand-slate/15 border border-brand-slate text-brand-slate text-[9px] font-mono px-2 py-0.5 rounded-sm">SYSTEM // V2.4</span>
+                        <FileText className="text-brand-red w-6 h-6" />
+                      </div>
+                      <h3 className="text-xl font-bold uppercase text-brand-cararra">Hyper Resume Parser</h3>
+                      <p className="text-xs text-brand-slate leading-relaxed">
+                        An automated talent parsing engine leveraging deep neural network vector searches to map professional trajectory data directly into active technical resource queues.
+                      </p>
+                      <div className="flex gap-2 flex-wrap pt-2">
+                        <span className="text-[9px] font-mono bg-brand-dark px-2 py-0.5 border border-brand-border">NLP</span>
+                        <span className="text-[9px] font-mono bg-brand-dark px-2 py-0.5 border border-brand-border">VECTOR SEARCH</span>
+                        <span className="text-[9px] font-mono bg-brand-dark px-2 py-0.5 border border-brand-border">PYTORCH</span>
+                      </div>
+                    </div>
+                    
+                    {/* Interactive parser dashboard preview */}
+                    <div className="h-44 bg-brand-dark border-t border-brand-border relative overflow-hidden flex flex-col justify-center px-6">
+                      <AnimatePresence mode="wait">
+                        {!isResumeEngineInitialized ? (
+                          <div className="text-center space-y-2">
+                            <p className="text-[10px] font-mono text-brand-slate uppercase">AIDA Neural engine offline</p>
+                            <button
+                              onClick={runResumeParser}
+                              className="mx-auto bg-brand-black border border-brand-border hover:border-brand-red text-brand-cararra px-4 py-2 text-[10px] uppercase font-bold tracking-widest transition-all"
+                            >
+                              Initialize Engine
+                            </button>
+                          </div>
+                        ) : (
+                          <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="space-y-2 font-mono text-[10px]"
+                          >
+                            {!resumeParsedData ? (
+                              <div className="space-y-1">
+                                <p className="text-brand-red animate-pulse">⚙️ PARSING RESUME DATA STREAM...</p>
+                                <div className="w-full bg-brand-black h-1 rounded-full overflow-hidden">
+                                  <motion.div
+                                    initial={{ width: 0 }}
+                                    animate={{ width: "100%" }}
+                                    transition={{ duration: 1.5 }}
+                                    className="bg-brand-red h-full"
+                                  ></motion.div>
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="space-y-2">
+                                <div className="flex justify-between text-brand-red">
+                                  <span>STATUS: SYNCHRONIZED</span>
+                                  <span>ID: {resumeParsedData.matchToken}</span>
+                                </div>
+                                <div className="grid grid-cols-2 gap-2 text-brand-slate text-[9px]">
+                                  {Object.entries(resumeParsedData.parsedScores).map(([k, v]: any) => (
+                                    <div key={k} className="flex justify-between border-b border-brand-border/30 pb-0.5">
+                                      <span>{k}:</span>
+                                      <span className="text-brand-cararra font-bold">{v}</span>
+                                    </div>
+                                  ))}
+                                </div>
+                                <p className="text-[9px] text-green-500">✔ Enterprise Scale verification passed.</p>
+                              </div>
+                            )}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  </div>
+
+                  {/* Sitman AI Card */}
+                  <div className="bg-brand-black border border-brand-border rounded-sm overflow-hidden flex flex-col hover:border-brand-red transition-all">
+                    <div className="p-8 space-y-4 flex-1">
+                      <div className="flex justify-between items-start">
+                        <span className="bg-brand-slate/15 border border-brand-slate text-brand-slate text-[9px] font-mono px-2 py-0.5 rounded-sm">SYSTEM // AI-EXP</span>
+                        <Cpu className="text-brand-red w-6 h-6" />
+                      </div>
+                      <h3 className="text-xl font-bold uppercase text-brand-cararra">Sitman AI</h3>
+                      <p className="text-xs text-brand-slate leading-relaxed">
+                        Situational SRE Manager AI for predictive data center maintenance. Evaluates acoustic spectra and heat distribution to predict hardware failure 72 hours in advance.
+                      </p>
+                      <div className="flex gap-2 flex-wrap pt-2">
+                        <span className="text-[9px] font-mono bg-brand-dark px-2 py-0.5 border border-brand-border">PREDICTION</span>
+                        <span className="text-[9px] font-mono bg-brand-dark px-2 py-0.5 border border-brand-border">ACOUSTIC ML</span>
+                        <span className="text-[9px] font-mono bg-brand-dark px-2 py-0.5 border border-brand-border">EDGE</span>
+                      </div>
+                    </div>
+
+                    {/* Interactive monitoring wave dashboard */}
+                    <div className="h-44 bg-brand-dark border-t border-brand-border relative overflow-hidden flex flex-col justify-between p-4">
+                      <div className="flex justify-between items-center text-[9px] font-mono">
+                        <div className="flex items-center gap-1.5 text-brand-red">
+                          <span className={`w-1.5 h-1.5 rounded-full ${isSitmanMonitoring ? "bg-red-500 animate-pulse" : "bg-brand-slate"}`}></span>
+                          <span>{isSitmanMonitoring ? "LIVE MONITORING ACTIVE" : "SENSOR MODULE STANDBY"}</span>
+                        </div>
+                        <span className="text-brand-slate">THERM_COEF: 2.14</span>
+                      </div>
+
+                      {isSitmanMonitoring ? (
+                        <div className="flex items-end justify-between h-16 px-4">
+                          {[...Array(16)].map((_, idx) => (
+                            <motion.div
+                              key={idx}
+                              animate={{ height: [15, Math.floor(Math.random() * 50) + 15, 15] }}
+                              transition={{ duration: 0.6, repeat: Infinity, delay: idx * 0.04 }}
+                              className="w-1.5 bg-brand-red"
+                            ></motion.div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="h-16 flex items-center justify-center">
+                          <p className="text-[9px] font-mono text-brand-slate uppercase">Acoustic waveform stream offline</p>
+                        </div>
+                      )}
+
+                      <div className="flex justify-between items-center border-t border-brand-border/30 pt-2 text-[9px] font-mono">
+                        <div className="flex gap-3 text-brand-slate">
+                          <span>Acoustic: <strong className="text-brand-cararra">{isSitmanMonitoring ? `${sitmanMetrics.acousticDb}dB` : "N/A"}</strong></span>
+                          <span>Thermal: <strong className="text-brand-cararra">{isSitmanMonitoring ? `${sitmanMetrics.thermalKelvin}K` : "N/A"}</strong></span>
+                        </div>
+                        <button
+                          onClick={toggleSitmanMonitoring}
+                          className="bg-brand-black border border-brand-border hover:border-brand-red text-brand-cararra px-3 py-1 text-[9px] uppercase font-bold tracking-widest transition-all"
+                        >
+                          {isSitmanMonitoring ? "Disconnect" : "Access Dashboard"}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Architecture Insights section */}
+                <div className="space-y-6">
+                  <div className="flex items-center gap-4">
+                    <div className="h-[1px] flex-1 bg-brand-border"></div>
+                    <span className="text-[10px] font-bold text-brand-slate uppercase tracking-[0.3em]">Architecture Insights</span>
+                    <div className="h-[1px] flex-1 bg-brand-border"></div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {ARCHITECTURE_INSIGHTS.map((insight, i) => (
+                      <article key={i} className="bg-brand-black border border-brand-border p-6 rounded-sm space-y-4 hover:border-brand-red hover:shadow-lg transition-all group">
+                        <span className="text-[10px] font-mono font-bold text-brand-red uppercase">{insight.type}</span>
+                        <h4 className="font-bold text-base text-brand-cararra leading-tight">{insight.title}</h4>
+                        <button
+                          onClick={() => alert(`Opening document: "${insight.title}" in secure reader.`)}
+                          className="text-brand-slate group-hover:text-brand-red font-bold text-[10px] uppercase tracking-widest flex items-center gap-1.5 transition-colors"
+                        >
+                          <span>{insight.cta}</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </button>
+                      </article>
+                    ))}
+                  </div>
+                </div>
+          </motion.div>
+
+          {/* Section Divider */}
+          <div className="h-[1px] bg-brand-border/40 my-16" />
+
+          <motion.div
+            id="labs"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+            className={`space-y-12 scroll-mt-[240px] sm:scroll-mt-[200px] md:scroll-mt-[180px] lg:scroll-mt-[155px] transition-all duration-1000 p-4 md:p-6 rounded-2xl ${
+              highlightedSectionId === "labs"
+                ? "ring-2 ring-brand-red bg-brand-red/5 shadow-[0_0_50px_rgba(235,94,85,0.15)] scale-[1.01]"
+                : "ring-0 ring-transparent"
+            }`}
+          >
+                {/* Header section */}
+                <div className="border-l-4 border-brand-red pl-6 space-y-2">
+                  <p className="text-[10px] font-bold text-brand-red uppercase tracking-widest leading-none">R&amp;D Division</p>
+                  <h2 className="text-3xl font-extrabold uppercase text-brand-cararra">Architecture Labs</h2>
+                  <p className="text-xs text-brand-slate max-w-2xl leading-relaxed">
+                    Exploring the boundaries of high-availability infrastructure and distributed systems. These labs represent live experiments in scalability, security, and industrial-grade software engineering.
+                  </p>
+                </div>
+
+                {/* VULCAN GRID: Featured Large Card */}
+                <div className="bg-brand-black border-2 border-brand-border p-8 rounded-sm space-y-6 group hover:border-brand-red hover:shadow-lg transition-all">
+                  <div className="flex justify-between items-start flex-wrap gap-4">
+                    <div>
+                      <span className="bg-brand-red text-white text-[9px] font-mono px-2.5 py-0.5 uppercase tracking-widest font-bold">STATUS: COMPLETED</span>
+                      <h3 className="text-2xl font-extrabold text-brand-cararra uppercase mt-2">Project: Vulcan Grid</h3>
+                    </div>
+                    <div className="font-mono text-[10px] text-brand-slate text-right">
+                      <p>REF_ID: LAB-2910</p>
+                      <p>AUTH: SOMASHEKAR BG</p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div className="space-y-4">
+                      <p className="text-xs text-brand-slate leading-relaxed">
+                        A distributed ledger implementation optimized for sub-50ms finality in high-throughput industrial IoT environments. Leverages custom consensus algorithms to ensure structural integrity under network partitions.
+                      </p>
+                      <ul className="space-y-2 font-mono text-[10px] text-brand-red font-bold uppercase">
+                        <li className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-brand-red" />
+                          <span>LATENCY: 42MS AVERAGE</span>
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-brand-red" />
+                          <span>NODES: 5,000+ VERIFIED IN FIELD</span>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div className="h-48 bg-brand-dark border border-brand-border relative overflow-hidden rounded-sm">
+                      <img
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbQx7d7U4aq6NAgKr4yxgr0N5okKimzW5JXI2Ts4BFJtaMMRHe5KwfSzJdY3EmJ-YKU57De93wZSG5-UQcZCYvUMNoQBeTwwxWhCEX7kqSXrS80sPmI-5-Xr2T_fgC9o0PkB7HD0FaAYo6-NJR2Xvc-oShHlKvhDkG3BKqNK_Q1268OULxUdpzqo7tjYs8So0sVNXlvyDax4MVDM7xSMSGrlU5Dki7WAjKN5ecBm_NevUmk0aBvXEqveDE8EJRkwLQ79aJMvITnb4"
+                        alt="Vulcan grid schematic diagram"
+                        className="w-full h-full object-cover grayscale brightness-90 group-hover:grayscale-0 transition-all duration-700"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between items-center border-t border-brand-border/40 pt-4 flex-wrap gap-4">
+                    <div className="flex gap-4 text-[9px] font-mono text-brand-slate">
+                      <span>#DISTRIBUTED_SYSTEMS</span>
+                      <span>#RUST_CORE</span>
+                    </div>
+                    <button
+                      onClick={() => alert("Vulcan Grid Whitepaper download initialized...")}
+                      className="bg-brand-red text-white px-6 py-2.5 text-xs font-bold uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all"
+                    >
+                      View Whitepaper
+                    </button>
+                  </div>
+                </div>
+
+                {/* Sub cards layout */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {/* Zero-Trust Mesh */}
+                  <div className="bg-brand-black border border-brand-border p-6 rounded-sm space-y-4 hover:border-brand-red transition-all flex flex-col justify-between">
+                    <div className="space-y-2">
+                      <span className="bg-brand-slate/15 border border-brand-slate text-brand-slate text-[9px] font-mono px-2 py-0.5 rounded-sm">STATUS: ACTIVE</span>
+                      <h4 className="font-bold text-base text-brand-cararra uppercase">Zero-Trust Mesh</h4>
+                      <p className="text-xs text-brand-slate leading-relaxed">
+                        mTLS-driven service mesh for enterprise Kubernetes. Automated rotating certificates and absolute identity access validation.
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => alert("Accessing Zero-Trust Mesh Case Study...")}
+                      className="border border-brand-slate text-brand-cararra hover:border-brand-red hover:text-brand-red w-full py-2.5 text-[10px] font-bold uppercase tracking-widest font-mono transition-all mt-4"
+                    >
+                      Access Case Study
+                    </button>
+                  </div>
+
+                  {/* Kernel Tuning */}
+                  <div className="bg-brand-black border border-brand-border p-6 rounded-sm space-y-4 hover:border-brand-red transition-all flex flex-col justify-between">
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center">
+                        <SlidersHorizontal className="text-brand-red w-5 h-5" />
+                        <span className="font-mono text-[9px] text-brand-slate">LAB-8812</span>
+                      </div>
+                      <h4 className="font-bold text-base text-brand-cararra uppercase">Kernel Tuning</h4>
+                      <p className="text-xs text-brand-slate leading-relaxed">
+                        Optimizing scheduler boundaries and memory locking parameters for ultra-low latency workloads, resulting in 15% reduction in tail packet lag.
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => alert("Kernel performance metrics dashboard compiled.")}
+                      className="flex items-center justify-between text-brand-red hover:brightness-110 text-[10px] font-bold uppercase tracking-widest font-mono mt-4"
+                    >
+                      <span>Explore Metrics</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  {/* Neural Infrastructure */}
+                  <div className="bg-brand-black border border-brand-border p-6 rounded-sm space-y-4 hover:border-brand-red transition-all flex flex-col justify-between">
+                    <div className="space-y-2">
+                      <span className="bg-brand-red text-white text-[9px] font-mono px-2 py-0.5 rounded-sm uppercase tracking-widest font-bold">EXPERIMENTAL</span>
+                      <h4 className="font-bold text-base text-brand-cararra uppercase">Neural Infrastructure</h4>
+                      <p className="text-xs text-brand-slate leading-relaxed">
+                        Self-healing server clusters managed by autonomous AI agents re-allocating memory loads based on predictive neural traffic graphs.
+                      </p>
+                    </div>
+                    <div className="flex gap-2 mt-4 font-mono">
+                      <button
+                        onClick={() => alert("Loading Neural Infrastructure Whitepaper...")}
+                        className="bg-brand-red text-white text-[9px] px-3 py-2 font-bold uppercase tracking-widest hover:brightness-110 transition-all flex-1"
+                      >
+                        Whitepaper
+                      </button>
+                      <button
+                        onClick={() => {
+                          setIsTerminalOpen(true);
+                          setChatMessages(prev => [
+                            ...prev,
+                            { role: "assistant", content: "[SYSTEM] Initiated Neural SRE Sandbox. Run /simulate-incident command to begin simulation." }
+                          ]);
+                        }}
+                        className="bg-transparent border border-brand-slate text-brand-cararra text-[9px] px-3 py-2 font-bold uppercase tracking-widest hover:bg-brand-dark transition-all flex-1"
+                      >
+                        Live Demo
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Cyber-Neural Network Visualization */}
+                <div className="bg-brand-black border border-brand-border p-8 rounded-sm grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                  <div className="md:col-span-8 space-y-4">
+                    <h3 className="font-extrabold text-xl text-brand-cararra uppercase">SRE Reinforcement Learning Visualization</h3>
+                    <p className="text-xs text-brand-slate leading-relaxed">
+                      Below is a microscopic schematic of our neural pipeline node connections. System logs are continuously evaluated to optimize memory slices on demand without human dispatcher intervention.
+                    </p>
+                    <div className="flex gap-4 text-[10px] font-mono text-brand-slate">
+                      <span>✓ NEURAL STATE: ACTIVE</span>
+                      <span>✓ NODE WEIGHTS: TUNED</span>
+                    </div>
+                  </div>
+                  <div className="md:col-span-4 h-48 bg-brand-dark border border-brand-border p-2">
+                    <img
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgc4p_zeTDTmyhdrdoCcj5UgwFdwkeBAn949P2yyK52G5DYcqxEaO-IhzyBgoNS0sALSbeEuxqBPIZipY2xSY76F7SLlSy1N8vH0V8Odtrh6XbPE06EJNm2-8ux0uKPttjd8-SnYi_1jGTVBjbOHDXuBfTKhqZP8djP8dclpZvAyWFZ_nGjEAUFAWBaoNDx4uHBUGVpUxD9yKI338k_oOw2A3zaskB4PbHQwmiJRs9Vlt5PNkgtStue2lSdaAWIKdQpUAkUpdHMzQ"
+                      alt="Neural network schematic"
+                      className="w-full h-full object-cover grayscale brightness-75 hover:grayscale-0 hover:brightness-100 transition-all duration-500"
+                    />
+                  </div>
+                </div>
+          </motion.div>
+
+          {/* Section Divider */}
+          <div className="h-[1px] bg-brand-border/40 my-16" />
+
+          <motion.div
+            id="docs"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+            className={`space-y-12 scroll-mt-[240px] sm:scroll-mt-[200px] md:scroll-mt-[180px] lg:scroll-mt-[155px] transition-all duration-1000 p-4 md:p-6 rounded-2xl ${
+              highlightedSectionId === "docs"
+                ? "ring-2 ring-brand-red bg-brand-red/5 shadow-[0_0_50px_rgba(235,94,85,0.15)] scale-[1.01]"
+                : "ring-0 ring-transparent"
+            }`}
+          >
+                {/* Docs Header */}
+                <div className="space-y-4 max-w-4xl">
+                  <div className="inline-block px-3 py-1 bg-brand-red text-white font-mono text-[9px] font-bold tracking-widest uppercase rounded-sm">
+                    SEC-ALPHA MARKER // CLASSIFIED
+                  </div>
+                  <h2 className="font-extrabold text-4xl uppercase text-brand-cararra tracking-tighter">API &amp; Core Protocols</h2>
+                  <p className="text-sm text-brand-slate leading-relaxed border-l-2 border-brand-red pl-6">
+                    Documentation for the programmatic interfaces of Somashekar's infrastructure setups. Built for extreme telemetry monitoring, continuous validation, and high-performance routing.
+                  </p>
+                </div>
+
+                {/* API Cards Row */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Auth protocol block */}
+                  <div className="border border-brand-border p-8 bg-brand-black/40 space-y-4 rounded-sm hover:border-brand-red transition-all">
+                    <div className="flex justify-between items-center">
+                      <h3 className="font-extrabold text-lg text-brand-red uppercase">01. Authentication</h3>
+                      <span className="font-mono text-[9px] bg-brand-red/10 border border-brand-red text-brand-red px-2 py-0.5 rounded-sm">HMAC-SHA256</span>
+                    </div>
+                    <p className="text-xs text-brand-slate leading-relaxed">
+                      All system orchestration calls must be authenticated using cryptographic headers signed by secure Somashekar BG platform credentials.
+                    </p>
+                    <div className="bg-brand-dark border border-brand-border p-4 font-mono text-xs text-brand-slate rounded-sm">
+                      <span className="text-brand-red font-bold">Authorization:</span> Bearer <span className="opacity-50">SBG_LIVE_7721A_889...</span>
+                    </div>
+                  </div>
+
+                  {/* System status block */}
+                  <div className="border border-brand-border p-8 bg-brand-black/40 space-y-4 rounded-sm hover:border-brand-red transition-all">
+                    <div className="flex justify-between items-center">
+                      <h3 className="font-extrabold text-lg text-brand-red uppercase">02. Cluster Health</h3>
+                      <span className="font-mono text-[9px] bg-green-500/15 border border-green-500 text-green-500 px-2 py-0.5 rounded-sm">HEALTH: OK</span>
+                    </div>
+                    <div className="space-y-3 font-mono text-[11px] text-brand-slate">
+                      <div className="flex justify-between border-b border-brand-border/30 pb-1">
+                        <span>PRIMARY CLUSTER STATUS:</span>
+                        <span className="text-green-500 font-bold">ONLINE (NOMINAL)</span>
+                      </div>
+                      <div className="flex justify-between border-b border-brand-border/30 pb-1">
+                        <span>ACTIVE TELEMETRY LATENCY:</span>
+                        <span className="text-brand-cararra font-bold">{latency}ms</span>
+                      </div>
+                      <div className="flex justify-between border-b border-brand-border/30 pb-1">
+                        <span>DATA SYNC THREADS:</span>
+                        <span className="text-brand-cararra font-bold">12 synchronized</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* API Endpoints */}
+                <div className="space-y-6">
+                  <div className="flex items-center gap-3 border-b border-brand-border pb-4">
+                    <SlidersHorizontal className="text-brand-red w-6 h-6" />
+                    <h3 className="text-xl font-extrabold uppercase text-brand-cararra">Core Architecture Endpoints</h3>
+                  </div>
+
+                  {/* GET /v4/infrastructure/metrics */}
+                  <div className="bg-brand-black border border-brand-border rounded-sm overflow-hidden">
+                    <div className="bg-brand-dark p-4 border-b border-brand-border flex flex-wrap justify-between items-center gap-4">
+                      <div className="flex items-center gap-4">
+                        <span className="bg-brand-red text-white font-bold text-xs font-mono px-3 py-1 rounded-sm">GET</span>
+                        <code className="text-brand-cararra font-mono font-bold text-sm">/v4/infrastructure/metrics</code>
+                      </div>
+                      <span className="text-[10px] text-brand-slate font-mono uppercase tracking-widest">Returns global cluster telemetry metadata</span>
+                    </div>
+                    <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div className="space-y-3">
+                        <h4 className="font-bold text-xs text-brand-red uppercase tracking-wider font-mono">Parameters</h4>
+                        <table className="w-full text-xs font-mono text-brand-slate">
+                          <tbody>
+                            <tr className="border-b border-brand-border/30">
+                              <td className="py-2 text-brand-red font-bold">cluster_id</td>
+                              <td className="py-2">UUID</td>
+                              <td className="py-2 text-right text-[10px] opacity-60">Required</td>
+                            </tr>
+                            <tr className="border-b border-brand-border/30">
+                              <td className="py-2 text-brand-red font-bold">time_slice</td>
+                              <td className="py-2">ISO8601</td>
+                              <td className="py-2 text-right text-[10px] opacity-60">Optional</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div className="space-y-2">
+                        <h4 className="font-bold text-xs text-brand-red uppercase tracking-wider font-mono">Response Schema</h4>
+                        <pre className="bg-brand-dark border border-brand-border p-4 font-mono text-[10px] text-brand-slate rounded-sm leading-relaxed overflow-x-auto">
+{`{
+  "status": "synchronized",
+  "nodes": 12,
+  "load": 0.42,
+  "sec_alpha": true
+}`}
+                        </pre>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* POST /v4/deployment/trigger */}
+                  <div className="bg-brand-black border border-brand-border rounded-sm overflow-hidden">
+                    <div className="bg-brand-dark p-4 border-b border-brand-border flex flex-wrap justify-between items-center gap-4">
+                      <div className="flex items-center gap-4">
+                        <span className="bg-brand-cararra text-brand-dark font-bold text-xs font-mono px-3 py-1 rounded-sm">POST</span>
+                        <code className="text-brand-cararra font-mono font-bold text-sm">/v4/deployment/trigger</code>
+                      </div>
+                      <span className="text-[10px] text-brand-slate font-mono uppercase tracking-widest">Triggers deployment rollout</span>
+                    </div>
+                    <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div className="space-y-3">
+                        <h4 className="font-bold text-xs text-brand-red uppercase tracking-wider font-mono">Parameters</h4>
+                        <table className="w-full text-xs font-mono text-brand-slate">
+                          <tbody>
+                            <tr className="border-b border-brand-border/30">
+                              <td className="py-2 text-brand-red font-bold">env</td>
+                              <td className="py-2">String</td>
+                              <td className="py-2 text-right text-[10px] opacity-60">Required</td>
+                            </tr>
+                            <tr className="border-b border-brand-border/30">
+                              <td className="py-2 text-brand-red font-bold">force_sync</td>
+                              <td className="py-2">Boolean</td>
+                              <td className="py-2 text-right text-[10px] opacity-60">Default: false</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div className="space-y-3">
+                        <h4 className="font-bold text-xs text-brand-red uppercase tracking-wider font-mono">Action Terminal</h4>
+                        <div className="bg-brand-dark border border-brand-border p-4 font-mono text-[10px] text-brand-slate rounded-sm leading-relaxed">
+                          <div className="flex items-center gap-2 mb-2 text-brand-red font-bold">
+                            <span className="w-2.5 h-2.5 rounded-full bg-brand-red animate-pulse"></span>
+                            <span>PIPELINE LISTENING</span>
+                          </div>
+                          <p className="text-brand-slate opacity-75">$ curl -X POST https://api.sbg.io/v4/deployment/trigger \</p>
+                          <p className="text-brand-slate opacity-75">  -H "Authorization: Bearer $SBG_TOKEN" \</p>
+                          <p className="text-brand-slate opacity-75">  -d '{"{"}"env": "production"{"}"}'</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Webhooks / Advanced event loops */}
+                <div className="space-y-6">
+                  <h3 className="text-xl font-extrabold uppercase text-brand-cararra border-b border-brand-border pb-4">Event Subscriptions</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="bg-brand-black border border-brand-border p-6 rounded-sm space-y-2">
+                      <Activity className="text-brand-red w-6 h-6 mb-2" />
+                      <h4 className="font-bold text-sm text-brand-cararra uppercase">Telemetry Streams</h4>
+                      <p className="text-xs text-brand-slate leading-relaxed">Real-time infrastructure heartbeats transmitted over secure WebSockets (WSS).</p>
+                    </div>
+                    <div className="bg-brand-black border border-brand-border p-6 rounded-sm space-y-2">
+                      <SlidersHorizontal className="text-brand-red w-6 h-6 mb-2" />
+                      <h4 className="font-bold text-sm text-brand-cararra uppercase">Security Audits</h4>
+                      <p className="text-xs text-brand-slate leading-relaxed">Automated telemetry reporting for edge security anomalies and container logs.</p>
+                    </div>
+                    <div className="bg-brand-black border border-brand-border p-6 rounded-sm space-y-2">
+                      <Cpu className="text-brand-red w-6 h-6 mb-2" />
+                      <h4 className="font-bold text-sm text-brand-cararra uppercase">Protocol Bridges</h4>
+                      <p className="text-xs text-brand-slate leading-relaxed">Highly customized gRPC endpoints designed for high-performance legacy piping.</p>
+                    </div>
+                  </div>
+                </div>
+          </motion.div>
+        </main>
+      </div>
+
+      {/* Floating Action Button for Terminal Trigger */}
+      <button
+        onClick={() => setIsTerminalOpen(true)}
+        className="fixed bottom-8 right-8 w-14 h-14 bg-brand-red text-white flex items-center justify-center rounded-sm hover:scale-110 active:scale-95 transition-all shadow-2xl hover:shadow-brand-red/30 border border-brand-border z-50 group"
+      >
+        <Terminal className="w-6 h-6 group-hover:rotate-6 transition-transform" />
+      </button>
+
+      {/* Floating Somashekar AI Operations Terminal Sliding Drawer */}
+      <AnimatePresence>
+        {isTerminalOpen && (
+          <div className="fixed inset-0 z-50 flex justify-end">
+            {/* Backdrop overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.6 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsTerminalOpen(false)}
+              className="absolute inset-0 bg-brand-dark/80 backdrop-blur-xs cursor-pointer"
+            ></motion.div>
+
+            {/* Sliding shell container */}
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 180 }}
+              className="absolute right-0 top-0 bottom-0 w-full max-w-xl bg-brand-black border-l-2 border-brand-border flex flex-col z-10"
+            >
+              {/* Shell header */}
+              <div className="bg-brand-dark p-4 border-b border-brand-border flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Terminal className="text-brand-red w-5 h-5 animate-pulse" />
+                  <div className="font-mono text-xs text-brand-cararra font-bold uppercase">
+                    SBG_CORE // CO-PILOT TERMINAL
+                  </div>
+                </div>
+                <button
+                  onClick={() => setIsTerminalOpen(false)}
+                  className="text-brand-slate hover:text-brand-red transition-colors p-1"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Shell console workspace */}
+              <div className="flex-1 overflow-y-auto p-6 font-mono text-[11px] leading-relaxed space-y-4" ref={chatScrollRef}>
+                <div className="border border-brand-border p-4 bg-brand-dark/40 text-brand-slate space-y-2">
+                  <p className="text-brand-red font-bold text-xs uppercase">// COMMAND CODES REFERENCE</p>
+                  <p>Type queries about Somashekar's 14+ years experience, $24M budget ownership, or 80,000+ servers scale.</p>
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    <button
+                      onClick={() => setChatInput("Tell me about Somashekar's cloud experience")}
+                      className="bg-brand-black border border-brand-border text-brand-cararra px-2 py-0.5 hover:border-brand-red transition-all"
+                    >
+                      Cloud Strategy
+                    </button>
+                    <button
+                      onClick={() => setChatInput("What are Somashekar's leadership metrics?")}
+                      className="bg-brand-black border border-brand-border text-brand-cararra px-2 py-0.5 hover:border-brand-red transition-all"
+                    >
+                      Leadership Scope
+                    </button>
+                    <button
+                      onClick={() => setChatInput("/simulate-incident")}
+                      className="bg-brand-black border border-brand-border text-brand-red px-2 py-0.5 hover:border-brand-red transition-all"
+                    >
+                      /simulate-incident
+                    </button>
+                  </div>
+                </div>
+
+                {/* Render chat messages */}
+                {chatMessages.map((msg, i) => (
+                  <div key={i} className={`space-y-1 ${msg.role === "user" ? "text-right" : "text-left"}`}>
+                    <span className={`text-[9px] font-bold uppercase tracking-wider ${msg.role === "user" ? "text-brand-red" : "text-brand-slate"}`}>
+                      {msg.role === "user" ? "USER_LINK // CLIENT" : "SBG_CO-PILOT // CONSOLE"}
+                    </span>
+                    <div className={`p-4 rounded-sm border inline-block max-w-[90%] text-left ${
+                      msg.role === "user"
+                        ? "bg-brand-red/10 border-brand-red/40 text-brand-cararra"
+                        : "bg-brand-dark/60 border-brand-border text-brand-slate"
+                    }`}>
+                      <p className="whitespace-pre-wrap">{msg.content}</p>
+                    </div>
+                  </div>
+                ))}
+
+                {/* SRE Simulator Container */}
+                {activeIncident && (
+                  <div className="border border-brand-red p-4 bg-brand-dark/80 space-y-4 rounded-sm">
+                    <div className="flex justify-between items-center border-b border-brand-border pb-2">
+                      <div className="flex items-center gap-2">
+                        <AlertTriangle className="text-brand-red w-4 h-4 animate-bounce" />
+                        <span className="font-bold text-xs text-brand-red uppercase">ACTIVE CRITICAL FAULT: {activeIncident.id}</span>
+                      </div>
+                      <span className="bg-brand-red text-white text-[8px] font-bold px-1.5 py-0.5 uppercase tracking-widest">{activeIncident.severity}</span>
+                    </div>
+
+                    <p className="text-brand-cararra font-bold text-xs">{activeIncident.title}</p>
+                    <p className="text-brand-slate text-[10px] leading-relaxed">{activeIncident.description}</p>
+                    <p className="text-brand-slate text-[10px] leading-relaxed font-bold text-brand-red">⚠️ IMPACT: {activeIncident.impact}</p>
+
+                    <div className="bg-brand-black p-3 text-[10px] font-mono border border-brand-border text-brand-slate rounded-sm space-y-1">
+                      <p className="text-brand-red font-bold uppercase">LIVE TELEMETRY READING:</p>
+                      <p>Latency: {activeIncident.telemetry?.latency}</p>
+                      <p>CPU Load: {activeIncident.telemetry?.cpuLoad}</p>
+                      <p>Packet Loss: {activeIncident.telemetry?.packetLoss}</p>
+                      <pre className="text-[8px] border-t border-brand-border/30 pt-1.5 mt-1.5 leading-tight overflow-x-auto">
+                        {activeIncident.telemetry?.logSnippet}
+                      </pre>
+                    </div>
+
+                    {/* Simulation log loops */}
+                    {simulationLog.slice(-5).map((log, i) => (
+                      <p key={i} className="text-[10px] text-brand-slate opacity-80 border-l-2 border-brand-slate pl-2">{log}</p>
+                    ))}
+
+                    {/* Resolution strategy choices */}
+                    {!simulationResult && (
+                      <div className="space-y-2 pt-2">
+                        <p className="text-brand-cararra text-[10px] uppercase font-bold">Remediation Strategies:</p>
+                        <div className="grid grid-cols-1 gap-2">
+                          {activeIncident.options?.map((opt: string, idx: number) => (
+                            <button
+                              key={idx}
+                              onClick={() => resolveIncident(opt)}
+                              disabled={isSimulating}
+                              className="bg-brand-black text-brand-slate border border-brand-border hover:border-brand-red hover:text-brand-cararra p-2 text-left text-[9px] uppercase tracking-wider font-mono transition-all disabled:opacity-50"
+                            >
+                              [OPTION {idx + 1}] {opt}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {simulationResult && (
+                      <div className={`p-4 border ${simulationResult.success ? "bg-green-100/50 border-green-500/50 text-brand-slate" : "bg-red-100/50 border-brand-red/50 text-brand-slate"} space-y-2`}>
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className={`w-4 h-4 ${simulationResult.success ? "text-green-500" : "text-brand-red"}`} />
+                          <span className={`font-bold text-xs uppercase ${simulationResult.success ? "text-green-500" : "text-brand-red"}`}>
+                            {simulationResult.success ? "INCIDENT REMEDIATED" : "RESOLUTION FAILED"}
+                          </span>
+                        </div>
+                        <p className="text-[10px] leading-relaxed">{simulationResult.debrief}</p>
+                        <div className="flex gap-4 text-[9px] text-brand-slate pt-1 border-t border-brand-border/30">
+                          <span>Latency: <strong className="text-brand-cararra">{simulationResult.telemetryAfter?.latency}</strong></span>
+                          <span>Recovery: <strong className="text-brand-cararra">{simulationResult.telemetryAfter?.recoveryStatus}</strong></span>
+                        </div>
+                        <button
+                          onClick={() => {
+                            setActiveIncident(null);
+                            setSimulationResult(null);
+                          }}
+                          className="mt-2 bg-brand-black border border-brand-border hover:border-brand-red px-3 py-1.5 text-[9px] uppercase font-bold tracking-widest text-brand-cararra transition-all"
+                        >
+                          Clear Simulator Console
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Loading state indicator */}
+                {isChatLoading && (
+                  <div className="flex items-center gap-2 text-brand-slate">
+                    <span className="w-2 h-2 rounded-full bg-brand-red animate-ping"></span>
+                    <span>AI double compiler running query operations...</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Shell prompt input */}
+              <form onSubmit={handleSendMessage} className="p-4 border-t border-brand-border bg-brand-dark flex items-center gap-3">
+                <input
+                  type="text"
+                  value={chatInput}
+                  onChange={(e) => setChatInput(e.target.value)}
+                  placeholder="Type questions or /simulate-incident..."
+                  className="flex-1 bg-brand-black border border-brand-border focus:border-brand-red focus:ring-0 rounded-sm font-mono text-xs px-4 py-3 text-brand-cararra placeholder:text-brand-slate/40"
+                />
+                <button
+                  type="submit"
+                  className="bg-brand-red text-white p-3 rounded-sm hover:brightness-110 active:scale-95 transition-all shrink-0"
+                >
+                  <Send className="w-4 h-4" />
+                </button>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Floating Connection Dialog Modal */}
+      <AnimatePresence>
+        {isConnectionModalOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.6 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsConnectionModalOpen(false)}
+              className="absolute inset-0 bg-brand-dark/80 backdrop-blur-xs cursor-pointer"
+            ></motion.div>
+
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="relative w-full max-w-md bg-brand-black border-2 border-brand-red p-8 space-y-6 shadow-2xl rounded-sm"
+            >
+              <div className="flex items-center justify-between border-b border-brand-border pb-4">
+                <div className="flex items-center gap-2">
+                  <Terminal className="text-brand-red w-5 h-5 animate-pulse" />
+                  <span className="font-bold text-xs uppercase tracking-widest text-brand-cararra">SBG // CONNECTION PORTAL</span>
+                </div>
+                <button onClick={() => setIsConnectionModalOpen(false)} className="text-brand-slate hover:text-brand-red transition-colors">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {connectionSubmitted ? (
+                <div className="text-center py-8 space-y-4 font-mono text-xs">
+                  <p className="text-brand-red font-bold animate-pulse">⚙️ ESTABLISHING CONNECTION HANDSHAKE...</p>
+                  <p className="text-brand-slate leading-relaxed"> Handshake token generated successfully. Somashekar BG is notified. System status: NOMINAL.</p>
+                </div>
+              ) : (
+                <form onSubmit={handleConnectionSubmit} className="space-y-4 font-mono text-xs">
+                  <div className="space-y-1">
+                    <label className="text-brand-slate uppercase font-bold">Full Name:</label>
+                    <input
+                      type="text"
+                      required
+                      value={connectionForm.name}
+                      onChange={(e) => setConnectionForm(prev => ({ ...prev, name: e.target.value }))}
+                      className="w-full bg-brand-dark border border-brand-border focus:border-brand-red text-brand-cararra px-3 py-2 rounded-sm focus:ring-0"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-brand-slate uppercase font-bold">Email Address:</label>
+                    <input
+                      type="email"
+                      required
+                      value={connectionForm.email}
+                      onChange={(e) => setConnectionForm(prev => ({ ...prev, email: e.target.value }))}
+                      className="w-full bg-brand-dark border border-brand-border focus:border-brand-red text-brand-cararra px-3 py-2 rounded-sm focus:ring-0"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-brand-slate uppercase font-bold">Message Details:</label>
+                    <textarea
+                      required
+                      rows={3}
+                      value={connectionForm.query}
+                      onChange={(e) => setConnectionForm(prev => ({ ...prev, query: e.target.value }))}
+                      className="w-full bg-brand-dark border border-brand-border focus:border-brand-red text-brand-cararra px-3 py-2 rounded-sm focus:ring-0"
+                    ></textarea>
+                  </div>
+                  <button
+                    type="submit"
+                    className="w-full bg-brand-red text-white py-3 font-bold uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all"
+                  >
+                    Transmit handshake signal
+                  </button>
+                </form>
+              )}
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Industrial Footer */}
+      <footer className="bg-brand-black border-t-2 border-brand-border relative z-30">
+        <div className="max-w-7xl mx-auto px-6 md:px-16 py-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-8 text-xs font-mono text-brand-slate">
+          <div className="space-y-2">
+            <p className="font-extrabold text-lg tracking-tighter text-brand-cararra uppercase">Somashekar BG</p>
+            <p className="uppercase text-[9px] tracking-widest font-bold">© 2026 Somashekar BG. Securely preserved via AES-256 protocols.</p>
+          </div>
+          <div className="flex gap-8 flex-wrap uppercase text-[9px] tracking-widest font-bold">
+            <button onClick={() => scrollToSection("docs")} className="hover:text-brand-red transition-all cursor-pointer">Security</button>
+            <button onClick={() => scrollToSection("solutions")} className="hover:text-brand-red transition-all cursor-pointer">Telemetry</button>
+            <button onClick={() => scrollToSection("summary")} className="hover:text-brand-red transition-all cursor-pointer">Core Architecture</button>
+          </div>
+        </div>
+
+        {/* Mobile Navigation Bar */}
+        <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-brand-black/95 backdrop-blur-sm border-t border-brand-border flex justify-around items-center py-3 z-40">
+          <button
+            onClick={() => scrollToSection("summary")}
+            className={`flex flex-col items-center gap-0.5 text-[9px] uppercase tracking-wider font-bold transition-all ${
+              activeTab === "summary" ? "text-brand-red" : "text-brand-slate"
+            }`}
+          >
+            <Compass className="w-4 h-4" />
+            <span>Summary</span>
+          </button>
+          <button
+            onClick={() => scrollToSection("solutions")}
+            className={`flex flex-col items-center gap-0.5 text-[9px] uppercase tracking-wider font-bold transition-all ${
+              activeTab === "solutions" ? "text-brand-red" : "text-brand-slate"
+            }`}
+          >
+            <Layers className="w-4 h-4" />
+            <span>Solutions</span>
+          </button>
+          <button
+            onClick={() => scrollToSection("labs")}
+            className={`flex flex-col items-center gap-0.5 text-[9px] uppercase tracking-wider font-bold transition-all ${
+              activeTab === "labs" ? "text-brand-red" : "text-brand-slate"
+            }`}
+          >
+            <Cpu className="w-4 h-4" />
+            <span>Labs</span>
+          </button>
+          <button
+            onClick={() => scrollToSection("docs")}
+            className={`flex flex-col items-center gap-0.5 text-[9px] uppercase tracking-wider font-bold transition-all ${
+              activeTab === "docs" ? "text-brand-red" : "text-brand-slate"
+            }`}
+          >
+            <FileText className="w-4 h-4" />
+            <span>Docs</span>
+          </button>
+        </nav>
+      </footer>
+    </div>
+  );
+}
