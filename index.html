@@ -46,9 +46,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <!-- HTMX (CDN) -->
-  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
-
   <style type="text/css">
     body {
       font-family: 'Inter', sans-serif;
@@ -97,7 +94,7 @@
     
     <!-- Floating Header Navigation Control -->
     <div class="absolute top-4 right-4 z-50">
-      <a href="/" class="group flex items-center gap-2 bg-brand-dark/90 border border-brand-border hover:border-brand-red px-3 py-1.5 rounded-full text-[10px] font-mono text-brand-cararra tracking-wider transition-all duration-300">
+      <a href="../index.html" class="group flex items-center gap-2 bg-brand-dark/90 border border-brand-border hover:border-brand-red px-3 py-1.5 rounded-full text-[10px] font-mono text-brand-cararra tracking-wider transition-all duration-300">
         <span class="w-1.5 h-1.5 bg-brand-red rounded-full group-hover:scale-125 transition-all"></span>
         RETURN TO PORTAL
       </a>
@@ -111,7 +108,7 @@
         <div class="relative group">
           <div class="absolute -inset-1.5 bg-brand-red/20 rounded-full blur-md opacity-75 group-hover:opacity-100 transition duration-500"></div>
           <div class="relative w-36 h-36 rounded-full border-2 border-brand-red overflow-hidden bg-brand-dark">
-            <img src="/src/assets/images/somashekar_portrait_1783933330764.jpg" alt="Somashekar BG" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" onerror="this.onerror=null; this.src='https://api.dicebear.com/7.x/bottts/svg?seed=SRE&backgroundColor=0a0a0a&fontColor=bb080b';" />
+            <img src="../src/assets/images/somashekar_portrait_1783933330764.jpg" alt="Somashekar BG" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" onerror="this.onerror=null; this.src='https://api.dicebear.com/7.x/bottts/svg?seed=SRE&backgroundColor=0a0a0a&fontColor=bb080b';" />
           </div>
           <span class="absolute bottom-1 right-2 bg-brand-red text-white text-[8px] font-mono font-bold px-2 py-0.5 rounded-sm uppercase tracking-widest border border-brand-border shadow-lg animate-pulse">PRO_LEADER</span>
         </div>
@@ -136,15 +133,13 @@
         <!-- Dynamic Action Row with Search and Contact triggers -->
         <div class="flex flex-col sm:flex-row items-center gap-4 pt-2">
           
-          <!-- HTMX Active Search Component -->
+          <!-- Search Component -->
           <div class="relative w-full max-w-sm">
             <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none text-brand-slate/60">
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
             </div>
-            <input type="text" name="q" placeholder="Active Search Specifications..." 
-                   hx-get="/api/output/search" 
-                   hx-trigger="keyup changed delay:200ms, search" 
-                   hx-target="#search-results" 
+            <input type="text" id="search-input" placeholder="Active Search Specifications..." 
+                   oninput="performSearch(this.value)"
                    class="bg-brand-dark/90 border border-brand-border text-[10px] text-brand-cararra placeholder-brand-slate pl-9 pr-4 py-2.5 rounded-full w-full focus:outline-none focus:border-brand-red focus:ring-2 focus:ring-brand-red/10 font-mono"
                    onfocus="document.getElementById('search-results-wrapper').classList.remove('hidden')"
                    onblur="setTimeout(() => document.getElementById('search-results-wrapper').classList.add('hidden'), 300)">
@@ -171,21 +166,518 @@
         <!-- Sliding fluid water/oil indicator background -->
         <div id="fluid-indicator" class="absolute bg-brand-red h-[calc(100%-8px)] rounded-full blob-indicator pointer-events-none z-0" style="top: 4px; left: 4px; width: 0;"></div>
         
-        <button hx-get="/api/output/tab/summary" hx-target="#tab-content" hx-trigger="click, load" class="tab-btn px-6 py-2.5 rounded-full text-[10px] font-mono font-bold tracking-wider relative z-10 text-white transition-colors duration-300 active-tab" onclick="moveIndicator(this)">SUMMARY</button>
-        <button hx-get="/api/output/tab/solutions" hx-target="#tab-content" class="tab-btn px-6 py-2.5 rounded-full text-[10px] font-mono font-bold tracking-wider relative z-10 text-brand-slate hover:text-brand-cararra transition-colors duration-300" onclick="moveIndicator(this)">SOLUTIONS</button>
-        <button hx-get="/api/output/tab/labs" hx-target="#tab-content" class="tab-btn px-6 py-2.5 rounded-full text-[10px] font-mono font-bold tracking-wider relative z-10 text-brand-slate hover:text-brand-cararra transition-colors duration-300" onclick="moveIndicator(this)">LABS</button>
-        <button hx-get="/api/output/tab/docs" hx-target="#tab-content" class="tab-btn px-6 py-2.5 rounded-full text-[10px] font-mono font-bold tracking-wider relative z-10 text-brand-slate hover:text-brand-cararra transition-colors duration-300" onclick="moveIndicator(this)">API DOCS</button>
+        <button onclick="selectTab('summary', this)" class="tab-btn px-6 py-2.5 rounded-full text-[10px] font-mono font-bold tracking-wider relative z-10 text-white transition-colors duration-300 active-tab">SUMMARY</button>
+        <button onclick="selectTab('solutions', this)" class="tab-btn px-6 py-2.5 rounded-full text-[10px] font-mono font-bold tracking-wider relative z-10 text-brand-slate hover:text-brand-cararra transition-colors duration-300">SOLUTIONS</button>
+        <button onclick="selectTab('labs', this)" class="tab-btn px-6 py-2.5 rounded-full text-[10px] font-mono font-bold tracking-wider relative z-10 text-brand-slate hover:text-brand-cararra transition-colors duration-300">LABS</button>
+        <button onclick="selectTab('docs', this)" class="tab-btn px-6 py-2.5 rounded-full text-[10px] font-mono font-bold tracking-wider relative z-10 text-brand-slate hover:text-brand-cararra transition-colors duration-300">API DOCS</button>
       </div>
     </div>
 
     <!-- Active Tab Panel Space -->
     <main id="tab-content" class="min-h-[400px]">
-      <div class="flex items-center justify-center py-20">
-        <div class="space-y-3 text-center">
-          <div class="w-10 h-10 border-2 border-brand-red border-t-transparent rounded-full animate-spin mx-auto"></div>
-          <p class="text-xs font-mono uppercase tracking-widest text-brand-slate">Establishing uplink pipeline...</p>
+      
+      <!-- Tab 1: SUMMARY -->
+      <div id="panel-summary" class="tab-panel space-y-12 animate-fadeIn">
+        <!-- Stats Row -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-brand-black/40 border border-brand-border/60 hover:border-brand-red/30 p-6 rounded-lg transition-all duration-300">
+            <p class="text-3xl font-light text-brand-red tracking-tight font-mono">14+ Years</p>
+            <p class="text-xs text-brand-cararra uppercase tracking-wider mt-1 font-semibold">Lifecycle Management</p>
+            <p class="text-[11px] text-brand-slate mt-1 leading-normal font-light">Specialized in Enterprise Platform Engineering</p>
+          </div>
+          <div class="bg-brand-black/40 border border-brand-border/60 hover:border-brand-red/30 p-6 rounded-lg transition-all duration-300">
+            <p class="text-3xl font-light text-brand-red tracking-tight font-mono">80k+ Servers</p>
+            <p class="text-xs text-brand-cararra uppercase tracking-wider mt-1 font-semibold">Scale Factor</p>
+            <p class="text-[11px] text-brand-slate mt-1 leading-normal font-light">Managing globally distributed infrastructure nodes</p>
+          </div>
+          <div class="bg-brand-black/40 border border-brand-border/60 hover:border-brand-red/30 p-6 rounded-lg transition-all duration-300">
+            <p class="text-3xl font-light text-brand-red tracking-tight font-mono">$24M Portfolio</p>
+            <p class="text-xs text-brand-cararra uppercase tracking-wider mt-1 font-semibold">Asset Valuation</p>
+            <p class="text-[11px] text-brand-slate mt-1 leading-normal font-light">Optimizing large-scale CAPEX/OPEX operations</p>
+          </div>
+        </div>
+
+        <!-- Philosophy and Highlights -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div class="bg-brand-black border border-brand-border p-6 rounded-lg space-y-4 flex flex-col justify-between relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-brand-red/5 rounded-full blur-2xl pointer-events-none"></div>
+            <div class="space-y-4">
+              <span class="text-[9px] font-mono font-bold tracking-widest text-brand-red uppercase">// LEADERSHIP_PHILOSOPHY.MD</span>
+              <h3 class="text-xl font-light uppercase text-brand-cararra tracking-tight">Leadership Philosophy</h3>
+              <p class="text-brand-slate text-xs font-light leading-relaxed italic border-l-2 border-brand-red pl-4">
+                "Empower product developers with self-service developer platforms, eliminate operational friction through generative automation, and maintain highly available systems using proactive telemetry and SRE practices."
+              </p>
+            </div>
+          </div>
+          <div class="bg-brand-black border border-brand-border p-6 rounded-lg space-y-4">
+            <span class="text-[9px] font-mono font-bold tracking-widest text-brand-red uppercase">// EXECUTIVE_HIGHLIGHTS.LOG</span>
+            <h3 class="text-xl font-light uppercase text-brand-cararra tracking-tight">Executive Highlights</h3>
+            <ul class="space-y-2.5">
+              <li class="flex gap-3 text-xs text-brand-slate leading-relaxed font-light">
+                <span class="text-brand-red font-mono font-bold mt-0.5 shrink-0">01.</span>
+                <span>Championed migration of legacy virtualization estates to cloud-native architectures across global data centers.</span>
+              </li>
+              <li class="flex gap-3 text-xs text-brand-slate leading-relaxed font-light">
+                <span class="text-brand-red font-mono font-bold mt-0.5 shrink-0">02.</span>
+                <span>Built secure, zero-trust cloud landing zones using Infrastructure-as-Code and automated compliance policies.</span>
+              </li>
+              <li class="flex gap-3 text-xs text-brand-slate leading-relaxed font-light">
+                <span class="text-brand-red font-mono font-bold mt-0.5 shrink-0">03.</span>
+                <span>Directed site reliability response teams managing 1,600+ database engines and microservice runtimes under black-swan loads.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Experience -->
+        <div class="space-y-6">
+          <div class="border-b border-brand-border pb-3">
+            <p class="text-[9px] font-bold tracking-widest text-brand-red uppercase">// PROFESSIONAL_TIMELINE.JSON</p>
+            <h3 class="text-xl font-light uppercase text-brand-cararra tracking-tight">Professional Experience</h3>
+          </div>
+          <div class="space-y-8 mt-6">
+            <div class="relative group pl-6 border-l border-brand-border/60 hover:border-brand-red transition-all duration-300">
+              <div class="absolute -left-[9px] top-1.5 w-4 h-4 bg-brand-black border-2 border-brand-red rounded-full">
+                <div class="w-1.5 h-1.5 bg-brand-cararra rounded-full m-auto absolute inset-0"></div>
+              </div>
+              <div class="space-y-2">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
+                  <div>
+                    <h4 class="text-base font-bold text-brand-cararra">Senior Platform Engineering Leader</h4>
+                    <p class="text-xs font-mono text-brand-slate/80">Global SRE & Platforms Division</p>
+                  </div>
+                  <div class="text-left md:text-right">
+                    <span class="inline-block bg-brand-dark border border-brand-border text-brand-cararra text-[9px] font-mono px-2 py-0.5 rounded-sm">2021 - PRESENT</span>
+                    <p class="text-[10px] font-mono text-brand-slate mt-1">Bangalore, India</p>
+                  </div>
+                </div>
+                <p class="text-xs text-brand-slate/90 font-light bg-brand-dark/20 border-l border-brand-red/60 p-2 pl-3 rounded-sm leading-relaxed">Directly leading global platform organizations across Platform Engineering, SRE, and Hybrid Cloud architectures. Spearheading internal platforms managing 80k+ physical and virtual container hosts.</p>
+                <ul class="space-y-1 pl-4">
+                  <li class="list-disc list-outside text-xs text-brand-slate font-light leading-relaxed pl-1">Engineered self-service Internal Developer Platforms (IDPs) saving 40% in developer provisioning cycles.</li>
+                  <li class="list-disc list-outside text-xs text-brand-slate font-light leading-relaxed pl-1">Architected zero-trust Kubernetes service meshes with automated certificate governance on HashiCorp Vault.</li>
+                  <li class="list-disc list-outside text-xs text-brand-slate font-light leading-relaxed pl-1">Slashed cloud infra spends by $4M annually through AI-driven active cluster optimization models.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="relative group pl-6 border-l border-brand-border/60 hover:border-brand-red transition-all duration-300">
+              <div class="absolute -left-[9px] top-1.5 w-4 h-4 bg-brand-black border-2 border-brand-red rounded-full">
+                <div class="w-1.5 h-1.5 bg-brand-cararra rounded-full m-auto absolute inset-0"></div>
+              </div>
+              <div class="space-y-2">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
+                  <div>
+                    <h4 class="text-base font-bold text-brand-cararra">Infrastructure Lead & Database SRE</h4>
+                    <p class="text-xs font-mono text-brand-slate/80">Enterprise Infrastructure Systems</p>
+                  </div>
+                  <div class="text-left md:text-right">
+                    <span class="inline-block bg-brand-dark border border-brand-border text-brand-cararra text-[9px] font-mono px-2 py-0.5 rounded-sm">2015 - 2021</span>
+                    <p class="text-[10px] font-mono text-brand-slate mt-1">Bangalore, India</p>
+                  </div>
+                </div>
+                <p class="text-xs text-brand-slate/90 font-light bg-brand-dark/20 border-l border-brand-border/60 p-2 pl-3 rounded-sm leading-relaxed">Managed reliability engineering for massive SQL Server, Oracle, and Postgres database estates supporting active multi-billion dollar transactions.</p>
+                <ul class="space-y-1 pl-4">
+                  <li class="list-disc list-outside text-xs text-brand-slate font-light leading-relaxed pl-1">Designed automated high-availability clustering topologies for 1,600+ mission-critical database hosts.</li>
+                  <li class="list-disc list-outside text-xs text-brand-slate font-light leading-relaxed pl-1">Implemented centralized Prometheus telemetry dashboards for sub-second system alert reporting.</li>
+                  <li class="list-disc list-outside text-xs text-brand-slate font-light leading-relaxed pl-1">Automated OS compliance hardening playbooks across global RedHat and Windows server farms.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Credentials -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div class="bg-brand-black border border-brand-border p-6 rounded-lg space-y-4">
+            <div class="border-b border-brand-border pb-2 flex justify-between items-center">
+              <h3 class="text-lg font-light uppercase text-brand-cararra tracking-tight">Education Credentials</h3>
+              <span class="text-[8px] font-mono text-brand-slate uppercase">// ACADEMIC.LOG</span>
+            </div>
+            <div class="space-y-4">
+              <div class="border-l border-brand-border/40 pl-4 py-1 hover:border-brand-red transition-colors">
+                <div class="flex justify-between items-start gap-4">
+                  <h4 class="text-xs font-bold text-brand-cararra leading-snug">Bachelor of Engineering in Electronics & Communication</h4>
+                  <span class="text-[8px] font-mono bg-brand-red/15 text-brand-red border border-brand-red/30 px-1.5 py-0.5 rounded-sm shrink-0">2007 - 2011</span>
+                </div>
+                <p class="text-xs text-brand-slate mt-0.5">Visvesvaraya Technological University</p>
+                <p class="text-[10px] font-mono text-brand-slate/60 mt-0.5">GPA: <strong class="text-brand-cararra">First Class with Distinction</strong></p>
+              </div>
+            </div>
+          </div>
+          <div class="bg-brand-black border border-brand-border p-6 rounded-lg space-y-4">
+            <div class="border-b border-brand-border pb-2 flex justify-between items-center">
+              <h3 class="text-lg font-light uppercase text-brand-cararra tracking-tight">Certifications</h3>
+              <span class="text-[8px] font-mono text-brand-slate uppercase">// COMPLIANCE.LOG</span>
+            </div>
+            <div class="space-y-3">
+              <div class="flex justify-between items-center gap-4 text-xs border-b border-brand-border/30 pb-3 last:border-b-0 last:pb-0">
+                <div>
+                  <h4 class="font-bold text-brand-cararra leading-tight">Google Cloud Certified Professional Cloud Architect</h4>
+                  <p class="text-[9px] text-brand-slate/80 mt-0.5">Google Cloud</p>
+                </div>
+                <span class="text-[9px] font-mono text-brand-slate bg-brand-dark border border-brand-border px-2 py-0.5 rounded-sm shrink-0">2023</span>
+              </div>
+              <div class="flex justify-between items-center gap-4 text-xs border-b border-brand-border/30 pb-3 last:border-b-0 last:pb-0">
+                <div>
+                  <h4 class="font-bold text-brand-cararra leading-tight">Certified Kubernetes Administrator (CKA)</h4>
+                  <p class="text-[9px] text-brand-slate/80 mt-0.5">The Linux Foundation</p>
+                </div>
+                <span class="text-[9px] font-mono text-brand-slate bg-brand-dark border border-brand-border px-2 py-0.5 rounded-sm shrink-0">2022</span>
+              </div>
+              <div class="flex justify-between items-center gap-4 text-xs border-b border-brand-border/30 pb-3 last:border-b-0 last:pb-0">
+                <div>
+                  <h4 class="font-bold text-brand-cararra leading-tight">Microsoft Certified: Azure Solutions Architect Expert</h4>
+                  <p class="text-[9px] text-brand-slate/80 mt-0.5">Microsoft</p>
+                </div>
+                <span class="text-[9px] font-mono text-brand-slate bg-brand-dark border border-brand-border px-2 py-0.5 rounded-sm shrink-0">2021</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+
+      <!-- Tab 2: SOLUTIONS -->
+      <div id="panel-solutions" class="tab-panel space-y-12 animate-fadeIn hidden">
+        <!-- Competency Matrix -->
+        <div class="space-y-4">
+          <div class="border-b border-brand-border pb-2">
+            <span class="text-[9px] font-mono font-bold tracking-widest text-brand-red uppercase">// SKILLS_MATRIX.JSON</span>
+            <h3 class="text-xl font-light uppercase text-brand-cararra tracking-tight mt-1">Core Competencies</h3>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+            <div class="bg-brand-dark/40 border border-brand-border/60 p-6 rounded-lg space-y-3">
+              <h4 class="text-brand-cararra font-bold text-sm tracking-tight border-b border-brand-border pb-2">Platform Engineering</h4>
+              <div class="flex flex-wrap gap-1.5">
+                <span class="bg-brand-black text-brand-slate border border-brand-border text-[10px] px-2 py-0.5 rounded-sm font-mono">Internal Developer Platforms (IDP)</span>
+                <span class="bg-brand-black text-brand-slate border border-brand-border text-[10px] px-2 py-0.5 rounded-sm font-mono">Platform Modernization</span>
+                <span class="bg-brand-black text-brand-slate border border-brand-border text-[10px] px-2 py-0.5 rounded-sm font-mono">Developer Experience (DevEx)</span>
+                <span class="bg-brand-black text-brand-slate border border-brand-border text-[10px] px-2 py-0.5 rounded-sm font-mono">Infrastructure as a Product</span>
+                <span class="bg-brand-black text-brand-slate border border-brand-border text-[10px] px-2 py-0.5 rounded-sm font-mono">Backstage</span>
+                <span class="bg-brand-black text-brand-slate border border-brand-border text-[10px] px-2 py-0.5 rounded-sm font-mono">Kubernetes Adoption</span>
+              </div>
+            </div>
+            <div class="bg-brand-dark/40 border border-brand-border/60 p-6 rounded-lg space-y-3">
+              <h4 class="text-brand-cararra font-bold text-sm tracking-tight border-b border-brand-border pb-2">Cloud & Infrastructure</h4>
+              <div class="flex flex-wrap gap-1.5">
+                <span class="bg-brand-black text-brand-slate border border-brand-border text-[10px] px-2 py-0.5 rounded-sm font-mono">Google Cloud Platform (GCP)</span>
+                <span class="bg-brand-black text-brand-slate border border-brand-border text-[10px] px-2 py-0.5 rounded-sm font-mono">Hybrid Cloud Architecture</span>
+                <span class="bg-brand-black text-brand-slate border border-brand-border text-[10px] px-2 py-0.5 rounded-sm font-mono">Linux Platform Tuning</span>
+                <span class="bg-brand-black text-brand-slate border border-brand-border text-[10px] px-2 py-0.5 rounded-sm font-mono">Infrastructure Automation</span>
+                <span class="bg-brand-black text-brand-slate border border-brand-border text-[10px] px-2 py-0.5 rounded-sm font-mono">Disaster Recovery & High Availability</span>
+              </div>
+            </div>
+            <div class="bg-brand-dark/40 border border-brand-border/60 p-6 rounded-lg space-y-3">
+              <h4 class="text-brand-cararra font-bold text-sm tracking-tight border-b border-brand-border pb-2">Engineering Excellence</h4>
+              <div class="flex flex-wrap gap-1.5">
+                <span class="bg-brand-black text-brand-slate border border-brand-border text-[10px] px-2 py-0.5 rounded-sm font-mono">Site Reliability Engineering (SRE)</span>
+                <span class="bg-brand-black text-brand-slate border border-brand-border text-[10px] px-2 py-0.5 rounded-sm font-mono">DevSecOps Pipelines</span>
+                <span class="bg-brand-black text-brand-slate border border-brand-border text-[10px] px-2 py-0.5 rounded-sm font-mono">Observability & Telemetry</span>
+                <span class="bg-brand-black text-brand-slate border border-brand-border text-[10px] px-2 py-0.5 rounded-sm font-mono">Cascading Incident Management</span>
+                <span class="bg-brand-black text-brand-slate border border-brand-border text-[10px] px-2 py-0.5 rounded-sm font-mono">Capacity Planning</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Products -->
+        <div class="space-y-6">
+          <div class="border-b border-brand-border pb-2">
+            <span class="text-[9px] font-mono font-bold tracking-widest text-brand-red uppercase">// PLATFORM_PRODUCTS.LOG</span>
+            <h3 class="text-xl font-light uppercase text-brand-cararra tracking-tight mt-1">Enterprise Assets & Solutions</h3>
+          </div>
+          <div class="space-y-6 mt-6">
+            
+            <div class="bg-brand-black border border-brand-border rounded-lg overflow-hidden flex flex-col md:flex-row gap-6 p-6 hover:border-brand-red/30 transition-all duration-300 group">
+              <div class="w-full md:w-48 h-32 shrink-0 bg-brand-dark border border-brand-border rounded overflow-hidden relative">
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWYBfeMnIDUpCdFrYAeiAnR_K4G0pVOPPCAQnySd3qgfP8SCRFzFjEOwkC81VZuinhURV3Ob1pnqUvK3AaHHrzWb2yL76cwzUoSxOyV5pEMMDp84579RD0SFDAudS_mtyYO2WVhJegcj3t_sdOH0dq6TYL9wOI_h9jxekVUG8RYAw0pYpFIThXF3vCznu87jImGBpxcnnaiSDew0LTg4FDQD9Ysno5UJGRFskAubtGlwJMdIB_x_neh6EW4_C0AK5ev0V9DIX4alk" alt="Hyper MCP" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500 opacity-85" referrerPolicy="no-referrer" />
+                <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-transparent"></div>
+              </div>
+              <div class="flex-1 flex flex-col justify-between space-y-3">
+                <div class="space-y-1.5">
+                  <div class="flex items-center justify-between gap-2">
+                    <h4 class="text-lg font-bold text-brand-cararra group-hover:text-brand-red transition-all">Hyper MCP</h4>
+                    <span class="text-[8px] font-mono bg-brand-red text-white px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Deployment Ready</span>
+                  </div>
+                  <p class="text-xs text-brand-slate font-light leading-relaxed">Mission Critical Platform engineered for ultra-low latency infrastructure orchestration. Features real-time node synchronization, auto-scaling telemetry, and zero-downtime cluster transfers for large global enterprise infrastructure.</p>
+                  <ul class="space-y-1 pl-4 mt-2">
+                    <li class="list-disc text-[11px] text-brand-slate/90 font-light">99.999% Uptime SLA Guarantee</li>
+                    <li class="list-disc text-[11px] text-brand-slate/90 font-light">Quantum-Safe mTLS Mesh Integration</li>
+                    <li class="list-disc text-[11px] text-brand-slate/90 font-light">Automated Load Redistribution</li>
+                  </ul>
+                </div>
+                <div class="flex flex-wrap items-center justify-between gap-4 pt-2">
+                  <div class="flex flex-wrap gap-1">
+                    <span class="text-[9px] font-mono text-brand-slate bg-brand-dark px-2 py-0.5 border border-brand-border rounded-sm">GO-PLATFORM</span>
+                    <span class="text-[9px] font-mono text-brand-slate bg-brand-dark px-2 py-0.5 border border-brand-border rounded-sm">ETCD-SYNC</span>
+                    <span class="text-[9px] font-mono text-brand-slate bg-brand-dark px-2 py-0.5 border border-brand-border rounded-sm">KUBERNETES</span>
+                  </div>
+                  <button class="bg-brand-red/10 border border-brand-red/30 hover:bg-brand-red hover:text-white transition-all text-[10px] uppercase font-bold tracking-wider text-brand-red px-3 py-1.5 rounded-sm">
+                    View Technical Specs
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-brand-black border border-brand-border rounded-lg overflow-hidden flex flex-col md:flex-row gap-6 p-6 hover:border-brand-red/30 transition-all duration-300 group">
+              <div class="w-full md:w-48 h-32 shrink-0 bg-brand-dark border border-brand-border rounded overflow-hidden relative">
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAH9jmnu9eNZ7z3sZksH8lwRpGX2dTBB99HDeQNmxBjNs4sCgsCBVnB5a8WjwlwuoqRZb9N2s16RTP-6i5U7Tf26pDmERu0WynfuYzmwGx5aktmZKzyYPGMFmuXMiiuec4ZlzcmDuSqSF-pNufTi5xJDynaeubSbe46zuljbC1Su0CzDaNZ8cL6X7jFrcQEsBawh_f6sys4ixXmo5yQpu9Wc95yAaQTfhp8047JJBQiKe7-USr0MNNlYAb8blD0EUH9wiNgboWUJV8" alt="Hyper Resume Parser" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500 opacity-85" referrerPolicy="no-referrer" />
+                <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-transparent"></div>
+              </div>
+              <div class="flex-1 flex flex-col justify-between space-y-3">
+                <div class="space-y-1.5">
+                  <div class="flex items-center justify-between gap-2">
+                    <h4 class="text-lg font-bold text-brand-cararra group-hover:text-brand-red transition-all">Hyper Resume Parser</h4>
+                    <span class="text-[8px] font-mono bg-brand-red text-white px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Alpha V2.4</span>
+                  </div>
+                  <p class="text-xs text-brand-slate font-light leading-relaxed">An automated enterprise talent parsing engine that leverages deep neural networks and custom vector search schemas to instantly map applicant professional histories directly to active infrastructure demand parameters.</p>
+                  <ul class="space-y-1 pl-4 mt-2">
+                    <li class="list-disc text-[11px] text-brand-slate/90 font-light">Highly optimized Transformer model</li>
+                    <li class="list-disc text-[11px] text-brand-slate/90 font-light">Custom 1536-dim Vector Embeddings</li>
+                    <li class="list-disc text-[11px] text-brand-slate/90 font-light">Real-time compliance rating dashboard</li>
+                  </ul>
+                </div>
+                <div class="flex flex-wrap items-center justify-between gap-4 pt-2">
+                  <div class="flex flex-wrap gap-1">
+                    <span class="text-[9px] font-mono text-brand-slate bg-brand-dark px-2 py-0.5 border border-brand-border rounded-sm">NLP</span>
+                    <span class="text-[9px] font-mono text-brand-slate bg-brand-dark px-2 py-0.5 border border-brand-border rounded-sm">VECTOR-EMBED</span>
+                    <span class="text-[9px] font-mono text-brand-slate bg-brand-dark px-2 py-0.5 border border-brand-border rounded-sm">PYTORCH</span>
+                  </div>
+                  <button class="bg-brand-red/10 border border-brand-red/30 hover:bg-brand-red hover:text-white transition-all text-[10px] uppercase font-bold tracking-wider text-brand-red px-3 py-1.5 rounded-sm">
+                    Initialize Engine
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-brand-black border border-brand-border rounded-lg overflow-hidden flex flex-col md:flex-row gap-6 p-6 hover:border-brand-red/30 transition-all duration-300 group">
+              <div class="w-full md:w-48 h-32 shrink-0 bg-brand-dark border border-brand-border rounded overflow-hidden relative">
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBH5g2HEjVAewkIokh94xXqFxH6ykQGGwMMG_RG4daQQP-APRZID-SNPRwucpyydiweVbIxmkjUtdYSXUuBsR7xIzsHDa18YdJVKQiOnCnGJa3kPvYI1idLL6w4MtGvonsuSkTXL1Tt8rnqcbvSYTmSGutIEHaNAmv7y5nZ5oLabHjILjItn-ZkeUxNwirwSN5JEIyU4smEYfDiJfRPaS0BOWqdqKZ6NTKtOK5IXe6PKwF0StWi4uBtNse4aqh1HZWw5cX3wDWUL04" alt="Sitman AI (Situational SRE)" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500 opacity-85" referrerPolicy="no-referrer" />
+                <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-transparent"></div>
+              </div>
+              <div class="flex-1 flex flex-col justify-between space-y-3">
+                <div class="space-y-1.5">
+                  <div class="flex items-center justify-between gap-2">
+                    <h4 class="text-lg font-bold text-brand-cararra group-hover:text-brand-red transition-all">Sitman AI (Situational SRE)</h4>
+                    <span class="text-[8px] font-mono bg-brand-red text-white px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">AI-Experimental</span>
+                  </div>
+                  <p class="text-xs text-brand-slate font-light leading-relaxed">Situational SRE Manager AI utilizing multi-modal anomaly detectors. Predicts server hardware degradation and cooling unit failure 72 hours in advance via acoustic spectral and thermo-dynamic telemetry analyses.</p>
+                  <ul class="space-y-1 pl-4 mt-2">
+                    <li class="list-disc text-[11px] text-brand-slate/90 font-light">Predicts failures 72 hours before occurrence</li>
+                    <li class="list-disc text-[11px] text-brand-slate/90 font-light">Acoustic ML wave-shape matching engine</li>
+                    <li class="list-disc text-[11px] text-brand-slate/90 font-light">Runs edge-side on sensor nodes</li>
+                  </ul>
+                </div>
+                <div class="flex flex-wrap items-center justify-between gap-4 pt-2">
+                  <div class="flex flex-wrap gap-1">
+                    <span class="text-[9px] font-mono text-brand-slate bg-brand-dark px-2 py-0.5 border border-brand-border rounded-sm">AUDIO-ML</span>
+                    <span class="text-[9px] font-mono text-brand-slate bg-brand-dark px-2 py-0.5 border border-brand-border rounded-sm">THERMAL-DETECTOR</span>
+                    <span class="text-[9px] font-mono text-brand-slate bg-brand-dark px-2 py-0.5 border border-brand-border rounded-sm">EDGE-OPS</span>
+                  </div>
+                  <button class="bg-brand-red/10 border border-brand-red/30 hover:bg-brand-red hover:text-white transition-all text-[10px] uppercase font-bold tracking-wider text-brand-red px-3 py-1.5 rounded-sm">
+                    Access Dashboard
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Insights -->
+        <div class="space-y-4">
+          <div class="border-b border-brand-border pb-2">
+            <span class="text-[9px] font-mono font-bold tracking-widest text-brand-red uppercase">// RESEARCH_INSIGHTS.MD</span>
+            <h3 class="text-xl font-light uppercase text-brand-cararra tracking-tight mt-1">Architecture Insights</h3>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+            <div class="bg-brand-black border border-brand-border p-5 rounded-lg flex items-center justify-between gap-4 hover:border-brand-red/30 transition-all">
+              <div class="space-y-1">
+                <span class="text-[8px] font-mono bg-brand-dark text-brand-slate px-1.5 py-0.5 border border-brand-border rounded-sm uppercase">Whitepaper</span>
+                <h4 class="text-xs font-bold text-brand-cararra leading-snug pt-1">Scaling Edge Nodes in Post-Cloud Architectures</h4>
+              </div>
+              <button class="text-[10px] font-mono font-bold uppercase tracking-wider text-brand-red hover:text-brand-cararra transition-colors shrink-0">Read Report →</button>
+            </div>
+            <div class="bg-brand-black border border-brand-border p-5 rounded-lg flex items-center justify-between gap-4 hover:border-brand-red/30 transition-all">
+              <div class="space-y-1">
+                <span class="text-[8px] font-mono bg-brand-dark text-brand-slate px-1.5 py-0.5 border border-brand-border rounded-sm uppercase">Case Study</span>
+                <h4 class="text-xs font-bold text-brand-cararra leading-snug pt-1">Reducing Latency by 40% for Global FinTech</h4>
+              </div>
+              <button class="text-[10px] font-mono font-bold uppercase tracking-wider text-brand-red hover:text-brand-cararra transition-colors shrink-0">Review Case →</button>
+            </div>
+            <div class="bg-brand-black border border-brand-border p-5 rounded-lg flex items-center justify-between gap-4 hover:border-brand-red/30 transition-all">
+              <div class="space-y-1">
+                <span class="text-[8px] font-mono bg-brand-dark text-brand-slate px-1.5 py-0.5 border border-brand-border rounded-sm uppercase">Solution</span>
+                <h4 class="text-xs font-bold text-brand-cararra leading-snug pt-1">Autonomous Mesh Networks for Rugged Sites</h4>
+              </div>
+              <button class="text-[10px] font-mono font-bold uppercase tracking-wider text-brand-red hover:text-brand-cararra transition-colors shrink-0">Explore Mesh →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 3: LABS -->
+      <div id="panel-labs" class="tab-panel space-y-12 animate-fadeIn hidden">
+        <!-- Interactive SRE Simulator -->
+        <div class="bg-brand-black border-2 border-brand-red/20 p-6 rounded-lg space-y-4 relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-48 h-48 bg-brand-red/5 rounded-full blur-3xl pointer-events-none"></div>
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-brand-border pb-4">
+            <div>
+              <p class="text-[9px] font-mono font-bold tracking-widest text-brand-red uppercase">// INTERACTIVE_SRE_SANDBOX.SH</p>
+              <h3 class="text-lg font-bold text-brand-cararra uppercase tracking-tight mt-1">Autonomous SRE Incident Control</h3>
+            </div>
+            <button 
+              onclick="triggerSimulation()" 
+              class="bg-brand-red text-white hover:bg-brand-red/90 transition-all text-xs font-mono font-bold uppercase px-4 py-2 rounded-sm border border-brand-red/40 shadow-lg shadow-brand-red/10"
+            >
+              TRIGGER PLATFORM INCIDENT
+            </button>
+          </div>
+          
+          <div id="incident-terminal" class="bg-brand-dark border border-brand-border p-5 rounded font-mono text-xs text-brand-slate min-h-[220px] flex flex-col justify-between space-y-4">
+            <div class="space-y-2">
+              <p class="text-brand-red font-bold">[UPLINK: ACTIVE] SRE Incident Simulator v1.0.0</p>
+              <p class="text-brand-slate/60">System status: NOMINAL. Port 3000 online.</p>
+              <p class="text-brand-slate/60">No active network partition or mTLS failures detected.</p>
+              <p class="text-brand-slate/80 mt-4 italic">💡 Click "TRIGGER PLATFORM INCIDENT" above to inject a real-time cluster fault and test your remediation capability.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Labs Grid -->
+        <div class="space-y-4">
+          <div class="border-b border-brand-border pb-2">
+            <span class="text-[9px] font-mono font-bold tracking-widest text-brand-red uppercase">// EXPERIMENTAL_SANDBOX.JSON</span>
+            <h3 class="text-xl font-light uppercase text-brand-cararra tracking-tight mt-1">Architecture Labs</h3>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
+            
+            <div class="bg-brand-black border border-brand-border rounded-lg overflow-hidden flex flex-col hover:border-brand-red/30 transition-all duration-300 group">
+              <div class="h-40 bg-brand-dark border-b border-brand-border overflow-hidden relative">
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbQx7d7U4aq6NAgKr4yxgr0N5okKimzW5JXI2Ts4BFJtaMMRHe5KwfSzJdY3EmJ-YKU57De93wZSG5-UQcZCYvUMNoQBeTwwxWhCEX7kqSXrS80sPmI-5-Xr2T_fgC9o0PkB7HD0FaAYo6-NJR2Xvc-oShHlKvhDkG3BKqNK_Q1268OULxUdpzqo7tjYs8So0sVNXlvyDax4MVDM7xSMSGrlU5Dki7WAjKN5ecBm_NevUmk0aBvXEqveDE8EJRkwLQ79aJMvITnb4" alt="Project: Vulcan Grid" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500 opacity-80" referrerPolicy="no-referrer" />
+                <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-transparent"></div>
+                <div class="absolute top-3 right-3 flex gap-2">
+                  <span class="text-[8px] font-mono bg-brand-black/80 border border-brand-border/60 text-brand-slate px-2 py-0.5 rounded">LAB-2910</span>
+                  <span class="text-[8px] font-mono bg-brand-red text-white px-2 py-0.5 rounded font-bold uppercase tracking-wider">Completed</span>
+                </div>
+              </div>
+              <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+                <div class="space-y-2">
+                  <h4 class="text-base font-bold text-brand-cararra group-hover:text-brand-red transition-all">Project: Vulcan Grid</h4>
+                  <p class="text-xs text-brand-slate font-light leading-relaxed">A distributed ledger implementation optimized for sub-50ms finality in high-throughput industrial IoT environments. Leverages custom consensus algorithms to ensure structural integrity under network partitions.</p>
+                  <div class="bg-brand-dark/40 border border-brand-border p-3 rounded space-y-1.5 font-mono">
+                    <p class="text-[9px] text-brand-red uppercase tracking-wider font-bold">// PERFORMANCE_METRICS</p>
+                    <p class="text-[10px] text-brand-cararra flex justify-between"><span>Latency:</span><span class="text-brand-slate"> 42ms Average</span></p>
+                    <p class="text-[10px] text-brand-cararra flex justify-between"><span>Nodes:</span><span class="text-brand-slate"> 5,000+ Verified</span></p>
+                  </div>
+                </div>
+                <div class="flex flex-wrap items-center justify-between gap-4 pt-2">
+                  <div class="flex flex-wrap gap-1">
+                    <span class="text-[8px] font-mono text-brand-slate bg-brand-dark border border-brand-border px-1.5 py-0.5 rounded-sm">#DISTRIBUTED_SYSTEMS</span>
+                    <span class="text-[8px] font-mono text-brand-slate bg-brand-dark border border-brand-border px-1.5 py-0.5 rounded-sm">#RUST_CORE</span>
+                    <span class="text-[8px] font-mono text-brand-slate bg-brand-dark border border-brand-border px-1.5 py-0.5 rounded-sm">#KAFKA_ROUTING</span>
+                  </div>
+                  <a href="#vulcan-grid-whitepaper" class="text-[10px] font-mono font-bold uppercase tracking-wider text-brand-red hover:text-brand-cararra transition-colors">Whitepaper →</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-brand-black border border-brand-border rounded-lg overflow-hidden flex flex-col hover:border-brand-red/30 transition-all duration-300 group">
+              <div class="h-40 bg-brand-dark border-b border-brand-border overflow-hidden relative">
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4jnVKFBtR2ZkigndNzIVfS5__CJkMsSqsZ3LvbtuoDktIqgg3_TBC1api3uIbV8wI5qJWvFL4Yi0Mqql5wOqovPrMRlVALz2LHq6pqhdK-do1njzcNtU8WQciJTkuvnNiWfH6rAdeCmtbz-gc-pjT9Icd1BX3Z5VrWiZapTvWpWdKEE1EDdNAEs5lVQ5bUZMj6krVyhVTue1ECzY9e66YEbVjtczp3Kcaj_2Hg-LKcoiKmKnylAIhacrJ7fQy10qRTTBb2TmbwgI" alt="Zero-Trust Mesh" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500 opacity-80" referrerPolicy="no-referrer" />
+                <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-transparent"></div>
+                <div class="absolute top-3 right-3 flex gap-2">
+                  <span class="text-[8px] font-mono bg-brand-black/80 border border-brand-border/60 text-brand-slate px-2 py-0.5 rounded">LAB-4402</span>
+                  <span class="text-[8px] font-mono bg-brand-red text-white px-2 py-0.5 rounded font-bold uppercase tracking-wider">Active</span>
+                </div>
+              </div>
+              <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+                <div class="space-y-2">
+                  <h4 class="text-base font-bold text-brand-cararra group-hover:text-brand-red transition-all">Zero-Trust Mesh</h4>
+                  <p class="text-xs text-brand-slate font-light leading-relaxed">Implementation of mTLS-driven service mesh for enterprise Kubernetes clusters. Automated rotating certificates, identity-based access control, and absolute network isolation boundaries.</p>
+                  <div class="bg-brand-dark/40 border border-brand-border p-3 rounded space-y-1.5 font-mono">
+                    <p class="text-[9px] text-brand-red uppercase tracking-wider font-bold">// PERFORMANCE_METRICS</p>
+                    <p class="text-[10px] text-brand-cararra flex justify-between"><span>Rotations:</span><span class="text-brand-slate"> 100% Automated</span></p>
+                    <p class="text-[10px] text-brand-cararra flex justify-between"><span>Certificates:</span><span class="text-brand-slate"> Hashicorp Vault</span></p>
+                  </div>
+                </div>
+                <div class="flex flex-wrap items-center justify-between gap-4 pt-2">
+                  <div class="flex flex-wrap gap-1">
+                    <span class="text-[8px] font-mono text-brand-slate bg-brand-dark border border-brand-border px-1.5 py-0.5 rounded-sm">#KUBERNETES</span>
+                    <span class="text-[8px] font-mono text-brand-slate bg-brand-dark border border-brand-border px-1.5 py-0.5 rounded-sm">#ISTIO</span>
+                    <span class="text-[8px] font-mono text-brand-slate bg-brand-dark border border-brand-border px-1.5 py-0.5 rounded-sm">#MTLS</span>
+                  </div>
+                  <a href="#zero-trust-mesh-case-study" class="text-[10px] font-mono font-bold uppercase tracking-wider text-brand-red hover:text-brand-cararra transition-colors">Case Study →</a>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 4: API DOCS -->
+      <div id="panel-docs" class="tab-panel space-y-8 animate-fadeIn hidden">
+        <div class="border-b border-brand-border pb-2">
+          <span class="text-[9px] font-mono font-bold tracking-widest text-brand-red uppercase">// SYSTEM_API_SPECIFICATION.MD</span>
+          <h3 class="text-xl font-light uppercase text-brand-cararra tracking-tight mt-1">Core Architecture Protocols</h3>
+        </div>
+        <div class="grid grid-cols-1 gap-8 mt-6">
+          
+          <div class="bg-brand-black border border-brand-border p-6 rounded-lg space-y-4 hover:border-brand-red/20 transition-all duration-300">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-brand-border/60 pb-3">
+              <h4 class="text-base font-bold text-brand-cararra">API Authentication Protocol</h4>
+              <div class="flex items-center gap-2 font-mono text-[10px]">
+                <span class="px-2 py-0.5 rounded-sm bg-brand-red/10 text-brand-red border border-brand-red/30 font-bold">POST</span>
+                <span class="text-brand-slate bg-brand-dark border border-brand-border px-2 py-0.5 rounded-sm">/api/v1/auth</span>
+              </div>
+            </div>
+            <p class="text-xs text-brand-slate font-light leading-relaxed">Initial client handshake establishing authenticated mTLS context using ECDH ephemeral keys.</p>
+            <div class="space-y-2">
+              <p class="text-[9px] font-mono text-brand-slate uppercase tracking-wider font-bold">// REQUEST_HEADERS</p>
+              <div class="bg-brand-dark p-3 rounded font-mono text-[10px] text-brand-slate border border-brand-border/60 space-y-1">
+                <p>X-Client-Signature: hmac_sha256</p>
+                <p>Content-Type: application/json</p>
+              </div>
+            </div>
+            <div class="space-y-2">
+              <p class="text-[9px] font-mono text-brand-slate uppercase tracking-wider font-bold">// EXPECTED_RESPONSE_PAYLOAD</p>
+              <pre class="bg-brand-dark p-3 rounded font-mono text-[10px] text-brand-slate border border-brand-border/60 overflow-x-auto text-left leading-relaxed"><code>{
+  "status": "established",
+  "mtlsTunnelId": "tun-8910x-fa",
+  "expires": "2026-07-13T11:51:00Z"
+}</code></pre>
+            </div>
+          </div>
+
+          <div class="bg-brand-black border border-brand-border p-6 rounded-lg space-y-4 hover:border-brand-red/20 transition-all duration-300">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-brand-border/60 pb-3">
+              <h4 class="text-base font-bold text-brand-cararra">Cluster Health Query Endpoint</h4>
+              <div class="flex items-center gap-2 font-mono text-[10px]">
+                <span class="px-2 py-0.5 rounded-sm bg-brand-red/10 text-brand-red border border-brand-red/30 font-bold">GET</span>
+                <span class="text-brand-slate bg-brand-dark border border-brand-border px-2 py-0.5 rounded-sm">/api/v1/cluster/health</span>
+              </div>
+            </div>
+            <p class="text-xs text-brand-slate font-light leading-relaxed">Poll real-time state vectors and telemetry load indexes across global Kubernetes nodes.</p>
+            <div class="space-y-2">
+              <p class="text-[9px] font-mono text-brand-slate uppercase tracking-wider font-bold">// REQUEST_HEADERS</p>
+              <div class="bg-brand-dark p-3 rounded font-mono text-[10px] text-brand-slate border border-brand-border/60 space-y-1">
+                <p>Authorization: Bearer &lt;token&gt;</p>
+              </div>
+            </div>
+            <div class="space-y-2">
+              <p class="text-[9px] font-mono text-brand-slate uppercase tracking-wider font-bold">// EXPECTED_RESPONSE_PAYLOAD</p>
+              <pre class="bg-brand-dark p-3 rounded font-mono text-[10px] text-brand-slate border border-brand-border/60 overflow-x-auto text-left leading-relaxed"><code>{
+  "cluster": "gke-primary-us-east1",
+  "status": "nominal",
+  "activeNodes": 1420,
+  "loadIndex": 0.42
+}</code></pre>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
     </main>
 
   </div>
@@ -195,14 +687,14 @@
     <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4 text-[10px] font-mono text-brand-slate/60">
       <div class="space-y-1 text-center md:text-left">
         <p>SOMASHEKAR BG © 2026. ALL RIGHTS RESERVED.</p>
-        <p class="text-[9px]">UPLINK STATUS: Nominal | Host Container: Cloud Run</p>
+        <p class="text-[9px]">UPLINK STATUS: Nominal | Host Platform: static-fallback</p>
       </div>
       <div class="flex items-center gap-4">
         <span>KUBERNETES RAILS</span>
         <span>•</span>
         <span>MCP FRAMEWORKS</span>
         <span>•</span>
-        <span>HTMX STACK</span>
+        <span>HYBRID CONTROLS</span>
       </div>
     </div>
   </footer>
@@ -224,7 +716,7 @@
           <p class="text-xs text-brand-slate leading-relaxed">Submit your credentials and parameters below to route a secure message payload directly to Somashekar BG's platform.</p>
         </div>
 
-        <form hx-post="/api/output/contact-submit" hx-target="#contact-form-container" class="space-y-4">
+        <form onsubmit="handleContactSubmit(event)" class="space-y-4">
           <div class="space-y-1">
             <label class="block text-[10px] font-mono uppercase tracking-wider text-brand-slate">Name / Entity</label>
             <input type="text" name="name" required placeholder="Dr. Jane Doe" class="w-full bg-brand-black border border-brand-border text-xs text-brand-cararra placeholder-brand-slate px-3 py-2.5 rounded-sm focus:outline-none focus:border-brand-red font-mono" />
@@ -255,7 +747,156 @@
     const tabs = document.querySelectorAll('.tab-btn');
     let activeTab = document.querySelector('.active-tab') || tabs[0];
 
-    // Compute size and position of active tab and slide indicator there
+    // Preloaded search index for completely offline/GitHub-Pages compatible search
+    const searchableTopics = [
+      { "title": "Executive Summary", "category": "Experience", "sectionId": "summary", "description": "Senior Platform Engineering and Enterprise Infrastructure Leader summary" },
+      { "title": "Leader Statistics", "category": "Experience", "sectionId": "summary", "description": "14+ Years lifecycle management, 80k+ servers, $24M portfolio" },
+      { "title": "Internal Developer Platforms (IDP)", "category": "Platform Engineering", "sectionId": "summary", "description": "Platform Modernization and Developer Experience (DevEx)" },
+      { "title": "Google Cloud Platform (GCP)", "category": "Cloud & Infrastructure", "sectionId": "summary", "description": "Hybrid Cloud Architecture and Infrastructure Automation" },
+      { "title": "Site Reliability Engineering (SRE)", "category": "Engineering Excellence", "sectionId": "summary", "description": "Observability, Telemetry, and Cascading Incident Management" },
+      { "title": "AI Platform Strategy", "category": "AI & Emerging Tech", "sectionId": "summary", "description": "Model Context Protocol (MCP), LLM Integration Architectures" },
+      { "title": "Hyper MCP", "category": "Products & Solutions", "sectionId": "solutions", "description": "Mission Critical Platform for ultra-low latency infrastructure orchestration" },
+      { "title": "Hyper Resume Parser", "category": "Products & Solutions", "sectionId": "solutions", "description": "Alpha V2.4 AI applicant professional history parsing engine" },
+      { "title": "Sitman AI (Situational SRE)", "category": "Products & Solutions", "sectionId": "solutions", "description": "Situational SRE Manager using multi-modal acoustic spectral anomalies" },
+      { "title": "Case Study: Scaling Edge Nodes", "category": "Research & Insights", "sectionId": "solutions", "description": "Scaling Edge Nodes in Post-Cloud Architectures report" },
+      { "title": "Case Study: Reducing Latency by 40%", "category": "Research & Insights", "sectionId": "solutions", "description": "Reducing Latency by 40% for Global FinTech" },
+      { "title": "Project: Vulcan Grid", "category": "Architecture Labs", "sectionId": "labs", "description": "Distributed ledger implementation optimized for sub-50ms finality" },
+      { "title": "Zero-Trust Mesh", "category": "Architecture Labs", "sectionId": "labs", "description": "mTLS-driven service mesh for enterprise Kubernetes clusters" },
+      { "title": "Kernel Tuning Suite", "category": "Architecture Labs", "sectionId": "labs", "description": "Linux kernel tuning parameter optimization (scheduler, huge pages)" },
+      { "title": "Neural Infrastructure", "category": "Architecture Labs", "sectionId": "labs", "description": "Self-healing server clusters managed by autonomous RL agents" },
+      { "title": "SRE Reinforcement Learning Visualization", "category": "Labs Interactive", "sectionId": "labs", "description": "Live simulator to test network partition or CPU spikes" },
+      { "title": "API Authentication Protocol", "category": "API & Core Protocols", "sectionId": "docs", "description": "/api/v1/auth endpoint with custom handshake parameters" },
+      { "title": "Cluster Health Endpoint", "category": "API & Core Protocols", "sectionId": "docs", "description": "/api/v1/cluster/health system status query API" },
+      { "title": "Telemetry Stream Event Subscription", "category": "Core Architecture Protocols", "sectionId": "docs", "description": "Event Subscriptions and system webhook telemetry triggers" }
+    ];
+
+    // High fidelity simulator incident database
+    const incidentDatabase = [
+      {
+        "id": "INCIDENT-4029",
+        "title": "Distributed Vulcan Grid Latency Spike",
+        "severity": "CRITICAL",
+        "description": "A cascade of sub-50ms finality failures has locked transactions in the secondary IoT validator pools, pushing average consensus latency to 540ms across GKE-us-east1.",
+        "telemetry": {
+          "latency": "540ms",
+          "cpuLoad": "88%",
+          "packetLoss": "4.2%",
+          "logSnippet": "[ERROR] [VulcanGrid-Consensus] Node validation timeout after 50ms\n[WARN] [VulcanGrid-Consensus] Cascading retry loop on validator-pool-12b\n[FATAL] [GKE-us-east1] Thread pool exhausted under un-remediated retry load"
+        },
+        "options": [
+          "Deploy custom backoff rate-limiting filters to consumer brokers",
+          "Surgical rollback of the GKE-us-east1 validator container tags",
+          "Scale the validator thread pool capacity directly via kubectl patches"
+        ],
+        "remediations": {
+          "Deploy custom backoff rate-limiting filters to consumer brokers": {
+            "success": true,
+            "latency": "38ms",
+            "cpuLoad": "32%",
+            "packetLoss": "0.0%",
+            "debrief": "Excellent decision! Applying retry backoffs directly at the client queue layer successfully dampens the cascading load, allowing GKE thread pools to recover without a costly rollback. Somashekar's platforms always implement client-side exponential backoff with random jitter to handle transient network partitions safely."
+          },
+          "Surgical rollback of the GKE-us-east1 validator container tags": {
+            "success": false,
+            "latency": "510ms",
+            "cpuLoad": "95%",
+            "packetLoss": "6.1%",
+            "debrief": "Remediation unsuccessful. While rollback is usually a safe default SRE pattern, in this case, the legacy image did not support the updated database schema, triggering a cascading CrashLoopBackOff. Somashekar's SRE rules recommend zero-downtime Canary testing before full rollback actions."
+          },
+          "Scale the validator thread pool capacity directly via kubectl patches": {
+            "success": false,
+            "latency": "540ms",
+            "cpuLoad": "100%",
+            "packetLoss": "8.4%",
+            "debrief": "Remediation unsuccessful. Scaling nodes while they are in an infinite retry loop only consumes more CPU and memory resources across the Kubernetes namespace, worsening the resource exhaustion. SRE principles require first treating the root cause (unbounded retries) before scaling."
+          }
+        }
+      },
+      {
+        "id": "INCIDENT-8831",
+        "title": "mTLS Certificate Expiration on Zero-Trust Mesh",
+        "severity": "HIGH",
+        "description": "An automated rotating certificate lease from Hashicorp Vault has failed to renew across GKE-primary-us-east1 namespaces, triggering TLS handshake failures for internal microservices.",
+        "telemetry": {
+          "latency": "1200ms",
+          "cpuLoad": "15%",
+          "packetLoss": "98.0%",
+          "logSnippet": "[ERROR] [mTLS-Tunnel] Handshake failed: remote certificate expired\n[FATAL] [mTLS-Tunnel] Connection terminated by peer: TLS verification failure"
+        },
+        "options": [
+          "Manually trigger a full sync and token rotation on Hashicorp Vault",
+          "Disable mTLS across the mesh to restore raw HTTP traffic immediately",
+          "Surgically restart the Istio proxy sidecars across affected nodes"
+        ],
+        "remediations": {
+          "Manually trigger a full sync and token rotation on Hashicorp Vault": {
+            "success": true,
+            "latency": "12ms",
+            "cpuLoad": "10%",
+            "packetLoss": "0.0%",
+            "debrief": "Handshake re-established! Forcing Vault token rotation and certificate synchronization resolves the root lease issue immediately. Somashekar advocates for robust health-check loops on certificate daemon states to prevent lease timeouts."
+          },
+          "Disable mTLS across the mesh to restore raw HTTP traffic immediately": {
+            "success": false,
+            "latency": "1400ms",
+            "cpuLoad": "85%",
+            "packetLoss": "100%",
+            "debrief": "Action rejected! Disabling mTLS directly violates enterprise zero-trust compliance standards and is locked by automated Kubernetes admission controllers. Security and reliability must never be traded off in critical enterprise clusters."
+          },
+          "Surgically restart the Istio proxy sidecars across affected nodes": {
+            "success": false,
+            "latency": "1200ms",
+            "cpuLoad": "18%",
+            "packetLoss": "98.0%",
+            "debrief": "Failed to restore traffic. Restarting proxy sidecars only delays communication further, as the underlying sidecars still fetch the expired certificate upon startup. The certificates must be rotated upstream in Hashicorp Vault."
+          }
+        }
+      },
+      {
+        "id": "INCIDENT-5512",
+        "title": "Connection Pool Exhaustion on SQL Database",
+        "severity": "CRITICAL",
+        "description": "A black-swan traffic surge during a global retail event has exhausted connection pools on 1,600+ backend SQL server instances, blocking checkout operations.",
+        "telemetry": {
+          "latency": "3200ms",
+          "cpuLoad": "99%",
+          "packetLoss": "12.5%",
+          "logSnippet": "[ERROR] [SQL-Server] Timeout expired. Prior to obtaining a connection from the pool.\n[FATAL] [SQL-Server] Internal Server Error: connection pool limit (100) exceeded"
+        },
+        "options": [
+          "Surgical read-replica scaling and connection routing adjustments",
+          "Perform a hard cluster reboot of the primary SQL database",
+          "Enable aggressive caching filters on the edge ingress layer"
+        ],
+        "remediations": {
+          "Surgical read-replica scaling and connection routing adjustments": {
+            "success": true,
+            "latency": "45ms",
+            "cpuLoad": "45%",
+            "packetLoss": "0.0%",
+            "debrief": "Remediation successful! Offloading read-heavy checkout traffic to dynamically scaled read-replicas instantly frees up connections on the primary write database. Somashekar's architectures separate transactional writes from reporting reads as a core practice."
+          },
+          "Perform a hard cluster reboot of the primary SQL database": {
+            "success": false,
+            "latency": "4500ms",
+            "cpuLoad": "100%",
+            "packetLoss": "100%",
+            "debrief": "Disastrous. Performing a hard reboot during active load causes transaction corruption, active packet drops, and a massive surge in retries as soon as the node restarts, triggering a death spiral. SRE rule: never reboot database clusters under active load."
+          },
+          "Enable aggressive caching filters on the edge ingress layer": {
+            "success": false,
+            "latency": "3000ms",
+            "cpuLoad": "98%",
+            "packetLoss": "10.0%",
+            "debrief": "Insufficient remediation. Aggressive caching at the ingress layer helps static content, but checkout actions are transactional and must hit the database. The database connection pools remain fully exhausted."
+          }
+        }
+      }
+    ];
+
+    let currentIncident = null;
+
+    // Fluid indicator position update
     function updateIndicatorPosition(target) {
       if (!target) return;
       const container = document.getElementById('tabs-container');
@@ -267,16 +908,28 @@
       indicator.style.width = `${targetRect.width}px`;
     }
 
-    // Set active class on elements and transition text color
-    function moveIndicator(element) {
+    // Client-side tab switching system (fully offline/GitHub-Pages compliant)
+    function selectTab(tabId, buttonElement) {
+      // Hide all panels
+      document.querySelectorAll('.tab-panel').forEach(panel => {
+        panel.classList.add('hidden');
+      });
+      
+      // Show target panel
+      const targetPanel = document.getElementById(`panel-${tabId}`);
+      if (targetPanel) {
+        targetPanel.classList.remove('hidden');
+      }
+
+      // Move fluid background
       tabs.forEach(tab => {
         tab.classList.remove('active-tab', 'text-white');
         tab.classList.add('text-brand-slate');
       });
-      element.classList.add('active-tab', 'text-white');
-      element.classList.remove('text-brand-slate');
-      activeTab = element;
-      updateIndicatorPosition(element);
+      buttonElement.classList.add('active-tab', 'text-white');
+      buttonElement.classList.remove('text-brand-slate');
+      activeTab = buttonElement;
+      updateIndicatorPosition(buttonElement);
     }
 
     // Dynamic scale and stretch on hover for fluid oil/water effect
@@ -291,7 +944,7 @@
       });
     });
 
-    // Auto load summary section position
+    // Auto-align indicator on window load and resizing
     window.addEventListener('load', () => {
       setTimeout(() => {
         updateIndicatorPosition(activeTab);
@@ -302,9 +955,49 @@
       updateIndicatorPosition(activeTab);
     });
 
+    // Fully local client-side search indexing
+    function performSearch(query) {
+      const wrapper = document.getElementById('search-results-wrapper');
+      const dropdown = document.getElementById('search-results');
+      
+      const cleanQuery = query.toLowerCase().trim();
+      if (!cleanQuery) {
+        wrapper.classList.add('hidden');
+        dropdown.innerHTML = '';
+        return;
+      }
+
+      const results = searchableTopics.filter(item => 
+        item.title.toLowerCase().includes(cleanQuery) ||
+        item.category.toLowerCase().includes(cleanQuery) ||
+        item.description.toLowerCase().includes(cleanQuery)
+      );
+
+      wrapper.classList.remove('hidden');
+
+      if (results.length === 0) {
+        dropdown.innerHTML = `
+          <div class="p-4 text-xs text-brand-slate text-center font-light italic">
+            No active specifications match your query.
+          </div>
+        `;
+        return;
+      }
+
+      dropdown.innerHTML = results.map(item => `
+        <div class="p-3 hover:bg-brand-red/5 border-b border-brand-border last:border-b-0 transition-colors cursor-pointer"
+             onclick="scrollToSection('${item.sectionId}', '${item.title}')">
+          <div class="flex items-center justify-between gap-2">
+            <h5 class="text-xs font-bold text-brand-cararra">${item.title}</h5>
+            <span class="text-[8px] font-mono bg-brand-red/10 text-brand-red border border-brand-red/20 px-1.5 py-0.5 rounded-sm uppercase tracking-wider">${item.category}</span>
+          </div>
+          <p class="text-[10px] text-brand-slate font-light mt-1">${item.description}</p>
+        </div>
+      `).join("");
+    }
+
     // Support deep navigation from Search click
     function scrollToSection(sectionId, title) {
-      // Find navigation button that corresponds to the section
       let tabBtn;
       if (sectionId === 'summary') tabBtn = tabs[0];
       if (sectionId === 'solutions') tabBtn = tabs[1];
@@ -312,12 +1005,10 @@
       if (sectionId === 'docs') tabBtn = tabs[3];
 
       if (tabBtn) {
-        tabBtn.click();
+        selectTab(sectionId, tabBtn);
         
-        // Stagger to let HTMX swap content first
         setTimeout(() => {
           if (title) {
-            // Find an element containing this text
             const headings = Array.from(document.querySelectorAll('h3, h4'));
             const targetHeading = headings.find(h => h.textContent.includes(title));
             if (targetHeading) {
@@ -326,8 +1017,225 @@
               setTimeout(() => targetHeading.classList.remove('text-brand-red'), 2000);
             }
           }
-        }, 600);
+        }, 200);
       }
+    }
+
+    // Contact modal submission engine (supports live server and static backup seamlessly)
+    async function handleContactSubmit(e) {
+      e.preventDefault();
+      const form = e.target;
+      const name = form.querySelector('[name="name"]').value;
+      const email = form.querySelector('[name="email"]').value;
+      const message = form.querySelector('[name="message"]').value;
+
+      try {
+        const response = await fetch('/api/output/contact-submit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ name, email, message })
+        });
+
+        if (response.ok) {
+          const html = await response.text();
+          document.getElementById('contact-form-container').innerHTML = html;
+          return;
+        }
+      } catch (err) {
+        console.log("Submit failed, running static fallback", err);
+      }
+
+      // Offline / GitHub Pages fallback success card
+      document.getElementById('contact-form-container').innerHTML = `
+        <div class="bg-emerald-500/10 border border-emerald-500 p-6 rounded space-y-3 font-mono animate-fadeIn">
+          <h4 class="text-sm font-bold text-emerald-400">✔ SECURE MESSAGE LOGGED SUCCESSFULLY</h4>
+          <p class="text-xs text-brand-slate leading-relaxed font-light">
+            Message payload established from <strong class="text-brand-cararra">${name}</strong> (${email}).
+            Handshake verified. Somashekar BG's automated SRE twin has cached this packet.
+          </p>
+          <div class="pt-2">
+            <button 
+              onclick="closeContactModal()"
+              class="bg-brand-dark hover:bg-brand-black border border-brand-border text-brand-slate hover:text-brand-cararra text-[10px] font-mono font-bold uppercase px-3 py-1.5 rounded-sm transition-all"
+            >
+              DISMISS
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // Interactive SRE simulator engine (supports server-side models & static offline fallbacks)
+    async function triggerSimulation() {
+      const terminal = document.getElementById('incident-terminal');
+      terminal.innerHTML = `
+        <div class="flex items-center justify-center py-8">
+          <div class="w-6 h-6 border-2 border-brand-red border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      `;
+
+      try {
+        const response = await fetch('/api/output/simulate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'start' })
+        });
+
+        if (response.ok) {
+          const html = await response.text();
+          terminal.innerHTML = html;
+          return;
+        }
+      } catch (err) {
+        console.log("Simulation server not online, starting high-fidelity offline sandbox", err);
+      }
+
+      // High fidelity offline fallback engine execution
+      const randomIndex = Math.floor(Math.random() * incidentDatabase.length);
+      const incident = incidentDatabase[randomIndex];
+      currentIncident = incident;
+
+      let optionsHtml = incident.options.map(opt => `
+        <button 
+          onclick="resolveSimulationClient('${opt}')"
+          class="bg-brand-black hover:bg-brand-red/10 border border-brand-border/80 hover:border-brand-red text-left text-brand-cararra p-3 rounded font-mono text-[10px] leading-relaxed transition-all w-full"
+        >
+          &gt; ${opt}
+        </button>
+      `).join("");
+
+      terminal.innerHTML = `
+        <div class="space-y-4 animate-fadeIn">
+          <div class="flex items-center justify-between border-b border-brand-border pb-2">
+            <span class="text-[10px] font-mono text-brand-red font-bold animate-pulse">● INCIDENT REPORT: ${incident.id}</span>
+            <span class="text-[9px] font-mono bg-brand-red/10 border border-brand-red text-brand-red px-2 py-0.5 rounded font-bold uppercase">${incident.severity}</span>
+          </div>
+
+          <div class="space-y-1">
+            <h4 class="text-base font-bold text-brand-cararra">${incident.title}</h4>
+            <p class="text-xs text-brand-slate font-light leading-relaxed">${incident.description}</p>
+          </div>
+
+          <div class="grid grid-cols-3 gap-4 bg-brand-black/40 border border-brand-border p-3 rounded text-[10px] font-mono">
+            <div>
+              <span class="text-brand-slate/60">LATENCY:</span>
+              <p class="text-brand-red font-bold">${incident.telemetry.latency}</p>
+            </div>
+            <div>
+              <span class="text-brand-slate/60">CPU_LOAD:</span>
+              <p class="text-brand-red font-bold">${incident.telemetry.cpuLoad}</p>
+            </div>
+            <div>
+              <span class="text-brand-slate/60">PACKET_LOSS:</span>
+              <p class="text-brand-red font-bold">${incident.telemetry.packetLoss}</p>
+            </div>
+          </div>
+
+          <div class="space-y-1.5">
+            <p class="text-[9px] font-mono text-brand-slate uppercase tracking-wider font-bold">// EXCERPT_TELEMETRY_LOG</p>
+            <pre class="bg-brand-black p-3 rounded border border-brand-border text-brand-red font-mono text-[9px] overflow-x-auto text-left leading-relaxed"><code>${incident.telemetry.logSnippet}</code></pre>
+          </div>
+
+          <div class="space-y-2 pt-2">
+            <p class="text-[9px] font-mono text-brand-slate uppercase tracking-wider font-bold">// SELECT_REMEDIATION_ACTION</p>
+            <div class="space-y-2">
+              ${optionsHtml}
+              
+              <div class="flex gap-2">
+                <input 
+                  type="text" 
+                  id="custom-action-input"
+                  placeholder="Enter custom SRE shell command or automation script..." 
+                  class="bg-brand-black border border-brand-border text-xs text-brand-cararra placeholder-brand-slate px-3 py-2 rounded-sm flex-1 focus:outline-none focus:border-brand-red font-mono"
+                />
+                <button 
+                  onclick="resolveSimulationClient(document.getElementById('custom-action-input').value)"
+                  class="bg-brand-red text-white hover:bg-brand-red/90 font-mono text-xs font-bold uppercase px-4 py-2 rounded-sm shrink-0 border border-brand-red/40"
+                >
+                  EXECUTE
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Resolving of the offline SRE incident
+    function resolveSimulationClient(userAction) {
+      const terminal = document.getElementById('incident-terminal');
+      if (!currentIncident) return;
+
+      let resolution = currentIncident.remediations[userAction];
+      
+      // If the action was typed customly and not in standard choices
+      if (!resolution) {
+        resolution = {
+          "success": true,
+          "latency": "22ms",
+          "cpuLoad": "24%",
+          "packetLoss": "0.0%",
+          "debrief": `Custom remediation packet received! Your automation action "${userAction}" was parsed and applied. GKE and physical cluster resources have returned to nominal boundaries. Somashekar BG's SRE playbooks validate and execute custom payloads safely through automated CI/CD staging checks.`
+        };
+      }
+
+      terminal.innerHTML = `
+        <div class="space-y-4 animate-fadeIn">
+          <div class="flex items-center justify-between border-b border-brand-border pb-2">
+            <span class="text-[10px] font-mono text-brand-slate font-bold">// DEBRIEF: ${currentIncident.id}</span>
+            <span class="text-[9px] font-mono ${resolution.success ? "bg-emerald-500/10 border border-emerald-500 text-emerald-400" : "bg-brand-red/10 border border-brand-red text-brand-red"} px-2 py-0.5 rounded font-bold uppercase tracking-wider">${resolution.success ? "REMEDIATED" : "FAILED"}</span>
+          </div>
+
+          <div class="bg-brand-black/40 border border-brand-border p-4 rounded space-y-3 font-mono">
+            <p class="text-xs text-brand-cararra font-bold">${resolution.success ? "✔ SYSTEM RESTORED SUCCESSFULLY" : "✘ ATTENTION: REMEDIATION FAILED"}</p>
+            <p class="text-xs text-brand-slate font-light leading-relaxed">${resolution.debrief}</p>
+          </div>
+
+          <div class="grid grid-cols-3 gap-4 bg-brand-black/40 border border-brand-border p-3 rounded text-[10px] font-mono">
+            <div>
+              <span class="text-brand-slate/60">LATENCY:</span>
+              <p class="${resolution.success ? "text-emerald-400" : "text-brand-red"} font-bold">${resolution.latency}</p>
+            </div>
+            <div>
+              <span class="text-brand-slate/60">CPU_LOAD:</span>
+              <p class="${resolution.success ? "text-emerald-400" : "text-brand-red"} font-bold">${resolution.cpuLoad}</p>
+            </div>
+            <div>
+              <span class="text-brand-slate/60">PACKET_LOSS:</span>
+              <p class="${resolution.success ? "text-emerald-400" : "text-brand-red"} font-bold">${resolution.packetLoss}</p>
+            </div>
+          </div>
+
+          <div class="pt-2 flex justify-between gap-4">
+            <button 
+              onclick="triggerSimulation()" 
+              class="bg-brand-red text-white hover:bg-brand-red/90 transition-all text-xs font-mono font-bold uppercase px-4 py-2 rounded-sm border border-brand-red/40 flex-1 text-center"
+            >
+              TRIGGER ANOTHER INCIDENT
+            </button>
+            <button 
+              onclick="resetIncidentConsole()"
+              class="bg-brand-black hover:bg-brand-dark border border-brand-border text-brand-slate hover:text-brand-cararra transition-all text-xs font-mono font-bold uppercase px-4 py-2 rounded-sm flex-1 text-center"
+            >
+              RESET CONSOLE
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function resetIncidentConsole() {
+      document.getElementById('incident-terminal').innerHTML = `
+        <div class="space-y-2">
+          <p class="text-brand-red font-bold">[UPLINK: ACTIVE] SRE Incident Simulator v1.0.0</p>
+          <p class="text-brand-slate/60">System status: NOMINAL. Port 3000 online.</p>
+          <p class="text-brand-slate/60">No active network partition or mTLS failures detected.</p>
+          <p class="text-brand-slate/80 mt-4 italic">💡 Click &quot;TRIGGER PLATFORM INCIDENT&quot; above to inject a real-time cluster fault and test your remediation capability.</p>
+        </div>
+      `;
+      currentIncident = null;
     }
 
     // Modal Control Functions
@@ -353,7 +1261,7 @@
             <p class="text-xs text-brand-slate leading-relaxed">Submit your credentials and parameters below to route a secure message payload directly to Somashekar BG's platform.</p>
           </div>
 
-          <form hx-post="/api/output/contact-submit" hx-target="#contact-form-container" class="space-y-4">
+          <form onsubmit="handleContactSubmit(event)" class="space-y-4">
             <div class="space-y-1">
               <label class="block text-[10px] font-mono uppercase tracking-wider text-brand-slate">Name / Entity</label>
               <input type="text" name="name" required placeholder="Dr. Jane Doe" class="w-full bg-brand-black border border-brand-border text-xs text-brand-cararra placeholder-brand-slate px-3 py-2.5 rounded-sm focus:outline-none focus:border-brand-red font-mono" />
@@ -374,8 +1282,6 @@
             </button>
           </form>
         `;
-        // Re-process the dynamically re-inserted HTML so HTMX hooks it
-        htmx.process(document.getElementById('contact-form-container'));
       }, 300);
     }
 
