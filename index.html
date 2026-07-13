@@ -1,13 +1,390 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Google AI Studio App</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-brand-black selection:bg-brand-red/30 selection:text-white">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Somashekar BG | Platform SRE & AI-Twin Control Panel</title>
+  
+  <!-- Tailwind CSS & Custom Config -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              black: "#0a0a0a",
+              dark: "#141414",
+              border: "#262626",
+              slate: "#8a8a8a",
+              cararra: "#f5f5f0",
+              red: "#bb080b",
+              chalk: "#e6e6e0"
+            }
+          },
+          animation: {
+            fadeIn: 'fadeIn 0.4s ease-out forwards',
+            pulseRed: 'pulseRed 2s infinite',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0', transform: 'translateY(10px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+            pulseRed: {
+              '0%, 100%': { opacity: '0.4', transform: 'scale(1)' },
+              '50%': { opacity: '0.8', transform: 'scale(1.05)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
 
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- HTMX (CDN) -->
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+
+  <style type="text/css">
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    /* Custom Scrollbar for high-tech industrial feel */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0a0a0a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #262626;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #bb080b;
+    }
+
+    /* Organic morphing animation for water/oil slider indicator */
+    @keyframes morphing-blob {
+      0% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+      34% { border-radius: 70% 30% 50% 50% / 50% 30% 70% 50%; }
+      67% { border-radius: 50% 50% 30% 70% / 40% 60% 40% 60%; }
+      100% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+    }
+    .blob-indicator {
+      animation: morphing-blob 8s ease-in-out infinite alternate;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    /* Simple utility classes for custom styling */
+    .animate-fadeIn {
+      animation: fadeIn 0.4s ease-out forwards;
+    }
+  </style>
+</head>
+<body class="bg-brand-black text-brand-slate h-full flex flex-col justify-between overflow-x-hidden">
+
+  <!-- Main Portal Layout -->
+  <div class="relative w-full max-w-6xl mx-auto px-4 py-8 md:py-12 flex-1 space-y-12">
+    
+    <!-- Floating Header Navigation Control -->
+    <div class="absolute top-4 right-4 z-50">
+      <a href="/" class="group flex items-center gap-2 bg-brand-dark/90 border border-brand-border hover:border-brand-red px-3 py-1.5 rounded-full text-[10px] font-mono text-brand-cararra tracking-wider transition-all duration-300">
+        <span class="w-1.5 h-1.5 bg-brand-red rounded-full group-hover:scale-125 transition-all"></span>
+        RETURN TO PORTAL
+      </a>
+    </div>
+
+    <!-- Header Section -->
+    <header class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center border-b border-brand-border/80 pb-10">
+      
+      <!-- Portrait Frame -->
+      <div class="md:col-span-3 flex justify-center md:justify-start">
+        <div class="relative group">
+          <div class="absolute -inset-1.5 bg-brand-red/20 rounded-full blur-md opacity-75 group-hover:opacity-100 transition duration-500"></div>
+          <div class="relative w-36 h-36 rounded-full border-2 border-brand-red overflow-hidden bg-brand-dark">
+            <img src="/src/assets/images/somashekar_portrait_1783933330764.jpg" alt="Somashekar BG" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" onerror="this.onerror=null; this.src='https://api.dicebear.com/7.x/bottts/svg?seed=SRE&backgroundColor=0a0a0a&fontColor=bb080b';" />
+          </div>
+          <span class="absolute bottom-1 right-2 bg-brand-red text-white text-[8px] font-mono font-bold px-2 py-0.5 rounded-sm uppercase tracking-widest border border-brand-border shadow-lg animate-pulse">PRO_LEADER</span>
+        </div>
+      </div>
+
+      <!-- Identity Meta -->
+      <div class="md:col-span-9 text-center md:text-left space-y-4">
+        <div class="space-y-1">
+          <span class="text-[10px] font-mono font-bold tracking-widest text-brand-red uppercase">// PLATFORM_SRE_UPLINK</span>
+          <h1 class="text-3xl md:text-4xl font-light tracking-tight text-brand-cararra uppercase">
+            Somashekar <strong class="font-extrabold text-brand-chalk">BG</strong>
+          </h1>
+          <p class="text-xs font-mono text-brand-slate uppercase tracking-wider">
+            Senior Platform Engineering Leader | Enterprise Infrastructure | Cloud & AI SRE
+          </p>
+        </div>
+        
+        <p class="text-xs md:text-sm text-brand-slate font-light leading-relaxed max-w-3xl">
+          Enterprise Platform Engineering Leader with 14+ years of experience building scalable infrastructure platforms, AI-enabled automation engines, cloud-native engineering capabilities, and high-performing organizations. Specialist in transitioning legacy operations into modern Internal Developer Platforms (IDP) that empower engineering teams to deliver software faster, more reliably, and with AI-assisted operations.
+        </p>
+
+        <!-- Dynamic Action Row with Search and Contact triggers -->
+        <div class="flex flex-col sm:flex-row items-center gap-4 pt-2">
+          
+          <!-- HTMX Active Search Component -->
+          <div class="relative w-full max-w-sm">
+            <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none text-brand-slate/60">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+            <input type="text" name="q" placeholder="Active Search Specifications..." 
+                   hx-get="/api/output/search" 
+                   hx-trigger="keyup changed delay:200ms, search" 
+                   hx-target="#search-results" 
+                   class="bg-brand-dark/90 border border-brand-border text-[10px] text-brand-cararra placeholder-brand-slate pl-9 pr-4 py-2.5 rounded-full w-full focus:outline-none focus:border-brand-red focus:ring-2 focus:ring-brand-red/10 font-mono"
+                   onfocus="document.getElementById('search-results-wrapper').classList.remove('hidden')"
+                   onblur="setTimeout(() => document.getElementById('search-results-wrapper').classList.add('hidden'), 300)">
+            
+            <!-- Search dropdown container -->
+            <div id="search-results-wrapper" class="absolute left-0 right-0 top-full mt-2 bg-brand-dark border border-brand-border rounded-lg shadow-xl z-50 overflow-hidden hidden">
+              <div id="search-results" class="max-h-60 overflow-y-auto font-mono"></div>
+            </div>
+          </div>
+
+          <!-- Contact Signature Handshake -->
+          <button onclick="openContactModal()" class="w-full sm:w-auto bg-brand-red/10 hover:bg-brand-red border border-brand-red/30 hover:border-brand-red text-brand-red hover:text-white transition-all duration-300 text-[10px] uppercase font-mono font-bold tracking-wider px-5 py-2.5 rounded-full shrink-0 flex items-center justify-center gap-2 shadow-lg shadow-brand-red/5">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+            ESTABLISH CONNECTION
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Navigation Control Deck (Tabs) -->
+    <div class="flex justify-center border-b border-brand-border/40 pb-6">
+      <div class="relative bg-brand-dark/50 border border-brand-border p-1 rounded-full flex gap-1 z-10" id="tabs-container">
+        
+        <!-- Sliding fluid water/oil indicator background -->
+        <div id="fluid-indicator" class="absolute bg-brand-red h-[calc(100%-8px)] rounded-full blob-indicator pointer-events-none z-0" style="top: 4px; left: 4px; width: 0;"></div>
+        
+        <button hx-get="/api/output/tab/summary" hx-target="#tab-content" hx-trigger="click, load" class="tab-btn px-6 py-2.5 rounded-full text-[10px] font-mono font-bold tracking-wider relative z-10 text-white transition-colors duration-300 active-tab" onclick="moveIndicator(this)">SUMMARY</button>
+        <button hx-get="/api/output/tab/solutions" hx-target="#tab-content" class="tab-btn px-6 py-2.5 rounded-full text-[10px] font-mono font-bold tracking-wider relative z-10 text-brand-slate hover:text-brand-cararra transition-colors duration-300" onclick="moveIndicator(this)">SOLUTIONS</button>
+        <button hx-get="/api/output/tab/labs" hx-target="#tab-content" class="tab-btn px-6 py-2.5 rounded-full text-[10px] font-mono font-bold tracking-wider relative z-10 text-brand-slate hover:text-brand-cararra transition-colors duration-300" onclick="moveIndicator(this)">LABS</button>
+        <button hx-get="/api/output/tab/docs" hx-target="#tab-content" class="tab-btn px-6 py-2.5 rounded-full text-[10px] font-mono font-bold tracking-wider relative z-10 text-brand-slate hover:text-brand-cararra transition-colors duration-300" onclick="moveIndicator(this)">API DOCS</button>
+      </div>
+    </div>
+
+    <!-- Active Tab Panel Space -->
+    <main id="tab-content" class="min-h-[400px]">
+      <div class="flex items-center justify-center py-20">
+        <div class="space-y-3 text-center">
+          <div class="w-10 h-10 border-2 border-brand-red border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <p class="text-xs font-mono uppercase tracking-widest text-brand-slate">Establishing uplink pipeline...</p>
+        </div>
+      </div>
+    </main>
+
+  </div>
+
+  <!-- Footer block -->
+  <footer class="border-t border-brand-border/80 bg-brand-black py-8 mt-12">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4 text-[10px] font-mono text-brand-slate/60">
+      <div class="space-y-1 text-center md:text-left">
+        <p>SOMASHEKAR BG © 2026. ALL RIGHTS RESERVED.</p>
+        <p class="text-[9px]">UPLINK STATUS: Nominal | Host Container: Cloud Run</p>
+      </div>
+      <div class="flex items-center gap-4">
+        <span>KUBERNETES RAILS</span>
+        <span>•</span>
+        <span>MCP FRAMEWORKS</span>
+        <span>•</span>
+        <span>HTMX STACK</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Contact Modal -->
+  <div id="contact-modal" class="fixed inset-0 bg-brand-black/90 flex items-center justify-center p-4 z-50 hidden opacity-0 transition-opacity duration-300">
+    <div class="bg-brand-dark border border-brand-border w-full max-w-md rounded-lg overflow-hidden shadow-2xl relative" onclick="event.stopPropagation()">
+      
+      <!-- Close button -->
+      <button onclick="closeContactModal()" class="absolute top-4 right-4 text-brand-slate hover:text-brand-cararra transition-all">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+
+      <!-- Modal Body -->
+      <div class="p-6 md:p-8 space-y-6" id="contact-form-container">
+        <div class="space-y-1.5">
+          <span class="text-[9px] font-mono font-bold tracking-widest text-brand-red uppercase">// PROTOCOL_BRIDGE_UPLINK</span>
+          <h3 class="text-lg font-bold text-brand-cararra uppercase tracking-tight">Establish Handshake</h3>
+          <p class="text-xs text-brand-slate leading-relaxed">Submit your credentials and parameters below to route a secure message payload directly to Somashekar BG's platform.</p>
+        </div>
+
+        <form hx-post="/api/output/contact-submit" hx-target="#contact-form-container" class="space-y-4">
+          <div class="space-y-1">
+            <label class="block text-[10px] font-mono uppercase tracking-wider text-brand-slate">Name / Entity</label>
+            <input type="text" name="name" required placeholder="Dr. Jane Doe" class="w-full bg-brand-black border border-brand-border text-xs text-brand-cararra placeholder-brand-slate px-3 py-2.5 rounded-sm focus:outline-none focus:border-brand-red font-mono" />
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-[10px] font-mono uppercase tracking-wider text-brand-slate">Email Endpoint</label>
+            <input type="email" name="email" required placeholder="jane.doe@enterprise.com" class="w-full bg-brand-black border border-brand-border text-xs text-brand-cararra placeholder-brand-slate px-3 py-2.5 rounded-sm focus:outline-none focus:border-brand-red font-mono" />
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-[10px] font-mono uppercase tracking-wider text-brand-slate">Message Payload</label>
+            <textarea name="message" required rows="4" placeholder="Parameters, proposals, or architecture specs..." class="w-full bg-brand-black border border-brand-border text-xs text-brand-cararra placeholder-brand-slate px-3 py-2.5 rounded-sm focus:outline-none focus:border-brand-red font-mono resize-none"></textarea>
+          </div>
+
+          <button type="submit" class="w-full bg-brand-red hover:bg-brand-red/90 text-white font-mono text-[10px] uppercase font-bold tracking-widest py-3 rounded-sm transition-all shadow-lg shadow-brand-red/10 border border-brand-red/40">
+            TRANSMIT PACKET
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Interactive Scripts -->
+  <script>
+    const indicator = document.getElementById('fluid-indicator');
+    const tabs = document.querySelectorAll('.tab-btn');
+    let activeTab = document.querySelector('.active-tab') || tabs[0];
+
+    // Compute size and position of active tab and slide indicator there
+    function updateIndicatorPosition(target) {
+      if (!target) return;
+      const container = document.getElementById('tabs-container');
+      const containerRect = container.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+      
+      const leftOffset = targetRect.left - containerRect.left;
+      indicator.style.left = `${leftOffset}px`;
+      indicator.style.width = `${targetRect.width}px`;
+    }
+
+    // Set active class on elements and transition text color
+    function moveIndicator(element) {
+      tabs.forEach(tab => {
+        tab.classList.remove('active-tab', 'text-white');
+        tab.classList.add('text-brand-slate');
+      });
+      element.classList.add('active-tab', 'text-white');
+      element.classList.remove('text-brand-slate');
+      activeTab = element;
+      updateIndicatorPosition(element);
+    }
+
+    // Dynamic scale and stretch on hover for fluid oil/water effect
+    tabs.forEach(tab => {
+      tab.addEventListener('mouseenter', (e) => {
+        updateIndicatorPosition(e.target);
+        indicator.style.transform = 'scale(1.06, 0.94)';
+      });
+      tab.addEventListener('mouseleave', () => {
+        updateIndicatorPosition(activeTab);
+        indicator.style.transform = 'scale(1)';
+      });
+    });
+
+    // Auto load summary section position
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        updateIndicatorPosition(activeTab);
+      }, 200);
+    });
+
+    window.addEventListener('resize', () => {
+      updateIndicatorPosition(activeTab);
+    });
+
+    // Support deep navigation from Search click
+    function scrollToSection(sectionId, title) {
+      // Find navigation button that corresponds to the section
+      let tabBtn;
+      if (sectionId === 'summary') tabBtn = tabs[0];
+      if (sectionId === 'solutions') tabBtn = tabs[1];
+      if (sectionId === 'labs') tabBtn = tabs[2];
+      if (sectionId === 'docs') tabBtn = tabs[3];
+
+      if (tabBtn) {
+        tabBtn.click();
+        
+        // Stagger to let HTMX swap content first
+        setTimeout(() => {
+          if (title) {
+            // Find an element containing this text
+            const headings = Array.from(document.querySelectorAll('h3, h4'));
+            const targetHeading = headings.find(h => h.textContent.includes(title));
+            if (targetHeading) {
+              targetHeading.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              targetHeading.classList.add('text-brand-red');
+              setTimeout(() => targetHeading.classList.remove('text-brand-red'), 2000);
+            }
+          }
+        }, 600);
+      }
+    }
+
+    // Modal Control Functions
+    const modal = document.getElementById('contact-modal');
+    function openContactModal() {
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        modal.classList.add('opacity-100');
+        modal.classList.remove('opacity-0');
+      }, 50);
+    }
+
+    function closeContactModal() {
+      modal.classList.add('opacity-0');
+      modal.classList.remove('opacity-100');
+      setTimeout(() => {
+        modal.classList.add('hidden');
+        // Reset form HTML back to empty form in case it was previously submitted
+        document.getElementById('contact-form-container').innerHTML = `
+          <div class="space-y-1.5">
+            <span class="text-[9px] font-mono font-bold tracking-widest text-brand-red uppercase">// PROTOCOL_BRIDGE_UPLINK</span>
+            <h3 class="text-lg font-bold text-brand-cararra uppercase tracking-tight">Establish Handshake</h3>
+            <p class="text-xs text-brand-slate leading-relaxed">Submit your credentials and parameters below to route a secure message payload directly to Somashekar BG's platform.</p>
+          </div>
+
+          <form hx-post="/api/output/contact-submit" hx-target="#contact-form-container" class="space-y-4">
+            <div class="space-y-1">
+              <label class="block text-[10px] font-mono uppercase tracking-wider text-brand-slate">Name / Entity</label>
+              <input type="text" name="name" required placeholder="Dr. Jane Doe" class="w-full bg-brand-black border border-brand-border text-xs text-brand-cararra placeholder-brand-slate px-3 py-2.5 rounded-sm focus:outline-none focus:border-brand-red font-mono" />
+            </div>
+
+            <div class="space-y-1">
+              <label class="block text-[10px] font-mono uppercase tracking-wider text-brand-slate">Email Endpoint</label>
+              <input type="email" name="email" required placeholder="jane.doe@enterprise.com" class="w-full bg-brand-black border border-brand-border text-xs text-brand-cararra placeholder-brand-slate px-3 py-2.5 rounded-sm focus:outline-none focus:border-brand-red font-mono" />
+            </div>
+
+            <div class="space-y-1">
+              <label class="block text-[10px] font-mono uppercase tracking-wider text-brand-slate">Message Payload</label>
+              <textarea name="message" required rows="4" placeholder="Parameters, proposals, or architecture specs..." class="w-full bg-brand-black border border-brand-border text-xs text-brand-cararra placeholder-brand-slate px-3 py-2.5 rounded-sm focus:outline-none focus:border-brand-red font-mono resize-none"></textarea>
+            </div>
+
+            <button type="submit" class="w-full bg-brand-red hover:bg-brand-red/90 text-white font-mono text-[10px] uppercase font-bold tracking-widest py-3 rounded-sm transition-all shadow-lg shadow-brand-red/10 border border-brand-red/40">
+              TRANSMIT PACKET
+            </button>
+          </form>
+        `;
+        // Re-process the dynamically re-inserted HTML so HTMX hooks it
+        htmx.process(document.getElementById('contact-form-container'));
+      }, 300);
+    }
+
+    // Close on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+        closeContactModal();
+      }
+    });
+  </script>
+</body>
+</html>
