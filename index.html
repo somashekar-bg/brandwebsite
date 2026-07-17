@@ -112,14 +112,14 @@
           
           <!-- Contact & Social Highlights Row -->
           <div class="flex flex-wrap items-center justify-center md:justify-start gap-x-4 gap-y-1.5 text-[11px] text-brand-muted pt-2 font-mono">
-            <a href="mailto:somasg1@gmail.com" class="flex items-center gap-1.5 hover:text-brand-red transition-colors">
+            <a href="mailto:santurmucik@gmail.com" class="flex items-center gap-1.5 hover:text-brand-red transition-colors">
               <svg class="w-3.5 h-3.5 text-brand-red/80 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-              <span>somasg1@gmail.com</span>
+              <span>santurmucik@gmail.com</span>
             </a>
             <span class="hidden md:inline opacity-30">|</span>
-            <a href="tel:+919886011041" class="flex items-center gap-1.5 hover:text-brand-red transition-colors">
+            <a href="tel:+919986992683" class="flex items-center gap-1.5 hover:text-brand-red transition-colors">
               <svg class="w-3.5 h-3.5 text-brand-red/80 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
-              <span>+91 98860 11041</span>
+              <span>+91 99869 92683</span>
             </a>
             <span class="hidden md:inline opacity-30">|</span>
             <a href="https://www.linkedin.com/in/somashekar-bg/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 hover:text-brand-red transition-colors">
@@ -188,7 +188,6 @@
         <button onclick="selectTab('summary', this)" class="tab-btn px-6 py-2.5 rounded-full text-[10px] font-mono font-bold tracking-wider relative z-10 text-white transition-colors duration-300">SUMMARY</button>
         <button onclick="selectTab('solutions', this)" class="tab-btn px-6 py-2.5 rounded-full text-[10px] font-mono font-bold tracking-wider relative z-10 text-brand-muted hover:text-brand-cararra transition-colors duration-300">SOLUTIONS</button>
         <button onclick="selectTab('labs', this)" class="tab-btn px-6 py-2.5 rounded-full text-[10px] font-mono font-bold tracking-wider relative z-10 text-brand-muted hover:text-brand-cararra transition-colors duration-300">LABS</button>
-        <button onclick="selectTab('docs', this)" class="tab-btn px-6 py-2.5 rounded-full text-[10px] font-mono font-bold tracking-wider relative z-10 text-brand-muted hover:text-brand-cararra transition-colors duration-300">API DOCS</button>
       </div>
     </div>
 
@@ -275,17 +274,17 @@
       ],
       "LEADER_STATS": [
         {
-          "label": "Lifecycle Management",
+          "label": "LIFECYCLE MANAGEMENT",
           "value": "14+ Years",
           "description": "Specialized in Enterprise Platform Engineering"
         },
         {
-          "label": "Scale Factor",
+          "label": "SCALE FACTOR",
           "value": "80k+ Servers",
           "description": "Managing globally distributed infrastructure nodes"
         },
         {
-          "label": "Asset Valuation",
+          "label": "ASSET VALUATION",
           "value": "$24M Portfolio",
           "description": "Optimizing large-scale CAPEX/OPEX operations"
         }
@@ -570,11 +569,7 @@
         { "title": "Zero-Trust Mesh", "category": "Architecture Labs", "sectionId": "labs", "description": "mTLS-driven service mesh for enterprise Kubernetes clusters" },
         { "title": "Kernel Tuning Suite", "category": "Architecture Labs", "sectionId": "labs", "description": "Linux kernel tuning parameter optimization (scheduler, huge pages)" },
         { "title": "Neural Infrastructure", "category": "Architecture Labs", "sectionId": "labs", "description": "Self-healing server clusters managed by autonomous RL agents" },
-        { "title": "SRE Reinforcement Learning Visualization", "category": "Labs Interactive", "sectionId": "labs", "description": "Live simulator to test network partition or CPU spikes" },
-        { "title": "API Authentication Protocol", "category": "API & Core Protocols", "sectionId": "docs", "description": "/api/v1/auth endpoint with custom handshake parameters" },
-        { "title": "Cluster Health Endpoint", "category": "API & Core Protocols", "sectionId": "docs", "description": "/api/v1/cluster/health system status query API" },
-        { "title": "Telemetry Stream Event Subscription", "category": "Core Architecture Protocols", "sectionId": "docs", "description": "Event Subscriptions and system webhook telemetry triggers" },
-        { "title": "Security Audits Protocol Bridge", "category": "Core Architecture Protocols", "sectionId": "docs", "description": "Protocol Bridge security log telemetry stream" }
+        { "title": "SRE Reinforcement Learning Visualization", "category": "Labs Interactive", "sectionId": "labs", "description": "Live simulator to test network partition or CPU spikes" }
       ]
     };
 
@@ -673,7 +668,6 @@
       let targetBtn = buttons[0];
       if (tabId === 'solutions') targetBtn = buttons[1];
       else if (tabId === 'labs') targetBtn = buttons[2];
-      else if (tabId === 'docs') targetBtn = buttons[3];
       
       selectTab(tabId, targetBtn);
       
@@ -1047,219 +1041,6 @@
             </div>
           </div>
         `;
-      } 
-      
-      else if (tabId === 'docs') {
-        container.innerHTML = `
-          <div class="space-y-8 animate-fadeIn">
-            <div class="border-b border-brand-border pb-2">
-              <span class="text-[9px] font-mono font-bold tracking-widest text-brand-red uppercase">// SYSTEM_API_SPECIFICATION.MD</span>
-              <h3 class="text-lg font-bold uppercase text-brand-cararra tracking-tight mt-1">Telemetry & Control API</h3>
-            </div>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-              <!-- Left Menu -->
-              <div class="lg:col-span-4 space-y-2">
-                <div class="p-3 bg-brand-white border border-brand-border rounded-lg shadow-sm">
-                  <p class="text-[9px] font-mono font-bold text-brand-red uppercase">// CORE_ENDPOINTS</p>
-                  <div class="space-y-1 mt-3">
-                    <button onclick="showDocEndpoint('auth')" id="btn-doc-auth" class="doc-ep-btn w-full text-left font-mono text-[11px] p-2 rounded transition-all bg-brand-redLight text-brand-red font-bold border-l-2 border-brand-red">POST /api/v1/auth</button>
-                    <button onclick="showDocEndpoint('health')" id="btn-doc-health" class="doc-ep-btn w-full text-left font-mono text-[11px] p-2 rounded transition-all text-brand-muted hover:bg-stone-100">GET /api/v1/cluster/health</button>
-                    <button onclick="showDocEndpoint('telemetry')" id="btn-doc-telemetry" class="doc-ep-btn w-full text-left font-mono text-[11px] p-2 rounded transition-all text-brand-muted hover:bg-stone-100">POST /api/v1/telemetry/stream</button>
-                    <button onclick="showDocEndpoint('remediate')" id="btn-doc-remediate" class="doc-ep-btn w-full text-left font-mono text-[11px] p-2 rounded transition-all text-brand-muted hover:bg-stone-100">POST /api/v1/remediate</button>
-                    <button onclick="showDocEndpoint('llm_infra')" id="btn-doc-llm_infra" class="doc-ep-btn w-full text-left font-mono text-[11px] p-2 rounded transition-all text-brand-muted hover:bg-stone-100">POST /api/v1/ai/llm-infra</button>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Right Panel Content -->
-              <div class="lg:col-span-8">
-                <div class="bg-brand-white border border-brand-border p-6 rounded-xl shadow-sm space-y-4 font-mono text-[11px]" id="doc-content-panel">
-                  <!-- Default is auth endpoint -->
-                  <div class="space-y-3">
-                    <div class="flex justify-between items-center border-b border-brand-border pb-2">
-                      <h4 class="text-xs font-bold text-brand-cararra">POST /api/v1/auth</h4>
-                      <span class="bg-blue-100 text-blue-700 font-bold px-1.5 py-0.5 rounded text-[9px]">TLS REQUIRED</span>
-                    </div>
-                    <p class="text-brand-muted leading-relaxed text-[11px]">Initiates security validation handshake and establishes mTLS state token boundary between Edge server endpoints and the central telemetry cluster.</p>
-                    
-                    <div class="space-y-1">
-                      <p class="text-[9px] font-bold text-brand-red uppercase">// REQUEST_HEADERS</p>
-                      <pre class="bg-stone-50 border border-brand-border p-2.5 rounded text-[10px] text-brand-dark">Authorization: Bearer &lt;HMAC_SHA256_JWT_TOKEN&gt;
-Content-Type: application/json</pre>
-                    </div>
-
-                    <div class="space-y-1">
-                      <p class="text-[9px] font-bold text-brand-red uppercase">// RESPONSE_BODY (200 OK)</p>
-                      <pre class="bg-stone-50 border border-brand-border p-2.5 rounded text-[10px] text-brand-dark">{
-  "status": "AUTHENTICATED",
-  "sessionId": "node-session-98ea2f4d11b3",
-  "ttlSeconds": 3600,
-  "handshakeProtocol": "mTLS_ECDHE_RSA_AES256_GCM"
-}</pre>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
-      }
-    }
-
-    // Dynamic docs switching
-    function showDocEndpoint(endpoint) {
-      const btns = document.querySelectorAll('.doc-ep-btn');
-      btns.forEach(b => {
-        b.className = 'doc-ep-btn w-full text-left font-mono text-[11px] p-2 rounded transition-all text-brand-muted hover:bg-stone-100';
-      });
-
-      const activeBtn = document.getElementById(`btn-doc-${endpoint}`);
-      activeBtn.className = 'doc-ep-btn w-full text-left font-mono text-[11px] p-2 rounded transition-all bg-brand-redLight text-brand-red font-bold border-l-2 border-brand-red';
-
-      const panel = document.getElementById('doc-content-panel');
-      if (endpoint === 'auth') {
-        panel.innerHTML = `
-          <div class="space-y-3 animate-fadeIn">
-            <div class="flex justify-between items-center border-b border-brand-border pb-2">
-              <h4 class="text-xs font-bold text-brand-cararra">POST /api/v1/auth</h4>
-              <span class="bg-blue-100 text-blue-700 font-bold px-1.5 py-0.5 rounded text-[9px]">TLS REQUIRED</span>
-            </div>
-            <p class="text-brand-muted leading-relaxed text-[11px]">Initiates security validation handshake and establishes mTLS state token boundary between Edge server endpoints and the central telemetry cluster.</p>
-            
-            <div class="space-y-1">
-              <p class="text-[9px] font-bold text-brand-red uppercase">// REQUEST_HEADERS</p>
-              <pre class="bg-stone-50 border border-brand-border p-2.5 rounded text-[10px] text-brand-cararra">Authorization: Bearer &lt;HMAC_SHA256_JWT_TOKEN&gt;
-Content-Type: application/json</pre>
-            </div>
-
-            <div class="space-y-1">
-              <p class="text-[9px] font-bold text-brand-red uppercase">// RESPONSE_BODY (200 OK)</p>
-              <pre class="bg-stone-50 border border-brand-border p-2.5 rounded text-[10px] text-brand-cararra">{
-  "status": "AUTHENTICATED",
-  "sessionId": "node-session-98ea2f4d11b3",
-  "ttlSeconds": 3600,
-  "handshakeProtocol": "mTLS_ECDHE_RSA_AES256_GCM"
-}</pre>
-            </div>
-          </div>
-        `;
-      } else if (endpoint === 'health') {
-        panel.innerHTML = `
-          <div class="space-y-3 animate-fadeIn">
-            <div class="flex justify-between items-center border-b border-brand-border pb-2">
-              <h4 class="text-xs font-bold text-brand-cararra">GET /api/v1/cluster/health</h4>
-              <span class="bg-green-100 text-green-700 font-bold px-1.5 py-0.5 rounded text-[9px]">PUBLIC</span>
-            </div>
-            <p class="text-brand-muted leading-relaxed text-[11px]">Returns sub-second health statistics for the current cluster node group, physical cooling grids, and memory pools.</p>
-            
-            <div class="space-y-1">
-              <p class="text-[9px] font-bold text-brand-red uppercase">// QUERY_PARAMS</p>
-              <pre class="bg-stone-50 border border-brand-border p-2.5 rounded text-[10px] text-brand-cararra">includePools: boolean (optional)
-detailedMetrics: boolean (optional)</pre>
-            </div>
-
-            <div class="space-y-1">
-              <p class="text-[9px] font-bold text-brand-red uppercase">// RESPONSE_BODY (200 OK)</p>
-              <pre class="bg-stone-50 border border-brand-border p-2.5 rounded text-[10px] text-brand-cararra">{
-  "status": "NOMINAL",
-  "uptimeSeconds": 1420955,
-  "clusterVersion": "k8s-v1.28.4-gcp",
-  "coresActive": 1024,
-  "coolingEfficiencyPercentage": 98.4
-}</pre>
-            </div>
-          </div>
-        `;
-      } else if (endpoint === 'telemetry') {
-        panel.innerHTML = `
-          <div class="space-y-3 animate-fadeIn">
-            <div class="flex justify-between items-center border-b border-brand-border pb-2">
-              <h4 class="text-xs font-bold text-brand-cararra">POST /api/v1/telemetry/stream</h4>
-              <span class="bg-blue-100 text-blue-700 font-bold px-1.5 py-0.5 rounded text-[9px]">TLS REQUIRED</span>
-            </div>
-            <p class="text-brand-muted leading-relaxed text-[11px]">Publishes custom structural telemetry logs directly into the automated analytical pipeline. Triggers immediate alert vectors if values degrade.</p>
-            
-            <div class="space-y-1">
-              <p class="text-[9px] font-bold text-brand-red uppercase">// REQUEST_BODY</p>
-              <pre class="bg-stone-50 border border-brand-border p-2.5 rounded text-[10px] text-brand-cararra">{
-  "nodeId": "edge-sea-041a",
-  "timestamp": "2026-07-13T18:02:11Z",
-  "cpuTemperatureCelsius": 41.5,
-  "memoryUtilizationRatio": 0.68,
-  "acousticFrequenciesHertz": [1200, 2400, 4800]
-}</pre>
-            </div>
-
-            <div class="space-y-1">
-              <p class="text-[9px] font-bold text-brand-red uppercase">// RESPONSE_BODY (201 CREATED)</p>
-              <pre class="bg-stone-50 border border-brand-border p-2.5 rounded text-[10px] text-brand-cararra">{
-  "acknowledged": true,
-  "telemetryOffset": 994812301,
-  "alarmTriggered": false
-}</pre>
-            </div>
-          </div>
-        `;
-      } else if (endpoint === 'remediate') {
-        panel.innerHTML = `
-          <div class="space-y-3 animate-fadeIn">
-            <div class="flex justify-between items-center border-b border-brand-border pb-2">
-              <h4 class="text-xs font-bold text-brand-cararra">POST /api/v1/remediate</h4>
-              <span class="bg-red-100 text-red-700 font-bold px-1.5 py-0.5 rounded text-[9px]">RESTRICTED</span>
-            </div>
-            <p class="text-brand-muted leading-relaxed text-[11px]">Triggers the autonomous self-healing script to clear memory caches, restart stalled Kubernetes control processes, and run kernel-level thread diagnostics.</p>
-            
-            <div class="space-y-1">
-              <p class="text-[9px] font-bold text-brand-red uppercase">// REQUEST_BODY</p>
-              <pre class="bg-stone-50 border border-brand-border p-2.5 rounded text-[10px] text-brand-cararra">{
-  "targetClusterId": "sea-cluster-prod",
-  "remediationProfile": "AGGRESSIVE_CACHE_CLEAR",
-  "verificationSignature": "RSA_SHA512_UPLINK_SECURE"
-}</pre>
-            </div>
-
-            <div class="space-y-1">
-              <p class="text-[9px] font-bold text-brand-red uppercase">// RESPONSE_BODY (200 OK)</p>
-              <pre class="bg-stone-50 border border-brand-border p-2.5 rounded text-[10px] text-brand-cararra">{
-  "remediationState": "COMPLETED",
-  "diagnosticsLog": "Mem pool optimized. 128 stale process threads terminated cleanly.",
-  "clusterHealth": "NOMINAL"
-}</pre>
-            </div>
-          </div>
-        `;
-      } else if (endpoint === 'llm_infra') {
-        panel.innerHTML = `
-          <div class="space-y-3 animate-fadeIn">
-            <div class="flex justify-between items-center border-b border-brand-border pb-2">
-              <h4 class="text-xs font-bold text-brand-cararra">POST /api/v1/ai/llm-infra</h4>
-              <span class="bg-green-100 text-green-700 font-bold px-1.5 py-0.5 rounded text-[9px]">ACTIVE GPUS</span>
-            </div>
-            <p class="text-brand-muted leading-relaxed text-[11px]">Configures and queries the hardware acceleration parameters, context caching window boundaries, and latency benchmarks for Somashekar's enterprise large language model serving platform.</p>
-            
-            <div class="space-y-1">
-              <p class="text-[9px] font-bold text-brand-red uppercase">// REQUEST_BODY</p>
-              <pre class="bg-stone-50 border border-brand-border p-2.5 rounded text-[10px] text-brand-cararra">{
-  "modelId": "gemini-2.5-pro",
-  "requestThroughputTps": 250,
-  "contextCachingEnabled": true,
-  "hardwareTarget": "NVIDIA_H100_SXM5_80GB"
-}</pre>
-            </div>
-
-            <div class="space-y-1">
-              <p class="text-[9px] font-bold text-brand-red uppercase">// RESPONSE_BODY (200 OK)</p>
-              <pre class="bg-stone-50 border border-brand-border p-2.5 rounded text-[10px] text-brand-cararra">{
-  "provisioningState": "ACTIVE",
-  "inferenceEndpoint": "https://vertex-gateway.internal/api/v1/inference",
-  "contextCachingTtlSeconds": 1800,
-  "systemBandwidthGbps": 4800,
-  "status": "NOMINAL"
-}</pre>
-            </div>
-          </div>
-        `;
       }
     }
 
@@ -1370,24 +1151,47 @@ detailedMetrics: boolean (optional)</pre>
       const body = document.body;
       
       // Let's create a beautiful, clean, non-interactive printable view
-      // We will render Summary, Solutions, Labs, and API Docs in one long high-contrast page
-      
       const printContainer = document.createElement('div');
       printContainer.id = 'print-dossier-layout';
-      printContainer.className = 'absolute inset-0 bg-white text-stone-900 p-8 space-y-12 max-w-4xl mx-auto z-[999999]';
+      printContainer.className = 'absolute inset-0 bg-white text-stone-900 p-8 space-y-8 max-w-4xl mx-auto z-[999999]';
       
       // Let's build the HTML structure of the complete dossier
       let headerHTML = `
-        <div class="border-b-4 border-brand-red pb-6 space-y-4">
-          <div class="flex justify-between items-start">
-            <div>
-              <h1 class="text-4xl font-extrabold text-stone-900 tracking-tight uppercase">SOMASHEKAR BG</h1>
-              <p class="text-xs font-mono text-brand-red font-bold uppercase tracking-wider mt-1">Senior Platform Engineering Leader | Enterprise Infrastructure | Cloud & AI SRE</p>
+        <style>
+          @media print {
+            body {
+              background-color: #ffffff !important;
+              color: #1c1917 !important;
+            }
+            #print-dossier-layout {
+              position: relative !important;
+              padding: 0 !important;
+              margin: 0 !important;
+              max-width: 100% !important;
+              box-shadow: none !important;
+            }
+            .page-break-avoid {
+              page-break-inside: avoid !important;
+              break-inside: avoid !important;
+            }
+          }
+          .page-break-avoid {
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+          }
+        </style>
+        <div class="border-b-4 border-brand-red pb-6 space-y-4 page-break-avoid">
+          <div class="flex justify-between items-start gap-6">
+            <div class="flex-1 min-w-0">
+              <h1 class="text-3xl font-extrabold text-stone-900 tracking-tight uppercase">SOMASHEKAR BG</h1>
+              <p class="text-[11px] font-mono text-brand-red font-bold uppercase tracking-wider mt-1.5 leading-normal">
+                Senior Platform Engineering Leader &bull; Enterprise Infrastructure &bull; Cloud & AI SRE
+              </p>
             </div>
-            <div class="text-right text-xs font-mono text-stone-500">
-              <p>Email: somasg1@gmail.com</p>
-              <p>Phone: +91 98860 11041</p>
-              <p>Location: Bangalore, India</p>
+            <div class="text-right text-xs font-mono text-stone-600 shrink-0 space-y-0.5 whitespace-nowrap min-w-fit">
+              <p><strong>Email:</strong> ${masterData.PROFILE ? masterData.PROFILE.email : 'santurmucik@gmail.com'}</p>
+              <p><strong>Phone:</strong> ${masterData.PROFILE ? masterData.PROFILE.phone : '+91 99869 92683'}</p>
+              <p><strong>Location:</strong> Bangalore, India</p>
             </div>
           </div>
           <p class="text-xs text-stone-700 leading-relaxed font-light mt-4">${masterData.PROFILE ? masterData.PROFILE.summary : 'Senior Platform Engineering Leader'}</p>
@@ -1396,122 +1200,80 @@ detailedMetrics: boolean (optional)</pre>
       
       // Let's generate the Summary, Solutions, Labs, and Docs contents!
       const matrix = (masterData.TECHNICAL_MATRIX || []).map(comp => `
-        <div class="border border-stone-200 p-3 rounded">
-          <h4 class="font-bold text-[10px] text-brand-red uppercase font-mono">${comp.category}</h4>
-          <p class="text-[10px] text-stone-800 font-light mt-1">${comp.items.join(', ')}</p>
+        <div class="border border-stone-200 p-2.5 rounded bg-stone-50/50">
+          <h4 class="font-bold text-[9px] text-brand-red uppercase font-mono tracking-tight">${comp.category}</h4>
+          <p class="text-[9px] text-stone-700 font-light mt-0.5">${comp.items.join(', ')}</p>
         </div>
       `).join('');
       
       const experiences = (masterData.PROFESSIONAL_EXPERIENCE || []).map(exp => {
-        const bullets = exp.bullets.map(b => `<li class="text-[11px] text-stone-700 font-light">${b}</li>`).join('');
+        const bullets = exp.bullets.map(b => `<li class="text-[10px] text-stone-700 font-light leading-normal">${b}</li>`).join('');
         return `
-          <div class="space-y-1.5 border-l-2 border-brand-red/40 pl-4 py-1">
-            <div class="flex justify-between items-start">
+          <div class="space-y-1 border-l-2 border-brand-red/40 pl-4 py-0.5 page-break-avoid">
+            <div class="flex justify-between items-start gap-4">
               <div>
                 <h4 class="text-xs font-bold text-stone-900">${exp.role}</h4>
                 <p class="text-[10px] text-stone-500 font-mono">${exp.company} | ${exp.location}</p>
               </div>
               <span class="text-[9px] font-mono bg-stone-100 text-stone-700 border border-stone-200 px-2 py-0.5 rounded font-bold shrink-0">${exp.period}</span>
             </div>
-            <ul class="list-disc pl-4 space-y-1 mt-1">${bullets}</ul>
+            <ul class="list-disc pl-4 space-y-0.5 mt-1">${bullets}</ul>
           </div>
         `;
       }).join('');
       
       const educations = (masterData.EDUCATION || []).map(edu => `
-        <div class="border-l-2 border-brand-red/20 pl-4 py-1">
-          <div class="flex justify-between items-start">
-            <h4 class="text-[11px] font-bold text-stone-900">${edu.degree}</h4>
-            <span class="text-[9px] font-mono text-stone-500">${edu.period}</span>
+        <div class="border-l-2 border-brand-red/20 pl-4 py-1 page-break-avoid">
+          <div class="flex justify-between items-start gap-4">
+            <div>
+              <h4 class="text-[11px] font-bold text-stone-900">${edu.degree}</h4>
+              <p class="text-[11px] text-stone-600">${edu.institution}</p>
+            </div>
+            <div class="flex flex-col items-end shrink-0">
+              <span class="text-[9px] font-mono text-stone-500 font-bold">${edu.period}</span>
+              ${edu.gpa ? `<span class="text-[9px] font-mono text-stone-500 mt-0.5">GPA: <strong>${edu.gpa}</strong></span>` : ''}
+            </div>
           </div>
-          <p class="text-[11px] text-stone-600">${edu.institution}</p>
-          ${edu.gpa ? `<p class="text-[9px] font-mono text-stone-500 mt-0.5">GPA: <strong>${edu.gpa}</strong></p>` : ''}
         </div>
       `).join('');
-
+ 
       const certifications = (masterData.CERTIFICATIONS || []).map(cert => `
-        <div class="flex justify-between items-center text-[11px] border-b border-stone-100 pb-1.5">
+        <div class="flex justify-between items-center text-[10px] border-b border-stone-100 pb-1.5 page-break-avoid">
           <div>
             <h4 class="font-bold text-stone-900">${cert.name}</h4>
             <p class="text-[9px] text-stone-500">${cert.issuer}</p>
           </div>
-          <span class="text-[10px] font-mono text-stone-500">${cert.year}</span>
+          <span class="text-[9px] font-mono text-stone-500 shrink-0">${cert.year}</span>
         </div>
       `).join('');
-
+ 
       const products = (masterData.PRODUCTS_LIST || []).map(p => {
-        const bullets = p.bullets.map(b => `<li class="text-[11px] text-stone-700 font-light">${b}</li>`).join('');
-        const linkText = p.actionLabel;
-        const linkUrl = p.actionUrl;
-        const ctaHtml = linkUrl ? `<a href="${linkUrl}" class="text-brand-red font-bold text-[10px] font-mono uppercase" target="_blank">${linkText} &rarr;</a>` : `<span class="text-[10px] font-mono text-stone-400 uppercase">${linkText} (Offline)</span>`;
+        const bullets = p.bullets.map(b => `<li class="text-[10px] text-stone-600 font-light leading-normal">${b}</li>`).join('');
         return `
-          <div class="border border-stone-200 p-4 rounded-lg space-y-2">
-            <div class="flex justify-between items-center">
+          <div class="border border-stone-200 p-3 rounded bg-stone-50/10 page-break-avoid space-y-1">
+            <div class="flex justify-between items-start gap-2">
               <h4 class="text-xs font-bold text-stone-900">${p.title}</h4>
-              <span class="text-[8px] font-mono bg-brand-red text-white px-2 py-0.5 rounded font-bold uppercase">${p.status}</span>
+              <span class="text-[8px] font-mono text-brand-red font-bold uppercase tracking-wider">${p.status}</span>
             </div>
-            <p class="text-[11px] text-stone-600">${p.description}</p>
-            <ul class="list-disc pl-4 space-y-1">${bullets}</ul>
-            <div class="pt-2 border-t border-stone-100 flex justify-between items-center">
-              <span class="text-[9px] font-mono text-stone-500">Tags: ${p.tags.join(', ')}</span>
-              ${ctaHtml}
-            </div>
+            <p class="text-[10px] text-stone-600 italic leading-snug">${p.description}</p>
+            <ul class="list-disc pl-4 space-y-0.5">${bullets}</ul>
           </div>
         `;
       }).join('');
-
+ 
       const labs = (masterData.ARCHITECTURE_LABS || []).map(lab => `
-        <div class="border border-stone-200 p-4 rounded-lg space-y-2">
-          <div class="flex justify-between items-center">
+        <div class="border border-stone-200 p-3 rounded bg-stone-50/10 page-break-avoid space-y-1">
+          <div class="flex justify-between items-start gap-2">
             <h4 class="text-xs font-bold text-stone-900">${lab.title}</h4>
-            <span class="text-[8px] font-mono bg-stone-100 text-stone-700 border border-stone-200 px-2 py-0.5 rounded font-bold">${lab.refId}</span>
+            <span class="text-[8px] font-mono text-stone-500 font-bold">${lab.refId}</span>
           </div>
-          <p class="text-[11px] text-stone-600">${lab.description}</p>
-          <div class="bg-stone-50 p-2.5 rounded font-mono text-[9px] text-stone-600 space-y-0.5 border border-stone-100">
-            <strong>Metrics:</strong>
-            ${lab.metrics.map(m => `<div>${m}</div>`).join('')}
-          </div>
-          <div class="pt-1.5 border-t border-stone-100 text-right">
-            <a href="${lab.whitepaperUrl}" class="text-brand-red font-bold text-[10px] font-mono uppercase" target="_blank">Whitepaper &rarr;</a>
+          <p class="text-[10px] text-stone-600 font-light leading-snug">${lab.description}</p>
+          <div class="text-[9px] font-mono text-stone-500 space-y-0.5">
+            <strong>Metrics:</strong> ${lab.metrics.join(' &bull; ')}
           </div>
         </div>
       `).join('');
-
-      const apiDocsHTML = `
-        <div class="space-y-4">
-          <div class="border-b-2 border-stone-300 pb-1.5">
-            <h3 class="text-sm font-bold uppercase text-stone-900 tracking-tight">System API Specifications</h3>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="border border-stone-200 p-3 rounded space-y-1">
-              <h4 class="font-mono text-[10px] font-bold text-stone-900">POST /api/v1/auth</h4>
-              <p class="text-[10px] text-stone-600">Handshake protocol token exchange for mTLS session authorization.</p>
-              <pre class="bg-stone-50 p-1.5 rounded text-[8px] font-mono text-stone-600">Response: { "status": "AUTHENTICATED", "handshakeProtocol": "mTLS_ECDHE" }</pre>
-            </div>
-            <div class="border border-stone-200 p-3 rounded space-y-1">
-              <h4 class="font-mono text-[10px] font-bold text-stone-900">GET /api/v1/cluster/health</h4>
-              <p class="text-[10px] text-stone-600">Sub-second cluster node physical and software metrics.</p>
-              <pre class="bg-stone-50 p-1.5 rounded text-[8px] font-mono text-stone-600">Response: { "status": "NOMINAL", "uptimeSeconds": 1420955 }</pre>
-            </div>
-            <div class="border border-stone-200 p-3 rounded space-y-1">
-              <h4 class="font-mono text-[10px] font-bold text-stone-900">POST /api/v1/telemetry/stream</h4>
-              <p class="text-[10px] text-stone-600">Streaming client sensor, CPU temperature, and memory load statistics.</p>
-              <pre class="bg-stone-50 p-1.5 rounded text-[8px] font-mono text-stone-600">Response: { "acknowledged": true, "alarmTriggered": false }</pre>
-            </div>
-            <div class="border border-stone-200 p-3 rounded space-y-1">
-              <h4 class="font-mono text-[10px] font-bold text-stone-900">POST /api/v1/remediate</h4>
-              <p class="text-[10px] text-stone-600">Autonomous self-healing trigger for microservice diagnostics.</p>
-              <pre class="bg-stone-50 p-1.5 rounded text-[8px] font-mono text-stone-600">Response: { "remediationState": "COMPLETED", "clusterHealth": "NOMINAL" }</pre>
-            </div>
-            <div class="border border-stone-200 p-3 rounded col-span-2 space-y-1">
-              <h4 class="font-mono text-[10px] font-bold text-stone-900">POST /api/v1/ai/llm-infra</h4>
-              <p class="text-[10px] text-stone-600">Configuration panel for Somashekar's hardware acceleration layers, context caching margins, and LLM throughput stats.</p>
-              <pre class="bg-stone-50 p-1.5 rounded text-[8px] font-mono text-stone-600">Response: { "provisioningState": "ACTIVE", "hardwareTarget": "NVIDIA_H100_SXM5_80GB" }</pre>
-            </div>
-          </div>
-        </div>
-      `;
-
+ 
       printContainer.innerHTML = `
         <div class="print:hidden bg-stone-900 text-stone-200 p-4 sticky top-0 flex flex-col z-[1000000] mb-8 rounded-lg border border-stone-800 shadow-2xl gap-3">
           <div class="flex flex-col sm:flex-row justify-between items-center gap-4 w-full">
@@ -1529,23 +1291,19 @@ detailedMetrics: boolean (optional)</pre>
               </button>
             </div>
           </div>
-          <div class="text-[11px] font-mono bg-stone-950/85 border border-yellow-500/20 text-yellow-500 p-2.5 rounded flex items-center gap-2.5 w-full leading-normal">
-            <svg class="w-4 h-4 text-yellow-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-            <span><strong>Note on Browser/Iframe Restrictions:</strong> If the print dialog did not open automatically, browser iframe security sandbox is blocking it. Please <a href="${window.location.href}" target="_blank" class="underline font-bold text-yellow-400 hover:text-yellow-300">click here to open the app in a new tab</a> where printing works seamlessly!</span>
-          </div>
         </div>
-
+ 
         ${headerHTML}
         
-        <div class="space-y-4">
+        <div class="space-y-4 page-break-avoid">
           <div class="border-b-2 border-stone-300 pb-1.5">
             <h3 class="text-sm font-bold uppercase text-stone-900 tracking-tight">I. Executive Summary & Core Competencies</h3>
           </div>
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div class="grid grid-cols-4 gap-3">
             ${matrix}
           </div>
         </div>
-
+ 
         <div class="space-y-4">
           <div class="border-b-2 border-stone-300 pb-1.5">
             <h3 class="text-sm font-bold uppercase text-stone-900 tracking-tight">II. Professional Experience</h3>
@@ -1554,8 +1312,8 @@ detailedMetrics: boolean (optional)</pre>
             ${experiences}
           </div>
         </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+ 
+        <div class="grid grid-cols-2 gap-6 page-break-avoid">
           <div class="space-y-3">
             <div class="border-b-2 border-stone-300 pb-1.5">
               <h3 class="text-sm font-bold uppercase text-stone-900 tracking-tight">Academic Credentials</h3>
@@ -1573,26 +1331,24 @@ detailedMetrics: boolean (optional)</pre>
             </div>
           </div>
         </div>
-
-        <div class="space-y-4">
+ 
+        <div class="space-y-4 page-break-avoid">
           <div class="border-b-2 border-stone-300 pb-1.5">
             <h3 class="text-sm font-bold uppercase text-stone-900 tracking-tight">III. Enterprise Products & Solutions</h3>
           </div>
-          <div class="space-y-4">
+          <div class="grid grid-cols-2 gap-4">
             ${products}
           </div>
         </div>
-
-        <div class="space-y-4">
+ 
+        <div class="space-y-4 page-break-avoid">
           <div class="border-b-2 border-stone-300 pb-1.5">
             <h3 class="text-sm font-bold uppercase text-stone-900 tracking-tight">IV. Architecture Labs & Experimental Work</h3>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="grid grid-cols-2 gap-4">
             ${labs}
           </div>
         </div>
-
-        ${apiDocsHTML}
       `;
       
       const originalContainer = document.getElementById('uplink-terminal-portal');
