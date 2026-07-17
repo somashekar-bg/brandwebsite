@@ -103,23 +103,23 @@
       <div class="md:col-span-9 text-center md:text-left space-y-4">
         <div class="space-y-1">
           <span class="text-[10px] font-mono font-bold tracking-widest text-brand-red uppercase">// PLATFORM_SRE_UPLINK</span>
-          <h1 class="text-3xl md:text-4xl font-light tracking-tight text-brand-cararra uppercase">
+          <h1 class="text-3xl md:text-4xl font-light tracking-tight text-brand-cararra uppercase" id="header-profile-name">
             Somashekar <strong class="font-extrabold text-brand-cararra">BG</strong>
           </h1>
-          <p class="text-xs font-mono text-brand-muted uppercase tracking-wider">
+          <p class="text-xs font-mono text-brand-muted uppercase tracking-wider" id="header-profile-title">
             Senior Platform Engineering Leader | Enterprise Infrastructure | Cloud & AI SRE
           </p>
           
           <!-- Contact & Social Highlights Row -->
           <div class="flex flex-wrap items-center justify-center md:justify-start gap-x-4 gap-y-1.5 text-[11px] text-brand-muted pt-2 font-mono">
-            <a href="mailto:santurmucik@gmail.com" class="flex items-center gap-1.5 hover:text-brand-red transition-colors">
+            <a id="header-email-link" href="mailto:santurmucik@gmail.com" class="flex items-center gap-1.5 hover:text-brand-red transition-colors">
               <svg class="w-3.5 h-3.5 text-brand-red/80 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-              <span>santurmucik@gmail.com</span>
+              <span id="header-email-text">santurmucik@gmail.com</span>
             </a>
             <span class="hidden md:inline opacity-30">|</span>
-            <a href="tel:+919986992683" class="flex items-center gap-1.5 hover:text-brand-red transition-colors">
+            <a id="header-phone-link" href="tel:+919986992683" class="flex items-center gap-1.5 hover:text-brand-red transition-colors">
               <svg class="w-3.5 h-3.5 text-brand-red/80 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
-              <span>+91 99869 92683</span>
+              <span id="header-phone-text">+91 99869 92683</span>
             </a>
             <span class="hidden md:inline opacity-30">|</span>
             <a href="https://www.linkedin.com/in/somashekar-bg/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 hover:text-brand-red transition-colors">
@@ -256,7 +256,7 @@
         "badge": "PRO-LEADER",
         "title": "Senior Platform Engineering Leader | Enterprise Infrastructure | Cloud | AI Platforms | Kubernetes | DevOps | SRE",
         "portraitUrl": "../src/assets/images/somashekar_portrait_1783933330764.jpg",
-        "email": "santurmucik@gmail.com",
+        "email": "somashekar.bg@gmail.com",
         "phone": "+91 99869 92683",
         "linkedin": "https://www.linkedin.com/in/somashekar-bg/",
         "github": "https://github.com/somashekar-bg",
@@ -591,9 +591,35 @@
         console.warn('Backend connection unavailable. Running in self-contained static client mode.');
       }
       
-      // Update basic profile summary on load if available
-      if (masterData.PROFILE && masterData.PROFILE.summary) {
-        document.getElementById('profile-summary').innerText = masterData.PROFILE.summary;
+      // Update basic profile elements on load if available
+      if (masterData.PROFILE) {
+        if (masterData.PROFILE.name && masterData.PROFILE.lastName) {
+          const nameEl = document.getElementById('header-profile-name');
+          if (nameEl) {
+            nameEl.innerHTML = `${masterData.PROFILE.name} <strong class="font-extrabold text-brand-cararra">${masterData.PROFILE.lastName}</strong>`;
+          }
+        }
+        if (masterData.PROFILE.title) {
+          const titleEl = document.getElementById('header-profile-title');
+          if (titleEl) {
+            titleEl.innerText = masterData.PROFILE.title;
+          }
+        }
+        if (masterData.PROFILE.email) {
+          const emailLink = document.getElementById('header-email-link');
+          const emailText = document.getElementById('header-email-text');
+          if (emailLink) emailLink.href = `mailto:${masterData.PROFILE.email}`;
+          if (emailText) emailText.innerText = masterData.PROFILE.email;
+        }
+        if (masterData.PROFILE.phone) {
+          const phoneLink = document.getElementById('header-phone-link');
+          const phoneText = document.getElementById('header-phone-text');
+          if (phoneLink) phoneLink.href = `tel:${masterData.PROFILE.phone.replace(/\s+/g, '')}`;
+          if (phoneText) phoneText.innerText = masterData.PROFILE.phone;
+        }
+        if (masterData.PROFILE.summary) {
+          document.getElementById('profile-summary').innerText = masterData.PROFILE.summary;
+        }
       }
       
       // Select summary tab by default and position the fluid slider
